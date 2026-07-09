@@ -5,6 +5,18 @@ export async function getSessions() {
     return response.json();
 }
 
+export async function getSession(id: string) {
+    const response = await fetch(`${API_URL}/sessions/${id}`);
+    return response.json();
+}
+
+export async function deleteSession(id: string) {
+    const response = await fetch(`${API_URL}/sessions/${id}`, {
+        method: 'DELETE'
+    });
+    return response.json();
+}
+
 export async function createSession(session: {
     date: string,
     gym_name: string,

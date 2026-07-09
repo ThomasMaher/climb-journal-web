@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getSessions } from "../api/sessions";
+import { getSessions } from "../../api/sessions";
+import { Link } from "react-router-dom";
 
 function Sessions() {
   const [sessions, setSessions] = useState([])
@@ -15,7 +16,7 @@ function Sessions() {
       {sessions.map((session) => (
         <div key={session.id}>
           <h2>{session.gym_name}</h2>
-          <p>{session.date}</p>
+          <p><Link to={`/sessions/${session.id}`}>{session.date}</Link></p>
         </div>
       ))}
     </>

@@ -1,4 +1,4 @@
-import { createSession } from '../api/sessions';
+import { createSession } from '../../api/sessions';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +22,7 @@ function NewSession() {
         try {
             const response = await createSession(formData);
             if (response.ok && response.status === 200) {
-                navigate('/sessions');
+                navigate('/');
             } else {
                 setErrors(response.data?.errors || {form: 'Failed to create session'});
             }

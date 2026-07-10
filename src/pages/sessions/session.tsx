@@ -1,6 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getSession, deleteSession } from "../../api/sessions";
+import BoulderForm from "../boulders/boulderForm.tsx"
+
+import styles from "./sessions.module.css";
 
 function Session() {
     const navigate = useNavigate();
@@ -29,18 +32,27 @@ function Session() {
     }
 
     return (
-        <>
-            <div>
-                {errors && <p>{errors}</p>}
-                <h1>{session?.gym_name}</h1>
-                <p>Session ID: {id}</p>
-                <p>{session?.date}</p>
-                <p>{session?.notes} </p>
+        <div className={styles.sessionView}>
+            <div className={styles.sessionInfo}>
+                <div>
+                    {errors && <p>{errors}</p>}
+                    <h1>{session?.gym_name}</h1>
+                    <p>Session ID: {id}</p>
+                    <p>{session?.date}</p>
+                    <p>{session?.notes} </p>
+                </div>
+                <div>
+                    <button onClick={handleDelete}>Delete Session</button>
+                </div>
             </div>
             <div>
-                <button onClick={handleDelete}>Delete Session</button>
+                <BoulderForm />
+
+                <div className="climb-sessions-list">
+
+                </div>
             </div>
-        </>
+        </div>
     );
 }
 

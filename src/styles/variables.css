@@ -1,0 +1,9 @@
+:root {
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+
+  --border-radius: 8px;
+
+  --primary: #3b82f6;
+}

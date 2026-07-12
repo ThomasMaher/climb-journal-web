@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { submitSessionBoulder } from "../../api/boulders"
+import { submitSessionBoulder, createRequestData } from "../../api/boulders"
 
 const MAX_VGRADE = 17
 const MAX_INCLINE = 90/5
@@ -14,9 +14,24 @@ type NewBoulderData = {
     rating: number;
     incline: number;
     boulder_type: string;
+    attempts: number;
+    percent_finished: number;
 }
 
-function BoulderForm() {
+type FormErrors = {
+    nickname: string;
+    vgrade_range_min: string;
+    vgrade_range_max: string;
+    self_grade: string;
+    notes: string;
+    rating: string;
+    incline: string;
+    boulder_type: string;
+    attempts: string;
+    percent_finished: string;
+}
+
+function BoulderForm(props) {
     const [formData, setFormData] = useState<NewBoulderData>({
         nickname: '',
         vgrade_range_min: 1,
@@ -25,18 +40,32 @@ function BoulderForm() {
         notes: '',
         incline: 0,
         rating: 10,
-        boulder_type: 'indoor',
+        boulder_type: 'Indoor',
+        attempts: 0,
+        percent_finished: 0,
     });
-    const [errors, setErrors] = useState();
+    const [errors, setErrors] = useState<FormErrors>( {
+        nickname: '',
+        vgrade_range_min: '',
+        vgrade_range_max: '',
+        self_grade: '',
+        notes: '',
+        rating: '',
+        incline: '',
+        boulder_type: '',
+        attempts: '',
+        percent_finished: '',
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await submitSessionBoulder(formData);
+            const response = await submitSessionBoulder(createRequestData(formData, props.sessionId));
 
-            if (response.data?.success) {
-                console.log('Success!')
+            if (response.ok && !!response.data) {
+                console.log(response.data)
+                props.setSessionBoulders([...(props.sessionBoulders ?? []), response.data])
             } else {
                 setErrors(response.data?.errors);
             }
@@ -62,17 +91,22 @@ function BoulderForm() {
         <div className='newClimbForm'>
             <h3>Add a climb to the session</h3>
             <p>Add information about the boulder or search and select an existing to track your climb on.</p>
-            {errors && <p>{errors}</p>}
 
             <form onSubmit={handleSubmit}>
                 <label>Nickname (This can help you keep track of your progress on individual boulder problems)</label>
+                {errors && !!errors?.nickname[0] && <p>{errors.nickname[0]}</p>}
                 <input type="text" name="nickname" value={formData.nickname} onChange={handleChange} />
 
+
+                {errors && !!errors?.vgrade_range_min[0] && <p>{errors.vgrade_range_min[0]}</p>}
                 <GradeSelect label="V Grade (lower bound)" name="vgrade_range_min" value={formData.vgrade_range_min} onChange={handleChange} />
+                {errors && !!errors?.vgrade_range_max[0] && <p>{errors.vgrade_range_max[0]}</p>}
                 <GradeSelect label="V Grade (upper bound)" name="vgrade_range_max" value={formData.vgrade_range_max} onChange={handleChange} />
+                {errors && !!errors?.self_grade[0] && <p>{errors.self_grade[0]}</p>}
                 <GradeSelect label="Your grade (what you think feels right)" name="self_grade" value={formData.self_grade} onChange={handleChange} />
 
                 <label>Incline</label>
+                {errors && !!errors?.incline[0] && <p>{errors.incline[0]}</p>}
                 <select name="incline" value={formData.incline} onChange={handleChange}>
                     <option value={0}>0</option>
                     {[...Array(MAX_INCLINE).keys()].map((k) => (
@@ -81,6 +115,7 @@ function BoulderForm() {
                 </select>
 
                 <label>Your Rating</label>
+                {errors && !!errors?.rating[0] && <p>{errors.rating[0]}</p>}
                 <select name="rating" value={formData.rating} onChange={handleChange}>
                     {[...Array(MAX_RATING).keys()].map((k) => (
                         <option key={k} value={k+1}>{k+1}</option>
@@ -88,8 +123,10 @@ function BoulderForm() {
                 </select>
 
                 <label>Notes</label>
+                {errors && !!errors?.notes && <p>{errors.notes}</p>}
                 <input type="text" name="notes" value={formData.notes} onChange={handleChange} />
 
+                {errors && !!errors?.boulder_type[0] && <p>{errors.boulder_type[0]}</p>}
                 <div className="climbType">
                     <label>
                         <input type="radio" name="boulder_type" value="Indoor" checked={formData.boulder_type === 'Indoor'} onChange={handleChange}/>
@@ -104,6 +141,12 @@ function BoulderForm() {
                         Kilter Board
                     </label>
                 </div>
+
+                <label>Attempts</label>
+                <input type='number' name="attempts" value={formData.attempts} onChange={handleChange} />
+                <label>Percent Finished (your estimate)</label>
+                <input type='number' name="percent_finished" value={formData.percent_finished} onChange={handleChange} />
+                <br />
 
                 <button type="submit">Enter new climb</button>
             </form>

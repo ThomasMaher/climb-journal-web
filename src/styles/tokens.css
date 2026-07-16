@@ -1,0 +1,48 @@
+:root {
+  /* Granite Field — dark */
+  --bg-deep: #0c100e;
+  --bg: #121816;
+  --bg-elevated: #1a211d;
+  --surface: #212a25;
+  --surface-hover: #28322c;
+  --border: #2e3a33;
+  --border-strong: #3d4d44;
+
+  --text: #9aaba2;
+  --text-strong: #d5e0da;
+  --text-heading: #eef3ef;
+  --chalk: #f4f7f4;
+
+  --accent: #6f9f76;
+  --accent-hover: #83b38a;
+  --accent-muted: rgba(111, 159, 118, 0.14);
+  --accent-border: rgba(111, 159, 118, 0.35);
+
+  --danger: #c96868;
+  --danger-hover: #d67c7c;
+  --danger-muted: rgba(201, 104, 104, 0.14);
+
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.03) inset,
+    0 8px 24px rgba(0, 0, 0, 0.28);
+
+  --content-width: 68rem;
+  --nav-height: 3.5rem;
+
+  --ease: 160ms ease;
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}

@@ -1,36 +1,73 @@
-import { useEffect, useState } from 'react'
-import { getSessions } from "../../api/sessions"
-import { Link } from "react-router-dom"
+import { useEffect, useState } from 'react';
+import { getSessions } from '../../api/sessions';
+import { Link } from 'react-router-dom';
 
 function Sessions() {
-  const [sessions, setSessions] = useState<any[]>([])
-  const [error, setError] = useState<string | undefined>(undefined)
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadSessions() {
-      const response = await getSessions()
+      const response = await getSessions();
       if (response.ok && response.data) {
-        setSessions(response.data)
+        setSessions(response.data);
       } else {
-        setError(response.error ?? 'Unable to load sessions')
+        setError(response.error ?? 'Unable to load sessions');
       }
+      setLoading(false);
     }
 
-    loadSessions()
-  }, [])
+    loadSessions();
+  }, []);
 
   return (
     <>
-      <h1>Bouldering Sessions</h1>
-      {error && <p>{error}</p>}
-      {sessions.map((session) => (
-        <div key={session.id}>
-          <h2>{session.gym_name}</h2>
-          <p><Link to={`/sessions/${session.id}`}>{session.date}</Link></p>
+      <header className="page-header">
+        <div>
+          <p className="page-header__eyebrow">Logbook</p>
+          <h1>Bouldering sessions</h1>
+          <p className="page-header__sub">
+            Track gym days, outdoor sends, and every attempt in between.
+          </p>
         </div>
-      ))}
+        <Link to="/newSession" className="btn">
+          New session
+        </Link>
+      </header>
+
+      {error && <p className="error-banner" role="alert">{error}</p>}
+
+      {loading ? (
+        <p>Loading sessions…</p>
+      ) : sessions.length === 0 ? (
+        <div className="empty-state">
+          <p>No sessions yet. Start your first log entry.</p>
+          <Link to="/newSession" className="btn">
+            Create session
+          </Link>
+        </div>
+      ) : (
+        <ul className="session-list">
+          {sessions.map((session) => (
+            <li key={session.id} className="session-list__item">
+              <Link to={`/sessions/${session.id}`} className="session-list__link">
+                <div>
+                  <div className="session-list__gym">{session.gym_name}</div>
+                  {session.notes ? (
+                    <p className="session-list__meta">{session.notes}</p>
+                  ) : null}
+                </div>
+                <time className="session-list__date" dateTime={session.date}>
+                  {session.date}
+                </time>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
-  )
+  );
 }
 
-export default Sessions
+export default Sessions;

@@ -23,21 +23,6 @@ function Sessions() {
 
   return (
     <>
-      <header className="page-header">
-        <div>
-          <p className="page-header__eyebrow">Logbook</p>
-          <h1>Bouldering sessions</h1>
-          <p className="page-header__sub">
-            Track gym days, outdoor sends, and every attempt in between.
-          </p>
-        </div>
-        <Link to="/newSession" className="btn">
-          New session
-        </Link>
-      </header>
-
-      {error && <p className="error-banner" role="alert">{error}</p>}
-
       {loading ? (
         <p>Loading sessions…</p>
       ) : sessions.length === 0 ? (

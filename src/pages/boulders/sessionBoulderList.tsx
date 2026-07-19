@@ -12,6 +12,17 @@ type SessionBoulderListProps = {
 function SessionBoulderList({ sessionBoulders }: SessionBoulderListProps) {
   const climbs = sessionBoulders ?? [];
 
+  const vGradeRange = (climb) => {
+    if (!climb.vgrade_range_max) { return climb.vgrade_range_min }
+    if (!climb.vgrade_range_min) { return climb.vgrade_range_max }
+
+    if (climb.vgrade_range_min === climb.vgrade_range_max) {
+      return climb.vgrade_range_min
+    } else {
+      return `${climb.vgrade_range_min} - V${climb.vgrade_range_max}`
+    }
+  }
+
   return (
     <section className="section-block">
       <div className="section-block__header">
@@ -30,7 +41,7 @@ function SessionBoulderList({ sessionBoulders }: SessionBoulderListProps) {
           {climbs.map((climb) => (
             <li key={climb.id} className="climb-item">
               <div className="climb-item__name">{climb.nickname || 'Untitled climb'}</div>
-              <span className="badge">V{climb.vgrade_range_min ?? '—'}</span>
+              <span className="badge">V{vGradeRange(climb)}</span>
               <p className="climb-item__stat">
                 <strong>{climb.attempts ?? 0}</strong> attempts
               </p>

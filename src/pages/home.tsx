@@ -38,7 +38,7 @@ function Home() {
 
             {content === SESSIONS && <Sessions />}
             {content === STATS && <HomeStats />}
-            </>
+        </>
     )
 }
 

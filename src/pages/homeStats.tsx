@@ -1,8 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getUserHomeStats } from '../api/user';
 import { BarChart, XAxis, YAxis, Bar, ResponsiveContainer, Tooltip } from 'recharts';
+
+type UserStats = {
+    total_sessions: number;
+    highest_grade: number;
+    avg_grade_sent: number;
+    most_frequented_gym: string;
+    sends_by_grade: any[];
+};
 
 function HomeStats() {
     const [ loading, setLoading ] = useState<string | undefined>(undefined);
+    const [ overallStats, setOverallStats ] = useState<UserStats>({
+        total_sessions: 0,
+        highest_grade: 0,
+        avg_grade_sent: 0,
+        most_frequented_gym: '',
+        sends_by_grade: [],
+    });
+    const [ pastMonthStats, setPastMonthStats ] = useState<UserStats>({
+        total_sessions: 0,
+        highest_grade: 0,
+        avg_grade_sent: 0,
+        most_frequented_gym: '',
+        sends_by_grade: [],
+    });
+
+    useEffect(() => {
+        async function loadStats() {
+            const response = await getUserHomeStats('1');
+
+            if(response.ok) {
+                setOverallStats(response.data.overall)
+                setPastMonthStats(response.data.past_month)
+            }
+        }
+
+        loadStats();
+    }, [])
 
     function CustomTooltip({ active, payload }: any) {
     if (!active || !payload?.length) return null;
@@ -40,11 +76,11 @@ function HomeStats() {
                                 </tr>
                                 <tr>
                                     <th scope="row">Avg grade climbed</th>
-                                    <td>{stats.avg_grade_climbed}</td>
+                                    <td>{stats.avg_grade_sent}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Favorite gym</th>
-                                    <td>{stats.most_frequent_gym}</td>
+                                    <td>{stats.most_frequented_gym}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -67,29 +103,14 @@ function HomeStats() {
         )
     }
 
-    const fakeOverallStats = {
-        total_sessions: 0,
-        highest_grade: 0,
-        avg_grade_climbed: 0,
-        most_frequent_gym: 'Vital',
-        sends_by_grade: [
-            { vgrade: "V0", sends: 12 },
-            { vgrade: "V1", sends: 18 },
-            { vgrade: "V2", sends: 25 },
-            { vgrade: "V3", sends: 14 },
-            { vgrade: "V4", sends: 7 },
-            { vgrade: "V5", sends: 3 },
-        ],
-    }
-
     return(
         <>
             {loading ? (
                 <p>Loading sessions…</p>
             ) : (
                 <div className="home-stats">
-                    {renderStats('Overall', fakeOverallStats)}
-                    {renderStats('Past 30 days', fakeOverallStats)}
+                    {renderStats('Overall', overallStats)}
+                    {renderStats('Past 30 days', pastMonthStats)}
                 </div>
             )}
         </>

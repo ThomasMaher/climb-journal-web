@@ -23,6 +23,7 @@ type FormErrors = FieldErrors | { form: string };
 
 type BoulderFormProps = {
   sessionId: string;
+  userId: number;
   errors?: FormErrors;
   sessionBoulders?: any[];
   setSessionBoulders: (boulders: any[]) => void;
@@ -62,7 +63,7 @@ function BoulderForm(props: BoulderFormProps) {
     setSubmitting(true);
 
     try {
-      const response = await submitSessionBoulder(createRequestData(formData, props.sessionId));
+      const response = await submitSessionBoulder(createRequestData(formData, props.sessionId, props.userId));
 
       if (response.ok && response.data) {
         props.setSessionBoulders([...(props.sessionBoulders ?? []), response.data]);

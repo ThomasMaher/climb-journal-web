@@ -11,7 +11,7 @@ export async function submitSessionBoulder(boulderData: any) {
     })
 }
 
-export function createRequestData(formData: any, sessionId: string) {
+export function createRequestData(formData: any, sessionId: string, userId: number) {
     const { attempts, percent_finished, notes } = formData
     delete formData.attempts
     delete formData.percent_finished
@@ -20,6 +20,7 @@ export function createRequestData(formData: any, sessionId: string) {
         percent_finished,
         notes,
         session_id: sessionId,
+        user_id: userId,
     }
 
     return {...formData, session_climbs_attributes: [session_climb]}

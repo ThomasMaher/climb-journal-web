@@ -112,7 +112,8 @@ function Session() {
         </aside>
 
         <BoulderForm
-          sessionId={id ?? ''}
+          sessionId={id}
+          userId={1}
           errors={formErrors}
           sessionBoulders={sessionBoulders}
           setSessionBoulders={setSessionBoulders}

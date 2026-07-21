@@ -2,7 +2,7 @@ import { API_URL, fetchApi } from './utils'
 import type { ApiResponse } from './utils'
 
 export async function getSessions() {
-    return fetchApi(`${API_URL}/sessions`)
+    return fetchApi(`${API_URL}/users/1/sessions`)
 }
 
 export async function getSession(id: string) {
@@ -15,7 +15,7 @@ export async function getSession(id: string) {
         } as ApiResponse<any>
     }
 
-    return fetchApi(`${API_URL}/sessions/${id}`)
+    return fetchApi(`${API_URL}/users/1/sessions/${id}`)
 }
 
 export async function deleteSession(id: string) {
@@ -28,7 +28,7 @@ export async function deleteSession(id: string) {
         } as ApiResponse<any>
     }
 
-    return fetchApi(`${API_URL}/sessions/${id}`, {
+    return fetchApi(`${API_URL}/users/1/sessions/${id}`, {
         method: 'DELETE',
     })
 }
@@ -38,7 +38,7 @@ export async function createSession(session: {
     gym_name: string,
     notes: string,
 }) {
-    return fetchApi(`${API_URL}/sessions`, {
+    return fetchApi(`${API_URL}/users/1/sessions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

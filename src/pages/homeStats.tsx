@@ -57,7 +57,7 @@ function HomeStats() {
     );
     }
 
-    const renderStats = (title, stats) => {
+    const renderStats = (title: string, stats: any) => {
         return (
             <div className="home-stats__card">
                 <h2>{title}</h2>
@@ -76,7 +76,7 @@ function HomeStats() {
                                 </tr>
                                 <tr>
                                     <th scope="row">Avg grade climbed</th>
-                                    <td>{stats.avg_grade_sent}</td>
+                                    <td>{stats.avg_sent_grade}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Favorite gym</th>

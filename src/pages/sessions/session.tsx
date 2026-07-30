@@ -11,7 +11,7 @@ function Session() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [session, setSession] = useState<Session | undefined>(undefined);
-  const [sessionClimbs, setsessionClimbs] = useState<SessionClimb[]>([]);
+  const [sessionClimbs, setSessionClimbs] = useState<SessionClimb[]>([]);
   const [pageError, setPageError] = useState<string>('');
   const [formErrors, setFormErrors] = useState<ApiFormErrors | undefined>(undefined);
   const [deleting, setDeleting] = useState(false);
@@ -39,7 +39,7 @@ function Session() {
       }
 
       setSession((({ id, date, gym_name, notes }) => ({ id, date, gym_name, notes }))(sessionData));
-      setsessionClimbs(sessionData?.boulders ?? []);
+      setSessionClimbs(sessionData?.boulders ?? []);
     }
 
     loadSession();
@@ -119,7 +119,7 @@ function Session() {
           userId={1}
           errors={formErrors}
           sessionClimbs={sessionClimbs}
-          setsessionClimbs={setsessionClimbs}
+          setSessionClimbs={setSessionClimbs}
         />
       </div>
 

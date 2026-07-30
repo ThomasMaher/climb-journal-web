@@ -1,4 +1,5 @@
 export type Session = {
+    id: number;
     date: string;
     gym_name: string;
     notes: string;
@@ -15,6 +16,7 @@ export type SessionClimb = {
     notes: string;
     created_at: string;
     updated_at: string;
+    [key: string]: any;
 }
 
 export type Boulder = {

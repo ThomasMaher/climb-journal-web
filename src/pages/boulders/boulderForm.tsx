@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { submitSessionBoulder, createRequestData } from '../../api/boulders';
+import { submitSessionClimb, createRequestData } from '../../api/boulders';
 import type { SessionClimbFormData, SessionClimb } from '../../models/climbing_models';
 
 const MAX_VGRADE = 17;
@@ -40,10 +40,10 @@ function BoulderForm(props: BoulderFormProps) {
     setSubmitting(true);
 
     try {
-      const response = await submitSessionBoulder(createRequestData(formData, props.sessionId, props.userId));
+      const response = await submitSessionClimb(createRequestData(formData, props.sessionId, props.userId));
 
       if (response.ok && response.data) {
-        props.setSessionBoulders([...(props.sessionBoulders ?? []), response.data]);
+        props.setSessionClimbs([...(props.sessionClimbs ?? []), response.data]);
       } else {
         if (response.data?.errors) {
           setErrors(response.data.errors);
@@ -273,11 +273,11 @@ function GradeSelect(props: {
 
 
 type BoulderFormProps = {
-  sessionId: string;
+  sessionId: string | undefined;
   userId: number;
   errors?: FormErrors;
-  sessionBoulders?: SessionClimb[];
-  setSessionBoulders: (boulders: SessionClimb[]) => void;
+  sessionClimbs?: SessionClimb[];
+  setSessionClimbs: (boulders: SessionClimb[]) => void;
 };
 
 export default BoulderForm;

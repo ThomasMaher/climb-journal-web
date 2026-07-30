@@ -1,13 +1,13 @@
-import type { SessionClimbBoulder } from '../../models/climbing_models';
+import type { SessionClimb } from '../../models/climbing_models';
 
-type SessionBoulderListProps = {
-  sessionBoulders?: SessionClimbBoulder[];
+type sessionClimbListProps = {
+  sessionClimbs?: SessionClimb[];
 };
 
-function SessionBoulderList({ sessionBoulders }: SessionBoulderListProps) {
-  const climbs = sessionBoulders ?? [];
+function sessionClimbList({ sessionClimbs }: sessionClimbListProps) {
+  const climbs = sessionClimbs ?? [];
 
-  const vGradeRange = (climb: SessionClimbBoulder) => {
+  const vGradeRange = (climb: SessionClimb) => {
     if (!climb.vgrade_range_max) { return climb.vgrade_range_min }
     if (!climb.vgrade_range_min) { return climb.vgrade_range_max }
 
@@ -48,4 +48,4 @@ function SessionBoulderList({ sessionBoulders }: SessionBoulderListProps) {
   );
 }
 
-export default SessionBoulderList;
+export default sessionClimbList;

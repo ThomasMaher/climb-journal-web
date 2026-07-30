@@ -1,18 +1,13 @@
-type SessionBoulder = {
-  id: string | number;
-  nickname?: string;
-  vgrade_range_min?: number;
-  attempts?: number;
-};
+import type { SessionClimbBoulder } from '../../models/climbing_models';
 
 type SessionBoulderListProps = {
-  sessionBoulders?: SessionBoulder[];
+  sessionBoulders?: SessionClimbBoulder[];
 };
 
 function SessionBoulderList({ sessionBoulders }: SessionBoulderListProps) {
   const climbs = sessionBoulders ?? [];
 
-  const vGradeRange = (climb) => {
+  const vGradeRange = (climb: SessionClimbBoulder) => {
     if (!climb.vgrade_range_max) { return climb.vgrade_range_min }
     if (!climb.vgrade_range_min) { return climb.vgrade_range_max }
 

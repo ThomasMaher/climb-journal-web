@@ -3,15 +3,16 @@ import { useEffect, useState } from 'react';
 import { getSession, deleteSession } from '../../api/sessions';
 import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
+import type { Session, SessionClimb } from '../../models/climbing_models.ts';
 
 type ApiFormErrors = Record<string, string[]> | { form: string };
 
 function Session() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [session, setSession] = useState<any | undefined>(undefined);
-  const [sessionBoulders, setSessionBoulders] = useState<any[] | undefined>(undefined);
-  const [pageError, setPageError] = useState<string | undefined>(undefined);
+  const [session, setSession] = useState<Session | undefined>(undefined);
+  const [sessionClimbs, setsessionClimbs] = useState<SessionClimb[]>([]);
+  const [pageError, setPageError] = useState<string>('');
   const [formErrors, setFormErrors] = useState<ApiFormErrors | undefined>(undefined);
   const [deleting, setDeleting] = useState(false);
 
@@ -38,14 +39,14 @@ function Session() {
       }
 
       setSession((({ id, date, gym_name, notes }) => ({ id, date, gym_name, notes }))(sessionData));
-      setSessionBoulders(sessionData?.boulders ?? []);
+      setsessionClimbs(sessionData?.boulders ?? []);
     }
 
     loadSession();
   }, [id]);
 
   const handleDelete = async () => {
-    setPageError(undefined);
+    setPageError('');
 
     if (!id) {
       setPageError('Session id is required');
@@ -65,8 +66,10 @@ function Session() {
       } else {
         setPageError(response.error ?? 'Failed to delete session');
       }
-    } catch (err: any) {
-      setPageError(err?.message || 'Failed to delete session');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setPageError(err?.message || 'Failed to delete session');
+      }
     } finally {
       setDeleting(false);
     }
@@ -115,12 +118,12 @@ function Session() {
           sessionId={id}
           userId={1}
           errors={formErrors}
-          sessionBoulders={sessionBoulders}
-          setSessionBoulders={setSessionBoulders}
+          sessionClimbs={sessionClimbs}
+          setsessionClimbs={setsessionClimbs}
         />
       </div>
 
-      <SessionBoulderList sessionBoulders={sessionBoulders} />
+      <SessionBoulderList sessionClimbs={sessionClimbs} />
     </>
   );
 }

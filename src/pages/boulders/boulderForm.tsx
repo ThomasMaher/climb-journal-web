@@ -1,36 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { submitSessionBoulder, createRequestData } from '../../api/boulders';
+import type { SessionClimbFormData, SessionClimb } from '../../models/climbing_models';
 
 const MAX_VGRADE = 17;
 const MAX_INCLINE = 90 / 5;
 const MAX_RATING = 10;
 
-type NewBoulderData = {
-  nickname: string;
-  vgrade_range_min: number;
-  vgrade_range_max: number;
-  self_grade?: number;
-  notes: string;
-  rating: number;
-  incline: number;
-  boulder_type: string;
-  attempts: number;
-  percent_finished: number;
-};
-
 type FieldErrors = Record<string, string[]>;
 type FormErrors = FieldErrors | { form: string };
 
-type BoulderFormProps = {
-  sessionId: string;
-  userId: number;
-  errors?: FormErrors;
-  sessionBoulders?: any[];
-  setSessionBoulders: (boulders: any[]) => void;
-};
-
 function BoulderForm(props: BoulderFormProps) {
-  const [formData, setFormData] = useState<NewBoulderData>({
+  const [formData, setFormData] = useState<SessionClimbFormData>({
     nickname: '',
     vgrade_range_min: 1,
     vgrade_range_max: 1,
@@ -41,14 +21,11 @@ function BoulderForm(props: BoulderFormProps) {
     boulder_type: 'Indoor',
     attempts: 0,
     percent_finished: 0,
+    warmup: false,
   });
   const [errors, setErrors] = useState<FormErrors | undefined>(props.errors);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    setErrors(props.errors);
-  }, [props.errors]);
 
   const getFieldError = (field: string) => {
     if (!errors || 'form' in errors) return undefined;
@@ -74,8 +51,10 @@ function BoulderForm(props: BoulderFormProps) {
           setSubmitError(response.error || 'Failed to submit climb');
         }
       }
-    } catch (err: any) {
-      setSubmitError(err?.message || 'Failed to submit climb');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setSubmitError(err?.message || 'Failed to submit climb');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -291,5 +270,14 @@ function GradeSelect(props: {
     </select>
   );
 }
+
+
+type BoulderFormProps = {
+  sessionId: string;
+  userId: number;
+  errors?: FormErrors;
+  sessionBoulders?: SessionClimb[];
+  setSessionBoulders: (boulders: SessionClimb[]) => void;
+};
 
 export default BoulderForm;

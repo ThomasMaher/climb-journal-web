@@ -1,18 +1,14 @@
 import { createSession } from '../../api/sessions';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import type { Session } from '../../models/climbing_models';
 
-type NewSessionData = {
-  date: string;
-  gym_name: string;
-  notes: string;
-};
 
 type ApiFormErrors = Record<string, string[]> | { form: string };
 
 function NewSession() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<NewSessionData>({
+  const [formData, setFormData] = useState<Session>({
     date: '',
     gym_name: '',
     notes: '',
@@ -38,8 +34,10 @@ function NewSession() {
       } else {
         setErrors(response.data?.errors || { form: response.error || 'Failed to create session' });
       }
-    } catch (err: any) {
-      setErrors({ form: err?.message || 'Failed to create session' });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrors({ form: err?.message || 'Failed to create session' });
+      }
     } finally {
       setSubmitting(false);
     }

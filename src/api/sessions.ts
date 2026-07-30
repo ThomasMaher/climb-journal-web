@@ -12,7 +12,7 @@ export async function getSession(id: string) {
             status: 0,
             data: null,
             error: 'Session id is required',
-        } as ApiResponse<any>
+        } as ApiResponse<unknown>
     }
 
     return fetchApi(`${API_URL}/users/1/sessions/${id}`)
@@ -25,7 +25,7 @@ export async function deleteSession(id: string) {
             status: 0,
             data: null,
             error: 'Session id is required',
-        } as ApiResponse<any>
+        } as ApiResponse<unknown>
     }
 
     return fetchApi(`${API_URL}/users/1/sessions/${id}`, {

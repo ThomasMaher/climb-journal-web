@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Sessions from './sessions/sessions.tsx';
 import HomeStats from './homeStats.tsx';
 
@@ -8,8 +7,6 @@ const SESSIONS = 'SESSIONS';
 
 function Home() {
     const [content, setContent] = useState<string>(STATS);
-    const [error, setError] = useState<string | undefined>(undefined);
-    const [loading, setLoading] = useState(true);
 
     const handleToggle = () => {
         const newState = content === STATS ? SESSIONS : STATS;
@@ -33,8 +30,6 @@ function Home() {
                     </div>
                 </div>
             </header>
-
-            {error && <p className="error-banner" role="alert">{error}</p>}
 
             {content === SESSIONS && <Sessions />}
             {content === STATS && <HomeStats />}

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getSessions } from '../../api/sessions';
 import { Link } from 'react-router-dom';
+import type { Session } from '../../models/climbing_models';
 
 function Sessions() {
-  const [sessions, setSessions] = useState<any[]>([]);
-  const [error, setError] = useState<string | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function loadSessions() {
@@ -32,24 +33,27 @@ function Sessions() {
             Create session
           </Link>
         </div>
-      ) : (
-        <ul className="session-list">
-          {sessions.map((session) => (
-            <li key={session.id} className="session-list__item">
-              <Link to={`/sessions/${session.id}`} className="session-list__link">
-                <div>
-                  <div className="session-list__gym">{session.gym_name}</div>
-                  {session.notes ? (
-                    <p className="session-list__meta">{session.notes}</p>
-                  ) : null}
-                </div>
-                <time className="session-list__date" dateTime={session.date}>
-                  {session.date}
-                </time>
-              </Link>
-            </li>
-          ))}
-        </ul>
+      ) :
+        error ? (
+          <p>An error occurred: {error}</p>
+        ) : (
+          <ul className="session-list">
+            {sessions.map((session) => (
+              <li key={session.id} className="session-list__item">
+                <Link to={`/sessions/${session.id}`} className="session-list__link">
+                  <div>
+                    <div className="session-list__gym">{session.gym_name}</div>
+                    {session.notes ? (
+                      <p className="session-list__meta">{session.notes}</p>
+                    ) : null}
+                  </div>
+                  <time className="session-list__date" dateTime={session.date}>
+                    {session.date}
+                  </time>
+                </Link>
+              </li>
+            ))}
+          </ul>
       )}
     </>
   );

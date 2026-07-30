@@ -1,17 +1,10 @@
 import { useState, useEffect } from 'react';
 import { getUserHomeStats } from '../api/user';
 import { BarChart, XAxis, YAxis, Bar, ResponsiveContainer, Tooltip } from 'recharts';
-
-type UserStats = {
-    total_sessions: number;
-    highest_grade: number;
-    avg_grade_sent: number;
-    most_frequented_gym: string;
-    sends_by_grade: any[];
-};
+import type { UserStats } from '../models/user_models';
 
 function HomeStats() {
-    const [ loading, setLoading ] = useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(true);
     const [ overallStats, setOverallStats ] = useState<UserStats>({
         total_sessions: 0,
         highest_grade: 0,
@@ -35,29 +28,30 @@ function HomeStats() {
                 setOverallStats(response.data.overall)
                 setPastMonthStats(response.data.past_month)
             }
+            setLoading(false);
         }
 
         loadStats();
     }, [])
 
-    function CustomTooltip({ active, payload }: any) {
-    if (!active || !payload?.length) return null;
+    function CustomTooltip({ active, payload }: {active?: boolean, payload?: any}) {
+        if (!active || !payload?.length) return null;
 
-    return (
-        <div
-        style={{
-            background: "white",
-            border: "1px solid #ccc",
-            borderRadius: 8,
-            padding: "6px 10px",
-        }}
-        >
-        {payload[0].value}
-        </div>
-    );
+        return (
+            <div
+            style={{
+                background: "white",
+                border: "1px solid #ccc",
+                borderRadius: 8,
+                padding: "6px 10px",
+            }}
+            >
+            {payload[0].value}
+            </div>
+        );
     }
 
-    const renderStats = (title: string, stats: any) => {
+    const renderStats = (title: string, stats: UserStats) => {
         return (
             <div className="home-stats__card">
                 <h2>{title}</h2>
@@ -76,7 +70,7 @@ function HomeStats() {
                                 </tr>
                                 <tr>
                                     <th scope="row">Avg grade climbed</th>
-                                    <td>{stats.avg_sent_grade}</td>
+                                    <td>{stats.avg_grade_sent}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Favorite gym</th>

@@ -1,6 +1,9 @@
 import { API_URL, fetchApi } from './utils'
+import type { SessionClimbFormData } from '../models/climbing_models';
 
-export async function submitSessionBoulder(boulderData: any) {
+type SessionClimbPayload = Omit<SessionClimbFormData, "attempts" | "percent_finished" | "notes">
+
+export async function submitSessionBoulder(boulderData: SessionClimbPayload) {
     return fetchApi(`${API_URL}/boulders`, {
         method: 'POST',
         headers: {
@@ -11,10 +14,8 @@ export async function submitSessionBoulder(boulderData: any) {
     })
 }
 
-export function createRequestData(formData: any, sessionId: string, userId: number) {
-    const { attempts, percent_finished, notes } = formData
-    delete formData.attempts
-    delete formData.percent_finished
+export function createRequestData(formData: SessionClimbFormData, sessionId: string, userId: number) {
+    const { attempts, percent_finished, notes, ...boulderData } = formData
     const session_climb = {
         attempts,
         percent_finished,
@@ -23,5 +24,5 @@ export function createRequestData(formData: any, sessionId: string, userId: numb
         user_id: userId,
     }
 
-    return {...formData, session_climbs_attributes: [session_climb]}
+    return {...boulderData, session_climbs_attributes: [session_climb]}
 }

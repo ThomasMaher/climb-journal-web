@@ -10,3 +10,9 @@ type SendsByGrade = {
     vgrade: number;
     sends: number
 }
+
+export type UserState = {
+    user: string | null;
+    setUser: (user: any) => void;
+    loading: boolean;
+}

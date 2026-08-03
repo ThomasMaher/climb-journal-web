@@ -16,3 +16,5 @@ export type UserState = {
     setUser: (user: any) => void;
     loading: boolean;
 }
+
+export type LoginData = {username: string, password: string};

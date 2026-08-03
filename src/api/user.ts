@@ -14,13 +14,11 @@ export async function login(formData: LoginData) {
 
     return fetchApi(`${API_URL}/login.json`, {
         method: 'POST',
-        credentials: "include",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            username,
-            password,
+            user: { username, password_digest: password, },
         }),
     })
 }

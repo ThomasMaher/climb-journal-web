@@ -9,7 +9,7 @@ export type ApiResponse<T> = {
 
 export async function fetchApi<T = any>(input: RequestInfo, init?: RequestInit): Promise<ApiResponse<T>> {
   try {
-    const response = await fetch(input, init)
+    const response = await fetch(input, { ...init, credentials: "include" })
     const text = await response.text()
     let data: any = null
 

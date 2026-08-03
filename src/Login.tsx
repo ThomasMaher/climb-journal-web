@@ -63,7 +63,7 @@ function Login() {
                     <label htmlFor="password">Password: </label>
                     <input
                         id="password"
-                        type="text"
+                        type="password"
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value})} />
                 </div>

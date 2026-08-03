@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom';
+import type { MouseEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { logout } from '../api/user';
+import { useAuth } from '../AuthContext';
 
 function NavBar() {
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  const handleLogout = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const response = await logout();
+
+    if (response.ok) {
+      setUser(null);
+    }
+
+    navigate('/');
+  }
+
   return (
     <header className="site-nav">
       <div className="site-nav__inner">
@@ -11,9 +28,9 @@ function NavBar() {
           <Link to="/" className="site-nav__link">
             Sessions
           </Link>
-          <Link to="/newSession" className="site-nav__link site-nav__link--primary">
-            New session
-          </Link>
+          <button onClick={(e) => handleLogout(e)} className="site-nav__link site-nav__link--primary">
+            Logout
+          </button>
         </nav>
       </div>
     </header>

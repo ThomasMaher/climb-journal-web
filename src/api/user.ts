@@ -22,3 +22,12 @@ export async function login(formData: LoginData) {
         }),
     })
 }
+
+export async function logout() {
+    return fetchApi(`${API_URL}/logout`, {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+}

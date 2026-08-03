@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getUserStatus } from "./api/user";
-import type { UserState } from "./models/user_models";
+import { getUserStatus } from "../../api/user";
+import type { UserState } from "../../models/user_models";
 
 const AuthContext = createContext<UserState>({user: null, setUser: ()=> {}, loading: true});
 

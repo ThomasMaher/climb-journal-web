@@ -1,75 +1,39 @@
-# React + TypeScript + Vite
+## Climb Journal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the UI repo for my application for tracking climbing sessions, and visualizing climbing progress over time.
 
-Currently, two official plugins are available:
+- React 19.2.7
+- node 24.13.2
+- Typescript 6.0.2
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+#### Development Tools
+- React
+- npm
+- Docker
+- Git
 
-## React Compiler
+### Set up
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+`npm install`
 
-## Expanding the ESLint configuration
+`npm run dev`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The backend application and database can be run through via Docker.
+https://github.com/ThomasMaher/climb_journal
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Clone the repo. In a new terminal window `cd climb_journal` and run
+`docker compose up -d`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+In another terminal widnow, create the database (first time only):
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+`docker compose run --rm rails bin/rails db:prepare db:seed`
 
-```
+#### To run tests
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+`docker compose run --rm -e RAILS_ENV=test rails bundle exec rspec`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+#### TODO:
+- ⏭️ Containerize the React frontend
+- Improved analytics and visualizations
+- Create a 'goals' feature

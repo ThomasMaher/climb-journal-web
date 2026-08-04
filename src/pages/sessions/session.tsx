@@ -7,7 +7,7 @@ import type { Session, SessionClimb } from '../../models/climbing_models.ts';
 
 type ApiFormErrors = Record<string, string[]> | { form: string };
 
-function Session() {
+export default function Session() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [session, setSession] = useState<Session | undefined>(undefined);
@@ -25,7 +25,7 @@ function Session() {
 
       const response = await getSession(id);
       if (!response.ok) {
-        setPageError(response.error ?? 'Unable to load session');
+        setPageError(response.errors ?? 'Unable to load session');
         if (response.data?.errors) {
           setFormErrors(response.data.errors);
         }
@@ -127,5 +127,3 @@ function Session() {
     </>
   );
 }
-
-export default Session;

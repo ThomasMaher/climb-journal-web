@@ -1,18 +1,18 @@
-import { API_URL, fetchApi } from './utils';
-import type { LoginData } from './models/user_models';
+import { fetchApi } from './utils';
+import type { LoginData } from '../models/user_models';
 
-export async function getUserHomeStats(userId: string) {
-    return fetchApi(`${API_URL}/home_stats.json`);
+export async function getUserHomeStats() {
+    return fetchApi(`/home_stats.json`);
 }
 
 export async function getUserStatus() {
-    return fetchApi(`${API_URL}/user_status.json`);
+    return fetchApi(`/user_status.json`);
 }
 
 export async function login(formData: LoginData) {
     const { username, password } = formData;
 
-    return fetchApi(`${API_URL}/login.json`, {
+    return fetchApi(`/login.json`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export async function login(formData: LoginData) {
 }
 
 export async function logout() {
-    return fetchApi(`${API_URL}/logout`, {
+    return fetchApi(`/logout`, {
         method: 'DELETE',
         headers: {
             "Content-Type": "application/json",

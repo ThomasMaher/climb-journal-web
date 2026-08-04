@@ -1,21 +1,20 @@
-import { API_URL, fetchApi } from './utils'
+import { fetchApi } from './utils'
 import type { ApiResponse } from './utils'
 
 export async function getSessions() {
-    return fetchApi(`${API_URL}/sessions`)
+    return fetchApi(`/sessions`)
 }
 
-export async function getSession(id: string) {
+export async function getSession(id: string): Promise<ApiResponse<unknown>> {
     if (!id) {
         return {
             ok: false,
             status: 0,
-            data: null,
-            error: 'Session id is required',
-        } as ApiResponse<unknown>
+            errors: { message: 'Session id is required' },
+        } 
     }
 
-    return fetchApi(`${API_URL}/sessions/${id}`)
+    return fetchApi(`/sessions/${id}`)
 }
 
 export async function deleteSession(id: string) {
@@ -23,12 +22,11 @@ export async function deleteSession(id: string) {
         return {
             ok: false,
             status: 0,
-            data: null,
-            error: 'Session id is required',
-        } as ApiResponse<unknown>
+            error: { message: 'Session id is required' },
+        }
     }
 
-    return fetchApi(`${API_URL}/sessions/${id}`, {
+    return fetchApi(`/sessions/${id}`, {
         method: 'DELETE',
     })
 }
@@ -38,7 +36,7 @@ export async function createSession(session: {
     gym_name: string,
     notes: string,
 }) {
-    return fetchApi(`${API_URL}/sessions`, {
+    return fetchApi(`/sessions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

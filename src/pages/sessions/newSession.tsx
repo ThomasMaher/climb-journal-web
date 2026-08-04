@@ -32,7 +32,7 @@ function NewSession() {
       if (response.ok) {
         navigate('/');
       } else {
-        setErrors(response.data?.errors || { form: response.error || 'Failed to create session' });
+        setErrors(response.data?.errors || { form: response.errors || 'Failed to create session' });
       }
     } catch (err: unknown) {
       if (err instanceof Error) {

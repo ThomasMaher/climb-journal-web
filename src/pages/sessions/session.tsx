@@ -4,16 +4,15 @@ import { getSession, deleteSession } from '../../api/sessions';
 import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
 import type { Session, SessionClimb } from '../../models/climbing_models.ts';
-
-type ApiFormErrors = Record<string, string[]> | { form: string };
+import type { ApiFormError } from '../../api/utils';
 
 export default function Session() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [session, setSession] = useState<Session | undefined>(undefined);
   const [sessionClimbs, setSessionClimbs] = useState<SessionClimb[]>([]);
-  const [pageError, setPageError] = useState<string>('');
-  const [formErrors, setFormErrors] = useState<ApiFormErrors | undefined>(undefined);
+  const [pageError, setPageError] = useState<string | undefined>(undefined);
+  const [formErrors, setFormErrors] = useState<ApiFormError | undefined>(undefined);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -25,20 +24,15 @@ export default function Session() {
 
       const response = await getSession(id);
       if (!response.ok) {
-        setPageError(response.errors ?? 'Unable to load session');
-        if (response.data?.errors) {
-          setFormErrors(response.data.errors);
+        setPageError(response.error ?? 'Unable to load session' );
+        if (response.errors) {
+          setFormErrors(response.errors);
         }
         return;
       }
 
       const sessionData = response.data;
-      if (sessionData?.errors) {
-        setFormErrors(sessionData.errors);
-        return;
-      }
-
-      setSession((({ id, date, gym_name, notes }) => ({ id, date, gym_name, notes }))(sessionData));
+      setSession(sessionData?.session)
       setSessionClimbs(sessionData?.boulders ?? []);
     }
 

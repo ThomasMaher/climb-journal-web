@@ -1,16 +1,18 @@
 import { fetchApi } from './utils'
-import type { ApiResponse } from './utils'
+import type { ApiResponse, GenericActionResponse } from './utils'
+import type { SessionApiResponse } from '../models/climbing_models';
 
 export async function getSessions() {
     return fetchApi(`/sessions`)
 }
 
-export async function getSession(id: string): Promise<ApiResponse<unknown>> {
+export async function getSession(id: string): Promise<ApiResponse<SessionApiResponse>> {
     if (!id) {
         return {
             ok: false,
             status: 0,
-            errors: { message: 'Session id is required' },
+            error: 'Session id is required',
+            errors: undefined,
         } 
     }
 
@@ -22,7 +24,8 @@ export async function deleteSession(id: string) {
         return {
             ok: false,
             status: 0,
-            error: { message: 'Session id is required' },
+            error: 'Session id is required',
+            errors: undefined
         }
     }
 

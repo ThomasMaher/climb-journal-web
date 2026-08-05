@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { useAuth } from './AuthContext';
-import { login } from './api/user';
+import { login, register } from '../../api/user';
 import { useNavigate } from 'react-router-dom';
-import type { LoginData } from './models/user_models';
-import type { ApiError } from './api/utils';
+import type { UserData } from '../../models/user_models';
+import type { ApiError } from '../../api/utils';
 
 function Login() {
     const navigate = useNavigate();
     const { setUser } = useAuth();
-    const [errors, setErrors] = useState<ApiError[] | undefined>(undefined);
+    const [errors, setErrors] = useState<ApiError | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
-    const [formData, setFormData] = useState<LoginData>({
+    const [formData, setFormData] = useState<UserData>({
         username: '',
         password: '',
-    })
+    });
+    const [registering, setRegistering] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -21,12 +22,17 @@ function Login() {
         setSubmitting(true);
 
         try {
-            const response = await login(formData);
-            if (response.ok) {
+            let response;
+            if (registering) {
+                response = await register(formData);
+            } else {
+                response = await login(formData);
+            }
+            if (response?.ok) {
                 setUser(response.data);
                 navigate(`/`);
             } else {
-                setErrors(response.errors ? response.errors : [{ message: 'Unable to log in.' }]);
+                setErrors(response.errors ? response.errors : { message: 'Unable to log in.' });
             }
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -37,11 +43,25 @@ function Login() {
         }
     }
 
+    const switchFormType = () => {
+        setErrors(undefined);
+
+        return (
+            <button onClick={() => setRegistering(!registering)}>
+                {registering ? "Login" : "Register"}
+            </button>
+        );
+    }
+
     return(
         <>
-            <h1>Climb Journal</h1>
+            <h1>
+                {registering ? 'Climb Journal' : 'Create a Climb Journal account'}
+            </h1>
 
-            <h2>Log In</h2>
+            <h2>
+                {registering ? 'Log In' : 'Choose username and password'}
+            </h2>
             <form className="form-panel form-stack" onSubmit={handleSubmit}>
                 {errors && (
                     <p className="error-banner" role="alert">
@@ -69,9 +89,17 @@ function Login() {
 
                 <div className="form-actions">
                     <button type="submit" className="btn" disabled={submitting}>
-                        {submitting ? 'Logging in ...' : 'Log in'}
+                        {submitting ? 'Logging in ...' : 'Submit'}
                     </button>
                 </div>
+                <button
+                    onClick={() => {
+                        setErrors(undefined);
+                        setRegistering(!registering);
+                    }}
+                    >
+                    {registering ? "Register" : "Login"}
+                    </button>
             </form>
         </>
     )

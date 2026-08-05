@@ -12,9 +12,9 @@ type SendsByGrade = {
 }
 
 export type UserState = {
-    user: string | null;
+    user: string | undefined;
     setUser: (user: any) => void;
     loading: boolean;
 }
 
-export type LoginData = {username: string, password: string};
+export type UserData = {username: string, password: string};

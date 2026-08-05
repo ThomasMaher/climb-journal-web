@@ -1,18 +1,18 @@
 import { fetchApi } from './utils';
-import type { LoginData } from '../models/user_models';
+import type { UserData } from '../models/user_models';
 
 export async function getUserHomeStats() {
-    return fetchApi(`/home_stats.json`);
+    return fetchApi(`/home_stats`);
 }
 
 export async function getUserStatus() {
-    return fetchApi(`/user_status.json`);
+    return fetchApi(`/user_status`);
 }
 
-export async function login(formData: LoginData) {
+export async function login(formData: UserData) {
     const { username, password } = formData;
 
-    return fetchApi(`/login.json`, {
+    return fetchApi(`/login`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -29,5 +29,18 @@ export async function logout() {
         headers: {
             "Content-Type": "application/json",
         },
+    })
+}
+
+export async function register(formData: UserData) {
+    const { username, password } = formData;
+    return fetchApi(`/users`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user: { username, password_digest: password, }
+        })
     })
 }

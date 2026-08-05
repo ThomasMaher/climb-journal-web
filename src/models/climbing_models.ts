@@ -66,3 +66,8 @@ export type SessionClimbBoulder = {
     created_at: string;
     updated_at: string;
 }
+
+export type SessionApiResponse = {
+    session: Session;
+    boulders: SessionClimbBoulder[];
+}

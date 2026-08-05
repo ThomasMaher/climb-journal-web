@@ -22,7 +22,7 @@ function HomeStats() {
 
     useEffect(() => {
         async function loadStats() {
-            const response = await getUserHomeStats('1');
+            const response = await getUserHomeStats();
 
             if(response.ok) {
                 setOverallStats(response.data.overall)

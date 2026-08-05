@@ -5,14 +5,14 @@ import type { UserStats } from '../models/user_models';
 
 function HomeStats() {
     const [loading, setLoading] = useState<boolean>(true);
-    const [ overallStats, setOverallStats ] = useState<UserStats>({
+    const [ overallStats, setOverallStats ] = useState<UserStats | undefined>({
         total_sessions: 0,
         highest_grade: 0,
         avg_grade_sent: 0,
         most_frequented_gym: '',
         sends_by_grade: [],
     });
-    const [ pastMonthStats, setPastMonthStats ] = useState<UserStats>({
+    const [ pastMonthStats, setPastMonthStats ] = useState<UserStats | undefined>({
         total_sessions: 0,
         highest_grade: 0,
         avg_grade_sent: 0,
@@ -24,9 +24,11 @@ function HomeStats() {
         async function loadStats() {
             const response = await getUserHomeStats();
 
-            if(response.ok) {
-                setOverallStats(response.data.overall)
-                setPastMonthStats(response.data.past_month)
+            if(!response.ok) {
+                console.log('Set errors');
+            } else {
+                setOverallStats(response.data?.overall)
+                setPastMonthStats(response.data?.past_month)
             }
             setLoading(false);
         }
@@ -51,7 +53,10 @@ function HomeStats() {
         );
     }
 
-    const renderStats = (title: string, stats: UserStats) => {
+    const renderStats = (title: string, stats: UserStats | undefined) => {
+        if (!stats) {
+            return (<p>Unable to load stats.</p>)
+        }
         return (
             <div className="home-stats__card">
                 <h2>{title}</h2>

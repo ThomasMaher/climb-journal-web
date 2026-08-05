@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react';
 import { getSession, deleteSession } from '../../api/sessions';
 import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
-import type { Session, SessionClimb } from '../../models/climbing_models.ts';
-import type { ApiFormError } from '../../api/utils';
+import type { Session, SessionClimbBoulder } from '../../models/climbing_models.ts';
+import type { ApiFormErrors } from '../../api/utils';
 
 export default function Session() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [session, setSession] = useState<Session | undefined>(undefined);
-  const [sessionClimbs, setSessionClimbs] = useState<SessionClimb[]>([]);
+  const [sessionClimbs, setSessionClimbs] = useState<SessionClimbBoulder[]>([]);
   const [pageError, setPageError] = useState<string | undefined>(undefined);
-  const [formErrors, setFormErrors] = useState<ApiFormError | undefined>(undefined);
+  const [formErrors, setFormErrors] = useState<ApiFormErrors | undefined>(undefined);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {

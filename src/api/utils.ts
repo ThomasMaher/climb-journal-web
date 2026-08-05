@@ -1,55 +1,30 @@
-import type { UserData, UserStats } from '../models/user_models';
-import type { Session, SessionClimbBoulder, SessionApiResponse } from '../models/climbing_models';
-
 export const API_URL = "http://localhost:3000";
 
 export type ApiResponse<T> =
   | { ok: true; status: number; data: T | null }
-  | { ok: false; status: number; error: string; errors: (ApiFormError | undefined) };
+  | { ok: false; status: number; error: string; errors: (ApiFormErrors | undefined) };
 
-export type ApiFormError = {
-  fieldErrors: { [field: string]: string[] } 
+export type ApiFormErrors = {
+  [field: string]: string[]
 };
 
 export type GenericActionResponse = { success: boolean; }
 
-type ApiResponses =
-    { path: "/boulders"; value: SessionClimbBoulder[] }
-  | { path: "/home_stats"; value: UserStats }
-  | { path: "/users"; value: UserData }
-  | { path: "/sessions"; value: Session[] }
-  | { path: "/user_status"; value: UserData }
-  | { path: "/login"; value: UserData }
-  | { path: "/logout"; value: unknown }
-  | { path: `/sessions/${string}`; value: SessionApiResponse | GenericActionResponse }
-
-type Paths = ApiResponses["path"];
-type ResponseValue<Path extends Paths> =
-  Path extends "/boulders" ? SessionClimbBoulder[] :
-  Path extends "/home_stats" ? UserStats :
-  Path extends "/users" ? UserData :
-  Path extends "/sessions" ? Session[] :
-  Path extends "/user_status" ? UserData :
-  Path extends "/login" ? UserData :
-  Path extends "/logout" ? unknown :
-  Path extends `/sessions/${string}` ? SessionApiResponse | GenericActionResponse :
-  never;
-
-export async function fetchApi<const Path extends Paths>(
-  path: Path,
+export async function fetchApi<T>(
+  path: string,
   init?: RequestInit,
-): Promise<ApiResponse<ResponseValue<Path>>> {
+): Promise<ApiResponse<T>> {
   try {
     const url = `${API_URL}${path}`;
     const response = await fetch(url, { ...init, credentials: "include" });
     const text = await response.text();
-    let data: ResponseValue<Path> | null = null;
+    let data = null;
 
     if (text) {
       try {
-        data = JSON.parse(text) as ResponseValue<Path>;
+        data = JSON.parse(text);
       } catch {
-        data = text as unknown as ResponseValue<Path>;
+        data = text;
       }
     }
 
@@ -61,14 +36,14 @@ export async function fetchApi<const Path extends Paths>(
           `Request failed with status ${response.status}`)
         : `Request failed with status ${response.status}`;
 
-    const errors: ApiFormError | undefined = response.ok
+    const errors: ApiFormErrors | undefined = response.ok
       ? undefined
       : typeof data === "object" && data !== null && "errors" in data
-        ? (data.errors as ApiFormError | undefined)
+        ? (data.errors as ApiFormErrors | undefined)
         : undefined;
 
     return response.ok
-      ? { ok: true, status: response.status, data }
+      ? { ok: true, status: response.status, data: data as T | null }
       : { ok: false, status: response.status, error: error ?? `Request failed with status ${response.status}`, errors };
   } catch (err: any) {
     return {

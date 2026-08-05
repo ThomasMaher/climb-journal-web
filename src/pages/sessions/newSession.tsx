@@ -4,16 +4,17 @@ import { useNavigate, Link } from 'react-router-dom';
 import type { Session } from '../../models/climbing_models';
 
 
-type ApiFormErrors = Record<string, string[]> | { form: string };
+type ApiFormErrorss = Record<string, string[]> | { form: string };
 
 function NewSession() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Session>({
+    id: undefined,
     date: '',
     gym_name: '',
     notes: '',
   });
-  const [errors, setErrors] = useState<ApiFormErrors | undefined>(undefined);
+  const [errors, setErrors] = useState<ApiFormErrorss | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
 
   const getFieldError = (field: string) => {
@@ -32,7 +33,7 @@ function NewSession() {
       if (response.ok) {
         navigate('/');
       } else {
-        setErrors(response.data?.errors || { form: response.errors || 'Failed to create session' });
+        setErrors(response.errors || { form: ['Failed to create session'] });
       }
     } catch (err: unknown) {
       if (err instanceof Error) {

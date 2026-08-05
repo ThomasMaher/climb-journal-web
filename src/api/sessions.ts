@@ -1,9 +1,9 @@
 import { fetchApi } from './utils'
 import type { ApiResponse, GenericActionResponse } from './utils'
-import type { SessionApiResponse } from '../models/climbing_models';
+import type { SessionApiResponse, Session } from '../models/climbing_models';
 
 export async function getSessions() {
-    return fetchApi(`/sessions`)
+    return fetchApi<Session[]>(`/sessions`)
 }
 
 export async function getSession(id: string): Promise<ApiResponse<SessionApiResponse>> {
@@ -16,7 +16,7 @@ export async function getSession(id: string): Promise<ApiResponse<SessionApiResp
         } 
     }
 
-    return fetchApi(`/sessions/${id}`)
+    return fetchApi<SessionApiResponse>(`/sessions/${id}`)
 }
 
 export async function deleteSession(id: string) {
@@ -29,7 +29,7 @@ export async function deleteSession(id: string) {
         }
     }
 
-    return fetchApi(`/sessions/${id}`, {
+    return fetchApi<GenericActionResponse>(`/sessions/${id}`, {
         method: 'DELETE',
     })
 }
@@ -39,7 +39,7 @@ export async function createSession(session: {
     gym_name: string,
     notes: string,
 }) {
-    return fetchApi(`/sessions`, {
+    return fetchApi<Session>(`/sessions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

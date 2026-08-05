@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { submitSessionClimb, createRequestData } from '../../api/boulders';
-import type { SessionClimbFormData, SessionClimb } from '../../models/climbing_models';
+import type { SessionClimbFormData, SessionClimbBoulder } from '../../models/climbing_models';
+import type { ApiFormErrors } from '../../api/utils';
 
 const MAX_VGRADE = 17;
 const MAX_INCLINE = 90 / 5;
 const MAX_RATING = 10;
-
-type FieldErrors = Record<string, string[]>;
-type FormErrors = FieldErrors | { form: string };
 
 function BoulderForm(props: BoulderFormProps) {
   const [formData, setFormData] = useState<SessionClimbFormData>({
@@ -23,12 +21,13 @@ function BoulderForm(props: BoulderFormProps) {
     percent_finished: 0,
     warmup: false,
   });
-  const [errors, setErrors] = useState<FormErrors | undefined>(props.errors);
+  const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
 
   const getFieldError = (field: string) => {
     if (!errors || 'form' in errors) return undefined;
+
     const fieldErrors = errors[field];
     return Array.isArray(fieldErrors) ? fieldErrors[0] : undefined;
   };
@@ -44,9 +43,9 @@ function BoulderForm(props: BoulderFormProps) {
 
       if (response.ok && response.data) {
         props.setSessionClimbs([...(props.sessionClimbs ?? []), response.data]);
-      } else {
-        if (response.data?.errors) {
-          setErrors(response.data.errors);
+      } else if (!response.ok) {
+        if (response.errors) {
+          setErrors(response.errors);
         } else {
           setSubmitError(response.error || 'Failed to submit climb');
         }
@@ -275,9 +274,9 @@ function GradeSelect(props: {
 type BoulderFormProps = {
   sessionId: string | undefined;
   userId: number;
-  errors?: FormErrors;
-  sessionClimbs?: SessionClimb[];
-  setSessionClimbs: (boulders: SessionClimb[]) => void;
+  errors?: ApiFormErrors;
+  sessionClimbs?: SessionClimbBoulder[];
+  setSessionClimbs: (boulders: SessionClimbBoulder[]) => void;
 };
 
 export default BoulderForm;

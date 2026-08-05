@@ -3,12 +3,11 @@ import { useAuth } from './AuthContext';
 import { login, register } from '../../api/user';
 import { useNavigate } from 'react-router-dom';
 import type { UserData } from '../../models/user_models';
-import type { ApiError } from '../../api/utils';
 
 function Login() {
     const navigate = useNavigate();
     const { setUser } = useAuth();
-    const [errors, setErrors] = useState<ApiError | undefined>(undefined);
+    const [errors, setErrors] = useState<string | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [formData, setFormData] = useState<UserData>({
         username: '',
@@ -31,12 +30,12 @@ function Login() {
             if (response?.ok) {
                 setUser(response.data);
                 navigate(`/`);
-            } else {
-                setErrors(response.errors ? response.errors : { message: 'Unable to log in.' });
+            } else if (response.error) {
+                setErrors(response.error || 'Unable to log in.');
             }
         } catch (err: unknown) {
             if (err instanceof Error) {
-                setErrors({ message: err?.message || 'Unable to log in.'})
+                setErrors(err?.message || 'Unable to log in.')
             }
         } finally {
             setSubmitting(false)

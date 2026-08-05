@@ -1,5 +1,5 @@
 export type Session = {
-    id: number;
+    id: number | undefined;
     date: string;
     gym_name: string;
     notes: string;

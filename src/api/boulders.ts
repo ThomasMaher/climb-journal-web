@@ -1,10 +1,10 @@
 import {  fetchApi } from './utils'
-import type { SessionClimbFormData } from '../models/climbing_models';
+import type { SessionClimbFormData, SessionClimbBoulder } from '../models/climbing_models';
 
 type SessionClimbPayload = Omit<SessionClimbFormData, "attempts" | "percent_finished" | "notes">
 
 export async function submitSessionClimb(boulderData: SessionClimbPayload) {
-    return fetchApi(`/boulders`, {
+    return fetchApi<SessionClimbBoulder>(`/boulders`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

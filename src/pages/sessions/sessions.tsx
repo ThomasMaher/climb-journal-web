@@ -13,7 +13,7 @@ function Sessions() {
       const response = await getSessions();
       if (response.ok && response.data) {
         setSessions(response.data);
-      } else {
+      } else if (!response.ok) {
         setError(response.error ?? 'Unable to load sessions');
       }
       setLoading(false);

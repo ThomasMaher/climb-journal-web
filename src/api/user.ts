@@ -1,12 +1,14 @@
 import { fetchApi } from './utils';
-import type { UserData } from '../models/user_models';
+import type { UserData, UserStats } from '../models/user_models';
+
+type UserStatsResponse = {overall: UserStats, past_month: UserStats}
 
 export async function getUserHomeStats() {
-    return fetchApi(`/home_stats`);
+    return fetchApi<UserStatsResponse>(`/home_stats`);
 }
 
 export async function getUserStatus() {
-    return fetchApi(`/user_status`);
+    return fetchApi<UserData>(`/user_status`);
 }
 
 export async function login(formData: UserData) {

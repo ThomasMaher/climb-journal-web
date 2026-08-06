@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getSession, deleteSession } from '../../api/sessions';
 import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
+import SessionStats from './sessionStats';
 import { SESSIONS } from '../home';
 import type { Session, SessionClimbBoulder } from '../../models/climbing_models.ts';
 import type { ApiFormErrors } from '../../api/utils';
@@ -91,24 +92,29 @@ export default function Session() {
 
       <div className="session-layout">
         <aside className="session-aside">
-          <div className="session-aside__meta">
-            <span className="session-aside__label">Gym</span>
-            <p className="session-aside__gym">{session?.gym_name ?? '—'}</p>
-            {session?.date && (
-              <time className="session-aside__date" dateTime={session.date}>
-                {session.date}
-              </time>
-            )}
+          <div className="session-aside__info">
+            <div className="session-aside__meta">
+              <span className="session-aside__label">Gym</span>
+              <p className="session-aside__gym">{session?.gym_name ?? '—'}</p>
+              {session?.date && (
+                <time className="session-aside__date" dateTime={session.date}>
+                  {session.date}
+                </time>
+              )}
+            </div>
+            {session?.notes ? <p className="session-aside__notes">{session.notes}</p> : null}
+            <button
+              type="button"
+              className="btn btn--danger btn--sm"
+              onClick={handleDelete}
+              disabled={deleting}
+            >
+              {deleting ? 'Deleting…' : 'Delete session'}
+            </button>
           </div>
-          {session?.notes ? <p className="session-aside__notes">{session.notes}</p> : null}
-          <button
-            type="button"
-            className="btn btn--danger btn--sm"
-            onClick={handleDelete}
-            disabled={deleting}
-          >
-            {deleting ? 'Deleting…' : 'Delete session'}
-          </button>
+          <div className="session-aside__info">
+            <SessionStats />
+          </div>
         </aside>
 
         <BoulderForm
@@ -119,6 +125,7 @@ export default function Session() {
           setSessionClimbs={setSessionClimbs}
         />
       </div>
+
 
       <SessionBoulderList sessionClimbs={sessionClimbs} />
     </>

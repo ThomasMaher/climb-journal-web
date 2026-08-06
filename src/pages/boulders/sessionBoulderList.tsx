@@ -1,13 +1,13 @@
-import type { SessionClimb } from '../../models/climbing_models';
+import type { SessionClimbBoulder } from '../../models/climbing_models';
 
 type sessionClimbListProps = {
-  sessionClimbs?: SessionClimb[];
+  sessionClimbs?: SessionClimbBoulder[];
 };
 
 function sessionClimbList({ sessionClimbs }: sessionClimbListProps) {
   const climbs = sessionClimbs ?? [];
 
-  const vGradeRange = (climb: SessionClimb) => {
+  const vGradeRange = (climb: SessionClimbBoulder) => {
     if (!climb.vgrade_range_max) { return climb.vgrade_range_min }
     if (!climb.vgrade_range_min) { return climb.vgrade_range_max }
 

@@ -394,14 +394,13 @@
 
 .home-stats__card {
   padding: var(--space-lg);
-  background: var(--bg-elevated);
+  background: rgba(26, 33, 29, 0.45);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  width: 58%;
-  height: 325px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  min-height: 325px;
   text-align: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .home-stats__body {
@@ -455,10 +454,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-  padding: var(--space-lg);
+  align-items: stretch;
+}
+
+.session-aside__info {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+  padding: var(--space-lg);
 }
 
 .session-aside__meta {

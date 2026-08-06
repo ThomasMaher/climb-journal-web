@@ -90,7 +90,12 @@ function HomeStats() {
                             <BarChart
                                 data={stats.sends_by_grade}
                             >
-                                <XAxis dataKey="vgrade" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
+                                <XAxis 
+                                    dataKey="vgrade" 
+                                    tickLine={false} 
+                                    axisLine={false} 
+                                    tickFormatter={(grade) => `V${grade}`}
+                                    tick={{ fontSize: 12 }} />
                                 <YAxis width="auto" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
                                 <Bar dataKey="sends" fill="#6f9f76" barSize={20} />
                                 <Tooltip cursor={false} content={<CustomTooltip />} />

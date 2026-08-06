@@ -2,6 +2,7 @@ import type { MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../api/user';
 import { useAuth } from './auth/AuthContext';
+import { SESSIONS } from './home';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function NavBar() {
           Climb<span>Journal</span>
         </Link>
         <nav className="site-nav__links" aria-label="Primary">
-          <Link to="/" className="site-nav__link">
+          <Link to="/" className="site-nav__link" state={{ content: SESSIONS }}>
             Sessions
           </Link>
           {renderUserButton()}

@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Sessions from './sessions/sessions.tsx';
 import HomeStats from './homeStats.tsx';
 
 const STATS = 'STATS';
-const SESSIONS = 'SESSIONS';
+export const SESSIONS = 'SESSIONS';
 
 function Home() {
-    const [content, setContent] = useState<string>(STATS);
+    const location = useLocation();
+    const locationState = location.state as { content?: string } | null | undefined;
+    const [content, setContent] = useState<string>(locationState?.content ?? STATS);
 
     const handleToggle = () => {
         const newState = content === STATS ? SESSIONS : STATS;
@@ -16,7 +19,7 @@ function Home() {
     return(
         <>
             <header className="page-header">
-                <div>
+                <div className="page-header__content">
                     <p className="page-header__eyebrow">Logbook</p>
                     <div className="page-header__toggler">
                         <div>
@@ -29,6 +32,9 @@ function Home() {
                         </div>
                     </div>
                 </div>
+                <Link to="/newSession" className="page-header__action">
+                    Create a session
+                </Link>
             </header>
 
             {content === SESSIONS && <Sessions />}

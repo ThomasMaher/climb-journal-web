@@ -49,7 +49,7 @@ export async function fetchApi<T>(
     return {
       ok: false,
       status: 0,
-      error: "Network error",
+      error: err.message || "Network error",
       errors: undefined
     };
   }

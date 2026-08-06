@@ -2,7 +2,7 @@ import { createSession } from '../../api/sessions';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import type { Session } from '../../models/climbing_models';
-
+import { SESSIONS } from '../home';
 
 type ApiFormErrorss = Record<string, string[]> | { form: string };
 
@@ -52,7 +52,7 @@ function NewSession() {
           <h1>New session</h1>
           <p className="page-header__sub">Where and when did you climb?</p>
         </div>
-        <Link to="/" className="btn btn--ghost">
+        <Link to="/" className="btn btn--ghost" state={{ content: SESSIONS }}>
           Cancel
         </Link>
       </header>

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getSession, deleteSession } from '../../api/sessions';
 import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
+import { SESSIONS } from '../home';
 import type { Session, SessionClimbBoulder } from '../../models/climbing_models.ts';
 import type { ApiFormErrors } from '../../api/utils';
 
@@ -32,8 +33,10 @@ export default function Session() {
       }
 
       const sessionData = response.data;
-      setSession(sessionData?.session)
-      setSessionClimbs(sessionData?.boulders ?? []);
+      if (sessionData) {
+        setSession((({ id, gym_name, date, notes }) => ({id, gym_name, date, notes}))(sessionData))
+        setSessionClimbs(sessionData.boulders ?? []);
+      }
     }
 
     loadSession();
@@ -75,7 +78,7 @@ export default function Session() {
         <div>
           <h1>Session</h1>
         </div>
-        <Link to="/" className="btn btn--ghost">
+        <Link to="/" state={{ content: SESSIONS }} className="btn btn--ghost">
           All sessions
         </Link>
       </header>

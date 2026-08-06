@@ -22,6 +22,17 @@
   margin-bottom: var(--space-xl);
 }
 
+.page-header__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.page-header__action {
+  margin-left: auto;
+  align-self: center;
+}
+
 .page-header__eyebrow {
   font-size: 0.75rem;
   font-weight: 600;
@@ -83,6 +94,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
+  margin-left: auto;
 }
 
 .site-nav__link {

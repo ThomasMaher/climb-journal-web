@@ -61,7 +61,7 @@ function HomeStats() {
             <div className="home-stats__card">
                 <h2>{title}</h2>
 
-                <div className="home-stats__body">
+                <div className="home-stats__body stats__body">
                     <div>
                         <table className="home-stats__table">
                             <tbody>

@@ -386,6 +386,15 @@
   margin-bottom: var(--space-md);
 }
 
+/* Stats General */
+.stats__body {
+  gap: 5%;
+  padding-top: 45px;
+}
+
+/* Session page stats */
+
+
 /* Home Stats */
 .home-stats {
   display: flex;
@@ -405,8 +414,6 @@
 
 .home-stats__body {
   display: flex;
-  gap: 5%;
-  padding-top: 45px;
 }
 
 .home-stats__table {
@@ -433,10 +440,6 @@
 .home-stats__table td {
   color: var(--text-heading);
   font-weight: 600;
-}
-
-.test-line {
-  width: 40px;
 }
 
 /* Session detail */

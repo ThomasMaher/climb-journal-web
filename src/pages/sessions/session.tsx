@@ -1,11 +1,11 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getSession, deleteSession } from '../../api/sessions';
+import { getSession, deleteSession, getSessionStats } from '../../api/sessions';
 import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
 import SessionStats from './sessionStats';
 import { SESSIONS } from '../home';
-import type { Session, SessionClimbBoulder } from '../../models/climbing_models.ts';
+import type { Session, SessionClimbBoulder, SessionStatsResponse } from '../../models/climbing_models.ts';
 import type { ApiFormErrors } from '../../api/utils';
 
 export default function Session() {
@@ -16,6 +16,8 @@ export default function Session() {
   const [pageError, setPageError] = useState<string | undefined>(undefined);
   const [formErrors, setFormErrors] = useState<ApiFormErrors | undefined>(undefined);
   const [deleting, setDeleting] = useState(false);
+  const [sessionStats, setSessionStats] = useState<SessionStatsResponse | undefined>(undefined);
+  const [statsError, setStatsError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     async function loadSession() {
@@ -40,8 +42,38 @@ export default function Session() {
       }
     }
 
+    async function loadSessionStats() {
+      if (!id) {
+        setPageError('Session id is required');
+        return;
+      }
+
+      const response = await getSessionStats(id);
+      if (!response.ok) {
+        setStatsError(response.error ?? 'Unable to load session stats' );
+        return;
+      }
+
+      const statsData = response.data;
+      if (statsData) {
+        setSessionStats(statsData);
+      }
+    }
+
     loadSession();
+    loadSessionStats();
   }, [id]);
+
+  const handleBoulderCreated = async (newBoulder: SessionClimbBoulder) => {
+      setSessionClimbs([...(sessionClimbs ?? []), newBoulder]);
+
+      const response = await getSessionStats(id);
+      if (!response.ok) {
+        setStatsError(response.error ?? "Unable to load data.")
+      } else if (!response.data?.id) {
+        setSessionStats(response.data);
+      }
+  }
 
   const handleDelete = async () => {
     setPageError('');
@@ -113,7 +145,7 @@ export default function Session() {
             </button>
           </div>
           <div className="session-aside__info">
-            <SessionStats />
+            <SessionStats sessionStats={sessionStats} statsError={statsError} />
           </div>
         </aside>
 
@@ -122,7 +154,7 @@ export default function Session() {
           userId={1}
           errors={formErrors}
           sessionClimbs={sessionClimbs}
-          setSessionClimbs={setSessionClimbs}
+          handleBoulderCreated={handleBoulderCreated}
         />
       </div>
 

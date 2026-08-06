@@ -42,7 +42,7 @@ function BoulderForm(props: BoulderFormProps) {
       const response = await submitSessionClimb(createRequestData(formData, props.sessionId, props.userId));
 
       if (response.ok && response.data) {
-        props.setSessionClimbs([...(props.sessionClimbs ?? []), response.data]);
+        props.handleBoulderCreated(response.data)
       } else if (!response.ok) {
         if (response.errors) {
           setErrors(response.errors);
@@ -276,7 +276,7 @@ type BoulderFormProps = {
   userId: number;
   errors?: ApiFormErrors;
   sessionClimbs?: SessionClimbBoulder[];
-  setSessionClimbs: (boulders: SessionClimbBoulder[]) => void;
+  handleBoulderCreated: (newBoulder: SessionClimbBoulder) => void;
 };
 
 export default BoulderForm;

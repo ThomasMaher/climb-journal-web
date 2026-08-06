@@ -1,3 +1,5 @@
+import type { SendsByGrade } from './user_models';
+
 export type Session = {
     id: number | undefined;
     date: string;
@@ -50,4 +52,10 @@ export type SessionClimbBoulder = SessionClimb& Boulder;
 
 export type SessionApiResponse = Session & {
     boulders: SessionClimbBoulder[];
+}
+
+export type SessionStatsResponse = {
+    total_boulders: number;
+    highest_grade_sent: number;
+    sends_by_grade: SendsByGrade;
 }

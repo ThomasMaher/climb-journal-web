@@ -6,7 +6,7 @@ export type UserStats = {
     sends_by_grade: SendsByGrade[];
 };
 
-type SendsByGrade = {
+export type SendsByGrade = {
     vgrade: number;
     sends: number
 }

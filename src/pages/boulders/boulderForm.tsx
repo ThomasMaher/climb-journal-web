@@ -233,7 +233,7 @@ function BoulderForm(props: BoulderFormProps) {
             <div className="choice-row">
               <label key='warmup' className="choice">
                 <input
-                  type="radio"
+                  type="checkbox"
                   name="warmup"
                   value="warmup"
                   checked={formData.warmup}

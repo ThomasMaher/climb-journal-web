@@ -530,10 +530,10 @@
 }
 
 .climb-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: var(--space-md);
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
   padding: var(--space-md) var(--space-lg);
   background: var(--bg-elevated);
   border: 1px solid var(--border);
@@ -542,14 +542,38 @@
 }
 
 .climb-item__name {
+  flex: 1 1 auto;
+  min-width: 0;
   font-family: var(--font-display);
   font-weight: 600;
   color: var(--text-heading);
 }
 
+.climb-item__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: nowrap;
+  margin-left: auto;
+}
+
+.climb-item__warmup {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  background: rgba(111, 159, 118, 0.16);
+  color: var(--accent-hover);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .climb-item__stat {
+  margin: 0;
   font-size: 0.9rem;
   color: var(--text);
+  white-space: nowrap;
 }
 
 .climb-item__stat strong {
@@ -583,11 +607,14 @@
   }
 
   .climb-item {
-    grid-template-columns: 1fr 1fr;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .climb-item__name {
-    grid-column: 1 / -1;
+  .climb-item__meta {
+    width: 100%;
+    flex-wrap: wrap;
+    margin-left: 0;
   }
 }
 

@@ -36,10 +36,13 @@ function sessionClimbList({ sessionClimbs }: sessionClimbListProps) {
           {climbs.map((climb) => (
             <li key={climb.id} className="climb-item">
               <div className="climb-item__name">{climb.nickname || 'Untitled climb'}</div>
-              <span className="badge">V{vGradeRange(climb)}</span>
-              <p className="climb-item__stat">
-                <strong>{climb.attempts ?? 0}</strong> attempts
-              </p>
+              <div className="climb-item__meta">
+                {climb.warmup && <span className="climb-item__warmup">Warmup</span>}
+                <span className="badge">V{vGradeRange(climb)}</span>
+                <p className="climb-item__stat">
+                  <strong>{climb.attempts ?? 0}</strong> attempts
+                </p>
+              </div>
             </li>
           ))}
         </ul>

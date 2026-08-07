@@ -57,6 +57,8 @@ function HomeStats() {
         if (!stats) {
             return (<p>Unable to load stats.</p>)
         }
+
+        const highest_climb_count = stats.sends_by_grade.reduce((max, current) => Math.max(max, current.sends), 0);
         return (
             <div className="home-stats__card">
                 <h2>{title}</h2>
@@ -96,7 +98,13 @@ function HomeStats() {
                                     axisLine={false} 
                                     tickFormatter={(grade) => `V${grade}`}
                                     tick={{ fontSize: 12 }} />
-                                <YAxis width="auto" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
+                                <YAxis 
+                                    width="auto" 
+                                    tickLine={false} 
+                                    axisLine={false} 
+                                    tick={{ fontSize: 12 }} 
+                                    allowDecimals={false} 
+                                    domain={[0, highest_climb_count]} />
                                 <Bar dataKey="sends" fill="#6f9f76" barSize={20} />
                                 <Tooltip cursor={false} content={<CustomTooltip />} />
                             </BarChart>

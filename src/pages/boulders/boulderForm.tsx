@@ -227,6 +227,24 @@ function BoulderForm(props: BoulderFormProps) {
           </div>
 
           <div className="field field--full">
+            {getFieldError('warmup') && (
+              <p className="field-error">{getFieldError('warmup')}</p>
+            )}
+            <div className="choice-row">
+              <label key='warmup' className="choice">
+                <input
+                  type="radio"
+                  name="warmup"
+                  value="warmup"
+                  checked={formData.warmup}
+                  onChange={handleChange}
+                />
+                Warmup
+              </label>
+            </div>
+          </div>
+
+          <div className="field field--full">
             <label htmlFor="notes">Notes</label>
             {getFieldError('notes') && (
               <p className="field-error">{getFieldError('notes')}</p>

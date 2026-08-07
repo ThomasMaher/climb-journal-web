@@ -24,6 +24,7 @@ export default function SessionStats(props: {
 
     const renderSessionStats = () => {
         const {total_boulders, highest_grade_sent, sends_by_grade} = props.sessionStats;
+        const highest_climb_count = sends_by_grade.reduce((max, current) => Math.max(max, current.sends), 0);
         return (
             <>
                 <div className="session-stats__body" style={{marginBottom: '14px'}}>
@@ -58,7 +59,13 @@ export default function SessionStats(props: {
                                 axisLine={false} 
                                 tickFormatter={(grade) => `V${grade}`}
                                 tick={{ fontSize: 12 }} />
-                            <YAxis width="auto" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
+                            <YAxis 
+                                width="auto" 
+                                tickLine={false} 
+                                axisLine={false} 
+                                tick={{ fontSize: 12 }} 
+                                allowDecimals={false} 
+                                domain={[0, highest_climb_count]} />
                             <Bar dataKey="sends" fill="#6f9f76" barSize={20} />
                             <Tooltip cursor={false} content={<CustomTooltip />} />
                         </BarChart>
@@ -72,7 +79,7 @@ export default function SessionStats(props: {
         <>
             <h2 style={{marginBottom: '5px'}}>Session Stats</h2>
 
-            {props.statsError ? <p>{props.statsError}</p> : props.sessionStats ? renderSessionStats : <p>Nothing to display</p>}
+            {props.statsError ? <p>{props.statsError}</p> : props.sessionStats ? renderSessionStats() : <p>Nothing to display</p>}
         </>
     )
 }

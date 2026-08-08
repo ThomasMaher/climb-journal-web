@@ -45,7 +45,7 @@ export async function createSession(session: {
 }
 
 export async function getSessionStats(session_id: string | undefined) {
-    if (!session_id) { return idRequiredResponse<SessionApiResponse>() }
+    // if (!session_id) { return idRequiredResponse<SessionApiResponse>() }
 
     return fetchApi<SessionStatsResponse>(`/sessions/${session_id}/session_stats`);
 }

@@ -72,7 +72,7 @@ export default function Session() {
       const response = await getSessionStats(id);
       if (!response.ok) {
         setStatsError(response.error ?? "Unable to load data.")
-      } else if (!response.data?.id) {
+      } else {
         setSessionStats(response.data);
       }
   }

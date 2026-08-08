@@ -34,6 +34,10 @@ function BoulderForm(props: BoulderFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!props.sessionId) {
+      setSubmitError("Unable to submit from without session loaded.");  
+      return;
+    }
     setErrors(undefined);
     setSubmitError(undefined);
     setSubmitting(true);

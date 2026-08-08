@@ -1,7 +1,7 @@
 export const API_URL = "http://localhost:3000";
 
 export type ApiResponse<T> =
-  | { ok: true; status: number; data: T | null }
+  | { ok: true; status: number; data: T | undefined }
   | { ok: false; status: number; error: string; errors: (ApiFormErrors | undefined) };
 
 export type ApiFormErrors = {
@@ -18,7 +18,7 @@ export async function fetchApi<T>(
     const url = `${API_URL}${path}`;
     const response = await fetch(url, { ...init, credentials: "include" });
     const text = await response.text();
-    let data = null;
+    let data = undefined;
 
     if (text) {
       try {
@@ -43,7 +43,7 @@ export async function fetchApi<T>(
         : undefined;
 
     return response.ok
-      ? { ok: true, status: response.status, data: data as T | null }
+      ? { ok: true, status: response.status, data: data as T | undefined }
       : { ok: false, status: response.status, error: error ?? `Request failed with status ${response.status}`, errors };
   } catch (err: any) {
     return {

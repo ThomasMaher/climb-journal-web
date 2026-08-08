@@ -1,5 +1,6 @@
 import { BarChart, XAxis, YAxis, Bar, ResponsiveContainer, Tooltip } from 'recharts';
 import type { SessionStatsResponse } from '../../models/climbing_models.ts';
+import type { SendsByGrade } from '../../models/user_models.ts';
 
 export default function SessionStats(props: {
     sessionStats: SessionStatsResponse | undefined, 
@@ -23,8 +24,10 @@ export default function SessionStats(props: {
     }
 
     const renderSessionStats = () => {
+        if (!props.sessionStats) { return <p>Nothing to display</p> }
+
         const {total_boulders, highest_grade_sent, sends_by_grade} = props.sessionStats;
-        const highest_climb_count = sends_by_grade.reduce((max, current) => Math.max(max, current.sends), 0);
+        const highest_climb_count = sends_by_grade.reduce((max: number, current: SendsByGrade) => Math.max(max, current.sends), 0);
         return (
             <>
                 <div className="session-stats__body" style={{marginBottom: '14px'}}>
@@ -79,7 +82,7 @@ export default function SessionStats(props: {
         <>
             <h2 style={{marginBottom: '5px'}}>Session Stats</h2>
 
-            {props.statsError ? <p>{props.statsError}</p> : props.sessionStats ? renderSessionStats() : <p>Nothing to display</p>}
+            {props.statsError ? <p>{props.statsError}</p> : renderSessionStats()}
         </>
     )
 }

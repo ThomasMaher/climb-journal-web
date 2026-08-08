@@ -13,6 +13,7 @@ export default function Session() {
   const { id } = useParams<{ id: string }>();
   const [session, setSession] = useState<Session | undefined>(undefined);
   const [sessionClimbs, setSessionClimbs] = useState<SessionClimbBoulder[]>([]);
+  const [sessionWarmups, setSessionWarmups] = useState<SessionClimbBoulder[]>([]);
   const [pageError, setPageError] = useState<string | undefined>(undefined);
   const [formErrors, setFormErrors] = useState<ApiFormErrors | undefined>(undefined);
   const [deleting, setDeleting] = useState(false);
@@ -38,7 +39,8 @@ export default function Session() {
       const sessionData = response.data;
       if (sessionData) {
         setSession((({ id, gym_name, date, notes }) => ({id, gym_name, date, notes}))(sessionData))
-        setSessionClimbs(sessionData.boulders ?? []);
+        setSessionClimbs(sessionData.not_warmup ?? []);
+        setSessionWarmups(sessionData.warmup ?? []);
       }
     }
 
@@ -159,7 +161,8 @@ export default function Session() {
       </div>
 
 
-      <SessionBoulderList sessionClimbs={sessionClimbs} />
+      <SessionBoulderList sessionClimbs={sessionClimbs} title="Climbs" />
+      <SessionBoulderList sessionClimbs={sessionWarmups} title="Warmups" />
     </>
   );
 }

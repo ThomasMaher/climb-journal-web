@@ -51,7 +51,8 @@ export type SessionClimbFormData = {
 export type SessionClimbBoulder = SessionClimb & Boulder;
 
 export type SessionApiResponse = Session & {
-    boulders: SessionClimbBoulder[];
+    warmup: SessionClimbBoulder[];
+    not_warmup: SessionClimbBoulder[];
 }
 
 export type SessionStatsResponse = {

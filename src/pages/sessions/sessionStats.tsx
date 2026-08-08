@@ -31,19 +31,19 @@ export default function SessionStats(props: {
                     <table className="home-stats__table stats__table">
                         <tbody>
                             <tr>
-                                <th scope="row">Total Boulders</th>
+                                <th scope="row">Total Boulder</th>
                                 <td>{total_boulders}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Highest grade</th>
-                                <td>{highest_grade_sent}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Time Climbing</th>
+                                <th scope="row">Total Sent</th>
                                 <td>Placeholder</td>
                             </tr>
                             <tr>
-                                <th scope="row">Health Report</th>
+                                <th scope="row">Highest Grade</th>
+                                <td>{highest_grade_sent}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Highest Grade Sent</th>
                                 <td>Placeholder</td>
                             </tr>
                         </tbody>

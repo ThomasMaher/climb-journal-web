@@ -1,11 +1,7 @@
 import type { SessionClimbBoulder } from '../../models/climbing_models';
 
-type sessionClimbListProps = {
-  sessionClimbs?: SessionClimbBoulder[];
-};
-
-function sessionClimbList({ sessionClimbs }: sessionClimbListProps) {
-  const climbs = sessionClimbs ?? [];
+function sessionClimbList(props: {sessionClimbs: SessionClimbBoulder[], title: string}) {
+  const climbs = props.sessionClimbs ?? [];
 
   const vGradeRange = (climb: SessionClimbBoulder) => {
     if (!climb.vgrade_range_max) { return climb.vgrade_range_min }
@@ -18,10 +14,25 @@ function sessionClimbList({ sessionClimbs }: sessionClimbListProps) {
     }
   }
 
+  const sent = (climb: SessionClimbBoulder) => climb.percent_finished === 100
+
+  const renderProgressTag = (climb: SessionClimbBoulder) => {
+    let tag: string = '';
+    if (climb.warmup) {
+      tag = 'Warmup';
+    } else if (sent(climb)) {
+      tag = 'Sent'
+    } else {
+      tag = `${climb.percent_finished}% complete`
+    }
+
+    return <span className="climb-item__warmup">{tag}</span>
+  }
+
   return (
     <section className="section-block">
       <div className="section-block__header">
-        <h2>Climbs</h2>
+        <h2>{props.title}</h2>
         <span className="section-block__count">
           {climbs.length} {climbs.length === 1 ? 'climb' : 'climbs'}
         </span>
@@ -37,7 +48,7 @@ function sessionClimbList({ sessionClimbs }: sessionClimbListProps) {
             <li key={climb.id} className="climb-item">
               <div className="climb-item__name">{climb.nickname || 'Untitled climb'}</div>
               <div className="climb-item__meta">
-                {climb.warmup && <span className="climb-item__warmup">Warmup</span>}
+                {renderProgressTag(climb)}
                 <span className="badge">V{vGradeRange(climb)}</span>
                 <p className="climb-item__stat">
                   <strong>{climb.attempts ?? 0}</strong> attempts

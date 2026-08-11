@@ -14,6 +14,11 @@ This is the UI repo for my application for tracking climbing sessions, and visua
 
 ### Set up
 
+To  run the full app, clone the backend repo and follow instructions in the README.
+
+
+To run the UI without Docker or without the backend follow these steps
+
 `npm install`
 
 `npm run dev`
@@ -32,8 +37,13 @@ In another terminal widnow, create the database (first time only):
 
 `docker compose run --rm -e RAILS_ENV=test rails bundle exec rspec`
 
-
 #### TODO:
-- ⏭️ Containerize the React frontend
-- Improved analytics and visualizations
-- Create a 'goals' feature
+✅ Containerize the Rails application
+✅Containerize the React frontend
+✅ Authentication
+✅ User accounts
+⏭ Host application
+Allow for searching previously created boulders to add to your session
+Improved analytics and visualizations
+Upload images of boulders
+Boulders can have overall stats (number of climb attempts, number of sends)

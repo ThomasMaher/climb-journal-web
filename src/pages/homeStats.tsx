@@ -8,14 +8,14 @@ function HomeStats() {
     const [ overallStats, setOverallStats ] = useState<UserStats | undefined>({
         total_sessions: 0,
         highest_grade: 0,
-        avg_grade_sent: 0,
+        avg_sent_grade: 0,
         most_frequented_gym: '',
         sends_by_grade: [],
     });
     const [ pastMonthStats, setPastMonthStats ] = useState<UserStats | undefined>({
         total_sessions: 0,
         highest_grade: 0,
-        avg_grade_sent: 0,
+        avg_sent_grade: 0,
         most_frequented_gym: '',
         sends_by_grade: [],
     });
@@ -77,7 +77,7 @@ function HomeStats() {
                                 </tr>
                                 <tr>
                                     <th scope="row">Avg grade climbed</th>
-                                    <td>{stats.avg_grade_sent}</td>
+                                    <td>{stats.avg_sent_grade}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Favorite gym</th>

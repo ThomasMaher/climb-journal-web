@@ -1,6 +1,6 @@
 import type { SessionClimbBoulder } from '../../models/climbing_models';
 
-function sessionClimbList(props: {sessionClimbs: SessionClimbBoulder[], title: string}) {
+function sessionClimbList(props: SessionClimbListProps) {
   const climbs = props.sessionClimbs ?? [];
 
   const vGradeRange = (climb: SessionClimbBoulder) => {
@@ -53,6 +53,9 @@ function sessionClimbList(props: {sessionClimbs: SessionClimbBoulder[], title: s
                 <p className="climb-item__stat">
                   <strong>{climb.attempts ?? 0}</strong> attempts
                 </p>
+                 <span className="climb-item__delete" onClick={() => props.handleRemoveClimb(climb.id)}>
+                  🗑️
+                </span>
               </div>
             </li>
           ))}
@@ -60,6 +63,12 @@ function sessionClimbList(props: {sessionClimbs: SessionClimbBoulder[], title: s
       )}
     </section>
   );
+}
+
+type SessionClimbListProps = {
+  sessionClimbs: SessionClimbBoulder[];
+  title: string;
+  handleRemoveClimb: (sessionClimbId: string) => void;
 }
 
 export default sessionClimbList;

@@ -8,7 +8,7 @@ export type Session = {
 }
 
 export type SessionClimb = {
-    id: number;
+    id: string;
     session_id: string;
     boulder_id: number;
     user_id: number;
@@ -21,7 +21,7 @@ export type SessionClimb = {
 }
 
 export type Boulder = {
-    id: number;
+    boulder_id: string;
     vgrade_range_min: number;
     vgrade_range_max: number;
     self_grade: number;

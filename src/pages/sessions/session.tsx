@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getSession, deleteSession, getSessionStats } from '../../api/sessions';
+import { deleteSessionClimb } from '../../api/session_climbs.ts';
 import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
 import SessionStats from './sessionStats';
@@ -107,6 +108,29 @@ export default function Session() {
     }
   };
 
+  const handleRemoveClimb = async (sessionClimbId: string) => {
+    setDeleting(true)
+    try {
+      const response = await deleteSessionClimb(sessionClimbId.toString());
+
+      if (!response.ok) {
+        setPageError(response.error ?? 'Failed to remove climb from session.')
+      } else {
+        const sessionData = response.data;
+        if (sessionData) {
+          setSessionClimbs(sessionData.not_warmup ?? []);
+          setSessionWarmups(sessionData.warmup ?? []);
+        }
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setPageError(err?.message || 'Failed to removev climb from session');
+      }
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   return (
     <>
       <header className="page-header">
@@ -161,8 +185,8 @@ export default function Session() {
       </div>
 
 
-      <SessionBoulderList sessionClimbs={sessionClimbs} title="Climbs" />
-      <SessionBoulderList sessionClimbs={sessionWarmups} title="Warmups" />
+      <SessionBoulderList sessionClimbs={sessionClimbs} handleRemoveClimb={handleRemoveClimb} title="Climbs" />
+      <SessionBoulderList sessionClimbs={sessionWarmups} handleRemoveClimb={handleRemoveClimb} title="Warmups" />
     </>
   );
 }

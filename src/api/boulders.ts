@@ -12,7 +12,7 @@ export async function submitSessionClimb(boulderData: SessionClimbPayload) {
     })
 }
 
-export function createRequestData(formData: SessionClimbFormData, sessionId: string, userId: number) {
+export function createRequestData(formData: SessionClimbFormData, sessionId: string, userId: string) {
     const { attempts, percent_finished, warmup, notes, ...boulderData } = formData
     const session_climb = {
         attempts,

@@ -11,7 +11,7 @@ export type SessionClimb = {
     id: string;
     session_id: string;
     boulder_id: number;
-    user_id: number;
+    user_id: string;
     attempts: number;
     percent_finished: number;
     warmup: boolean;

@@ -31,7 +31,11 @@ function NewSession() {
     try {
       const response = await createSession(formData);
       if (response.ok) {
-        navigate('/');
+        if (response.data) {
+          navigate(`/sessions/${response.data.id}`)
+        } else {
+          navigate('/');
+        }
       } else {
         setErrors(response.errors || { form: ['Failed to create session'] });
       }

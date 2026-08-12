@@ -3,7 +3,7 @@ import { submitSessionClimb, createRequestData } from '../../api/boulders';
 import type { SessionClimbFormData, SessionClimbBoulder } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
 
-const MAX_VGRADE = 17;
+const MAX_VGRADE = 18;
 const MAX_INCLINE = 90 / 5;
 const MAX_RATING = 10;
 
@@ -36,6 +36,9 @@ function BoulderForm(props: BoulderFormProps) {
     e.preventDefault();
     if (!props.sessionId) {
       setSubmitError("Unable to submit from without session loaded.");  
+      return;
+    } else if (!props.userId) {
+      setSubmitError("User id not found.");  
       return;
     }
     setErrors(undefined);
@@ -284,8 +287,8 @@ function GradeSelect(props: {
     <select id={props.id} name={props.name} onChange={props.onChange} value={props.value ?? ''}>
       <option value="">— Select —</option>
       {[...Array(MAX_VGRADE).keys()].map((k) => (
-        <option key={k} value={k + 1}>
-          V{k + 1}
+        <option key={k} value={k}>
+          V{k}
         </option>
       ))}
     </select>
@@ -295,7 +298,7 @@ function GradeSelect(props: {
 
 type BoulderFormProps = {
   sessionId: string | undefined;
-  userId: number;
+  userId: string | undefined;
   errors?: ApiFormErrors;
   sessionClimbs?: SessionClimbBoulder[];
   handleBoulderCreated: (newBoulder: SessionClimbBoulder) => void;

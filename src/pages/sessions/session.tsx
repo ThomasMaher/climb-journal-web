@@ -6,69 +6,78 @@ import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
 import SessionStats from './sessionStats';
 import { SESSIONS } from '../home';
+import { useAuth } from '../auth/AuthContext';
 import type { Session, SessionClimbBoulder, SessionStatsResponse } from '../../models/climbing_models.ts';
 import type { ApiFormErrors } from '../../api/utils';
 
 export default function Session() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
+
   const [session, setSession] = useState<Session | undefined>(undefined);
   const [sessionClimbs, setSessionClimbs] = useState<SessionClimbBoulder[]>([]);
   const [sessionWarmups, setSessionWarmups] = useState<SessionClimbBoulder[]>([]);
-  const [pageError, setPageError] = useState<string | undefined>(undefined);
-  const [formErrors, setFormErrors] = useState<ApiFormErrors | undefined>(undefined);
-  const [deleting, setDeleting] = useState(false);
   const [sessionStats, setSessionStats] = useState<SessionStatsResponse | undefined>(undefined);
+
+  const [sessionLoading, setSessionLoading] = useState<boolean>(true);
+  const [statsLoading, setStatsLoading] = useState<boolean>(true);
+  const [deleting, setDeleting] = useState(false);
+
+  const [sessionError, setSessionError] = useState<string | undefined>(undefined);
   const [statsError, setStatsError] = useState<string | undefined>(undefined);
+  const [sessionClimbError, setSessionClimbError] = useState<string | undefined>(undefined);
+  const [formErrors] = useState<ApiFormErrors | undefined>(undefined);
 
+  // set session data
   useEffect(() => {
-    async function loadSession() {
-      if (!id) {
-        setPageError('Session id is required');
-        return;
-      }
+    if (!id) {
+      setSession(undefined);
+      setSessionClimbs([]);
+      setSessionWarmups([]);
+      setSessionStats(undefined);
+      return;
+    }
 
-      const response = await getSession(id);
-      if (!response.ok) {
-        setPageError(response.error ?? 'Unable to load session' );
-        if (response.errors) {
-          setFormErrors(response.errors);
-        }
-        return;
-      }
+    // clear prev session data
+    setSession(undefined);
+    setSessionClimbs([]);
+    setSessionWarmups([]);
+    setSessionStats(undefined);
+    setSessionError(undefined);
+    setStatsError(undefined);
 
-      const sessionData = response.data;
-      if (sessionData) {
-        setSession((({ id, gym_name, date, notes }) => ({id, gym_name, date, notes}))(sessionData))
+    setSessionLoading(true);
+    setStatsLoading(true);
+
+    getSession(id).then((response) => {
+      if (response.ok && response.data) {
+        const sessionData = response.data;
+        setSession((({ id, gym_name, date, notes }) => ({id, gym_name, date, notes}))(sessionData));
         setSessionClimbs(sessionData.not_warmup ?? []);
         setSessionWarmups(sessionData.warmup ?? []);
+      } else if (!response.ok) {
+        setSessionError(response.error ?? 'Unable to load session');
       }
-    }
+      setSessionLoading(false);
+    });
 
-    async function loadSessionStats() {
-      if (!id) {
-        setPageError('Session id is required');
-        return;
-      }
-
-      const response = await getSessionStats(id);
+    getSessionStats(id).then((response) => {
       if (!response.ok) {
-        setStatsError(response.error ?? 'Unable to load session stats' );
-        return;
+        setStatsError(response.error ?? 'Unable to load stats');
+      } else if (response.data) {
+        setSessionStats(response.data);
       }
-
-      const statsData = response.data;
-      if (statsData) {
-        setSessionStats(statsData);
-      }
-    }
-
-    loadSession();
-    loadSessionStats();
+      setStatsLoading(false);
+    });
   }, [id]);
 
   const handleBoulderCreated = async (newBoulder: SessionClimbBoulder) => {
-      setSessionClimbs([...(sessionClimbs ?? []), newBoulder]);
+      if (newBoulder.warmup) {
+        setSessionWarmups(prev => [...prev, newBoulder]);
+      } else {
+        setSessionClimbs(prev => [...prev, newBoulder]);
+      }
 
       const response = await getSessionStats(id);
       if (!response.ok) {
@@ -79,16 +88,7 @@ export default function Session() {
   }
 
   const handleDelete = async () => {
-    setPageError('');
-
-    if (!id) {
-      setPageError('Session id is required');
-      return;
-    }
-
-    if (!window.confirm('Delete this session and its climbs?')) {
-      return;
-    }
+    if (!id) { return; }
 
     setDeleting(true);
     try {
@@ -97,11 +97,11 @@ export default function Session() {
       if (response.ok) {
         navigate('/');
       } else {
-        setPageError(response.error ?? 'Failed to delete session');
+        setSessionError(response.error ?? 'Failed to delete session');
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setPageError(err?.message || 'Failed to delete session');
+        setSessionError(err?.message || 'Failed to delete session');
       }
     } finally {
       setDeleting(false);
@@ -114,17 +114,22 @@ export default function Session() {
       const response = await deleteSessionClimb(sessionClimbId.toString());
 
       if (!response.ok) {
-        setPageError(response.error ?? 'Failed to remove climb from session.')
+        setSessionClimbError(response.error ?? 'Failed to remove climb from session.')
       } else {
         const sessionData = response.data;
         if (sessionData) {
           setSessionClimbs(sessionData.not_warmup ?? []);
           setSessionWarmups(sessionData.warmup ?? []);
         }
+
+        const statsResponse = await getSessionStats(id);
+        if(statsResponse.ok && statsResponse.data) {
+          setSessionStats(statsResponse.data);
+        }
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setPageError(err?.message || 'Failed to removev climb from session');
+        setSessionClimbError(err?.message || 'Failed to removev climb from session');
       }
     } finally {
       setDeleting(false);
@@ -142,9 +147,9 @@ export default function Session() {
         </Link>
       </header>
 
-      {pageError && (
+      {sessionError && (
         <p className="error-banner" role="alert">
-          {pageError}
+          {sessionError}
         </p>
       )}
 
@@ -152,6 +157,7 @@ export default function Session() {
         <aside className="session-aside">
           <div className="session-aside__info">
             <div className="session-aside__meta">
+              {sessionLoading && <p>Session Loading...</p>}
               <span className="session-aside__label">Gym</span>
               <p className="session-aside__gym">{session?.gym_name ?? '—'}</p>
               {session?.date && (
@@ -171,20 +177,21 @@ export default function Session() {
             </button>
           </div>
           <div className="session-aside__info">
-            <SessionStats sessionStats={sessionStats} statsError={statsError} />
+            {statsLoading && <p>Session Stats Loading...</p>}
+            {!statsLoading && <SessionStats sessionStats={sessionStats} statsError={statsError} />}
           </div>
         </aside>
 
         <BoulderForm
           sessionId={id}
-          userId={1}
+          userId={user?.id}
           errors={formErrors}
           sessionClimbs={sessionClimbs}
           handleBoulderCreated={handleBoulderCreated}
         />
       </div>
 
-
+      {sessionClimbError && <p>{sessionClimbError}</p>}
       <SessionBoulderList sessionClimbs={sessionClimbs} handleRemoveClimb={handleRemoveClimb} title="Climbs" />
       <SessionBoulderList sessionClimbs={sessionWarmups} handleRemoveClimb={handleRemoveClimb} title="Warmups" />
     </>

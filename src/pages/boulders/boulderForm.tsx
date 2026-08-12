@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { submitSessionClimb, createRequestData } from '../../api/boulders';
 import type { SessionClimbFormData, SessionClimbBoulder } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
@@ -24,6 +24,10 @@ function BoulderForm(props: BoulderFormProps) {
   const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    setErrors(props.errors);
+  }, [props.errors])
 
   const getFieldError = (field: string) => {
     if (!errors || 'form' in errors) return undefined;

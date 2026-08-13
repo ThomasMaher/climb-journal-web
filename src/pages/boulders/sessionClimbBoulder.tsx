@@ -55,6 +55,11 @@ function SessionClimbBoulder() {
         <div style={{textAlign: 'center'}}>
             <h2>{boulder && !loadingBoulder ? boulder.nickname : ''}</h2>
 
+        {sessionClimb ? <p>Session Climb</p> : ''}
+        {loadingSession}
+        {sessionClimbError}
+        {boulderError}
+        {pageError}
             <div className="session-boulder__pictureblock">
                 <p style={{marginTop: '20px'}}>(Photo uploads coming soon...)</p>
             </div>

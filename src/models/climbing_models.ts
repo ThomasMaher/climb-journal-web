@@ -11,13 +11,10 @@ export type SessionClimb = {
     id: string;
     session_id: string;
     boulder_id: number;
-    user_id: string;
     attempts: number;
     percent_finished: number;
     warmup: boolean;
     notes: string;
-    created_at: string;
-    updated_at: string;
 }
 
 export type Boulder = {
@@ -27,7 +24,6 @@ export type Boulder = {
     self_grade: number;
     incline: number;
     rating: number;
-    notes: string;
     boulder_type: string;
     nickname: string;
     created_at: string;

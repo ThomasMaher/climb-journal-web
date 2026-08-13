@@ -5,6 +5,7 @@ import NavBar from './pages/navbar.tsx';
 import Home from './pages/home.tsx';
 import ProtectedRoute from './pages/auth/ProtectedRoute.tsx';
 import Login from './pages/auth/Login.tsx';
+import SessionClimbBoulder from './pages/boulders/sessionClimbBoulder';
 
 function App() {
   return (
@@ -26,6 +27,11 @@ function App() {
           <Route path="/sessions/:id" element={
             <ProtectedRoute>
               <Session />
+            </ProtectedRoute>
+            } />
+          <Route path="sessionClimbBoulders/:sessionClimbId" element={
+            <ProtectedRoute>
+              <SessionClimbBoulder />
             </ProtectedRoute>
             } />
         </Routes>

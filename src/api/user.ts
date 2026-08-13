@@ -1,5 +1,5 @@
 import { fetchApi } from './utils';
-import type { UserData, UserStats } from '../models/user_models';
+import type { UserData, UserPayload, UserStats } from '../models/user_models';
 
 type UserStatsResponse = {overall: UserStats, past_month: UserStats}
 
@@ -11,7 +11,7 @@ export async function getUserStatus() {
     return fetchApi<UserData>(`/user_status`);
 }
 
-export async function login(formData: UserData) {
+export async function login(formData: UserPayload) {
     const { username, password } = formData;
 
     return fetchApi(`/login`, {
@@ -34,7 +34,7 @@ export async function logout() {
     })
 }
 
-export async function register(formData: UserData) {
+export async function register(formData: UserPayload) {
     const { username, password } = formData;
     return fetchApi(`/users`, {
         method: 'POST',

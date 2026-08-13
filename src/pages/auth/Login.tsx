@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
 import { login, register } from '../../api/user';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { UserData } from '../../models/user_models';
+import type { UserPayload } from '../../models/user_models';
 
 function Login() {
     const navigate = useNavigate();
@@ -10,7 +10,7 @@ function Login() {
     const { setUser } = useAuth();
     const [error, setError] = useState<string | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
-    const [formData, setFormData] = useState<UserData>({
+    const [formData, setFormData] = useState<UserPayload>({
         username: '',
         password: '',
     });

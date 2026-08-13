@@ -52,9 +52,13 @@ function SessionClimbBoulder() {
     }, [sessionClimbId])
 
     return(
-        <div>
+        <div style={{textAlign: 'center'}}>
             <h2>{boulder && !loadingBoulder ? boulder.nickname : ''}</h2>
 
+            <div className="session-boulder__pictureblock">
+                <p style={{marginTop: '20px'}}>(Photo uploads coming soon...)</p>
+            </div>
+            
         </div>
     )
 }

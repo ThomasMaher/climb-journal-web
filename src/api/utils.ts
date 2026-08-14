@@ -18,6 +18,10 @@ export async function fetchApi<T>(
 ): Promise<ApiResponse<T>> {
   try {
     const url = `${VITE_API_URL}${path}`;
+    console.log("Request URL:", `${VITE_API_URL}/login`);
+    console.log(url);
+    console.log(VITE_API_URL);
+    console.log(import.meta.env.VITE_API_URL);
     const response = await fetch(url, { ...init, credentials: "include" });
     const text = await response.text();
     let data = undefined;

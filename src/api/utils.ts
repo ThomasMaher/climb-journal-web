@@ -1,4 +1,4 @@
-const VITE_API_URL = import.meta.env.VITE_VITE_API_URL;
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export type ApiResponse<T> =
   | { ok: true; status: number; data: T | undefined }

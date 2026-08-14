@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const VITE_API_URL = import.meta.env.VITE_VITE_API_URL;
 
 export type ApiResponse<T> =
   | { ok: true; status: number; data: T | undefined }
@@ -15,7 +15,7 @@ export async function fetchApi<T>(
   init?: RequestInit,
 ): Promise<ApiResponse<T>> {
   try {
-    const url = `${API_URL}${path}`;
+    const url = `${VITE_API_URL}${path}`;
     const response = await fetch(url, { ...init, credentials: "include" });
     const text = await response.text();
     let data = undefined;

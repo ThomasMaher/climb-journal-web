@@ -1,4 +1,6 @@
-const VITE_API_URL = import.meta.env.VITE_API_URL;
+// Temporary fix - need to find out why env variable set up is not working in railway.
+const VITE_API_URL = "https://climbjournal-production-12d7.up.railway.app";
+// const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export type ApiResponse<T> =
   | { ok: true; status: number; data: T | undefined }

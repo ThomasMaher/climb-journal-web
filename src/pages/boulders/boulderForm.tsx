@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { submitSessionClimb, createRequestData } from '../../api/boulders';
+import GradeSelect from '../shared/gradeSelect';
 import type { SessionClimbFormData, SessionClimbBoulder } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
 
-const MAX_VGRADE = 18;
 const MAX_INCLINE = 90 / 5;
 const MAX_RATING = 10;
 
@@ -278,24 +278,6 @@ function BoulderForm(props: BoulderFormProps) {
         </div>
       </form>
     </section>
-  );
-}
-
-function GradeSelect(props: {
-  id: string;
-  name: string;
-  value: number | undefined;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}) {
-  return (
-    <select id={props.id} name={props.name} onChange={props.onChange} value={props.value ?? ''}>
-      <option value="">— Select —</option>
-      {[...Array(MAX_VGRADE).keys()].map((k) => (
-        <option key={k} value={k}>
-          V{k}
-        </option>
-      ))}
-    </select>
   );
 }
 

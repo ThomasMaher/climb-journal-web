@@ -1,5 +1,14 @@
 import { fetchApi } from './utils'
-import type { SessionClimbFormData, SessionClimbBoulder, SessionClimbPayload } from '../models/climbing_models';
+import type { 
+    SessionClimbFormData, 
+    SessionClimbBoulder, 
+    SessionClimbPayload,
+    Boulder,
+ } from '../models/climbing_models';
+
+export async function getBoulder(boulderId: string) {
+    return fetchApi<Boulder>(`/boulders/${boulderId}`)
+}
 
 export async function submitSessionClimb(boulderData: SessionClimbPayload) {
     return fetchApi<SessionClimbBoulder>(`/boulders`, {

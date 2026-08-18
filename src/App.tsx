@@ -29,7 +29,7 @@ function App() {
               <Session />
             </ProtectedRoute>
             } />
-          <Route path="sessionClimbBoulders/:sessionClimbId" element={
+          <Route path="sessionClimbBoulders/:boulderId" element={
             <ProtectedRoute>
               <SessionClimbBoulder />
             </ProtectedRoute>

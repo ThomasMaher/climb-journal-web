@@ -45,7 +45,7 @@ function SessionClimbList(props: SessionClimbListProps) {
       ) : (
         <ul className="climb-list">
           {climbs.map((climb) => (
-            <Link key={climb.id} to={`/sessionClimbBoulders/${climb.id}`}>
+            <Link key={climb.id} to={`/sessionClimbBoulders/${climb.boulder_id}`}>
               <li className="climb-item">
                 <div className="climb-item__name">{climb.nickname || 'Untitled climb'}</div>
                 <div className="climb-item__meta">

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBoulder } from '../../api/boulders';
 import GradeSelect from '../shared/gradeSelect';
+import BoulderImages from './boulderImages';
+import PersonalBoulderStats from './personalBoulderStats';
 import type { Boulder } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
 
@@ -183,6 +185,9 @@ function SessionClimbBoulder() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        setSubmitting(true);
+        setSubmitting(false);
     }
 
     return(
@@ -190,10 +195,10 @@ function SessionClimbBoulder() {
             <h2>{boulder && !loadingBoulder ? boulder.nickname : ''}</h2>
 
             {pageError}
-            <div className="session-boulder__pictureblock">
-                <p style={{marginTop: '20px'}}>(Photo uploads coming soon...)</p>
+            <div className="home-stats__body">
+                <BoulderImages />
+                <PersonalBoulderStats boulderId={boulderId} />
             </div>
-
             <form className="form-stack" onSubmit={handleSubmit}>
                 <div className="fields-grid">
                     {userCreatedBoulder() ? renderBoulderForm() : renderBoulderInfo()}

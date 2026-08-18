@@ -647,6 +647,6 @@
   background: rgba(26, 33, 29, 0.45);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  width: 70%;
+  width: 50%;
   min-height: 400px;
 }

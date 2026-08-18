@@ -641,10 +641,12 @@
 
 /* Session Boulders */
 .session-boulder__pictureblock {
-  margin: 40px;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
   background: rgba(26, 33, 29, 0.45);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  width: 100%;
+  width: 70%;
   min-height: 400px;
 }

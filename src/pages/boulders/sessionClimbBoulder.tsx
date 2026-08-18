@@ -49,7 +49,34 @@ function SessionClimbBoulder() {
 
         setLoadingSession(false);
         setLoadingBoulder(false);
-    }, [sessionClimbId])
+    }, [sessionClimbId]);
+
+    const userCreatedBoulder = () => {
+        return false
+    }
+
+    const renderBoulderField = (fieldName: string, fieldValue: number | string | undefined) => {
+        if (!boulder) return;
+
+        if (userCreatedBoulder()) {
+            return (
+                <div className="field">
+                    <label htmlFor={fieldName}>{fieldName}</label>
+                    <input
+                        id="nickname"
+                        type="text"
+                        value={fieldValue} />
+                </div>
+            );
+        } else {
+            return (
+                <div className="field">
+                    <label htmlFor={fieldName}>{fieldName}</label>
+                    <p>{fieldValue}</p>
+                </div>
+            );
+        }
+    }
 
     return(
         <div style={{textAlign: 'center'}}>
@@ -63,6 +90,12 @@ function SessionClimbBoulder() {
             <div className="session-boulder__pictureblock">
                 <p style={{marginTop: '20px'}}>(Photo uploads coming soon...)</p>
             </div>
+
+            <form className="form-stack">
+                <div className="fields-grid">
+                    {boulder && renderBoulderField("nickname", boulder.nickname)}
+                </div>
+            </form>
             
         </div>
     )

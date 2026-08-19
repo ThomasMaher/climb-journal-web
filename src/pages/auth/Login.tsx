@@ -13,6 +13,7 @@ function Login() {
     const [formData, setFormData] = useState<UserPayload>({
         username: '',
         password: '',
+        rePassword: '',
     });
 
     const locationState = location.state as { registering?: boolean } | null | undefined;
@@ -27,6 +28,12 @@ function Login() {
         e.preventDefault();
         setError(undefined);
         setSubmitting(true);
+
+        if (formData.password !== formData.rePassword) {
+            setError('Passwords do not match');
+            setSubmitting(false);
+            return;
+        }
 
         try {
             let response;
@@ -78,6 +85,16 @@ function Login() {
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value})} />
                 </div>
+                {registering && (
+                    <div className="field">
+                        <label htmlFor="password">Re-enter Password: </label>
+                        <input
+                            id="password"
+                            type="password"
+                            value={formData.rePassword}
+                            onChange={(e) => setFormData({ ...formData, rePassword: e.target.value})} />
+                    </div>
+                )}
 
                 <div className="form-actions">
                     <button type="submit" className="btn" disabled={submitting}>

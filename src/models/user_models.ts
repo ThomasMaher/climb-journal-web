@@ -18,7 +18,9 @@ export type UserState = {
 }
 
 export type UserData = {id: string; username: string, password: string};
-export type UserPayload = Omit<UserData, 'id'>
+export type UserPayload = Omit<UserData, 'id'> & {
+    rePassword?: string;
+}
 
 export type UserBoulderData = {
     total_sessions: number;

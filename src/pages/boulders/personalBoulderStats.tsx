@@ -26,6 +26,7 @@ export default function PersonalBoulderStats(props: {boulderId: string | undefin
 
     return (
         <div className="personal-boulder__stats">
+            {error && (<h4>{error}</h4>)}
             <table className="home-stats__table">
                 <tbody>
                     <tr>

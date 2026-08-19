@@ -195,7 +195,7 @@ function SessionClimbBoulder() {
             <h2>{boulder && !loadingBoulder ? boulder.nickname : ''}</h2>
 
             {pageError}
-            <div className="home-stats__body">
+            <div className="home-stats__body" style={{marginTop: '40px', marginBottom: '40px'}}>
                 <BoulderImages />
                 <PersonalBoulderStats boulderId={boulderId} />
             </div>

@@ -19,3 +19,11 @@ export type UserState = {
 
 export type UserData = {id: string; username: string, password: string};
 export type UserPayload = Omit<UserData, 'id'>
+
+export type UserBoulderData = {
+    total_sessions: number;
+    current_progress: number;
+    total_attempts: number;
+    date_completed: string | null;
+    last_date_climbed: string;
+}

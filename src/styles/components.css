@@ -642,11 +642,14 @@
 /* Session Boulders */
 .session-boulder__pictureblock {
   margin: auto;
-  margin-top: 40px;
-  margin-bottom: 40px;
   background: rgba(26, 33, 29, 0.45);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   width: 50%;
   min-height: 400px;
+}
+
+/* Personal boulder stats */
+.personal-boulder__stats {
+  width: 35%;
 }

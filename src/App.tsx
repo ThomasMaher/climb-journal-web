@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Session from './pages/sessions/session.tsx';
 import NewSession from './pages/sessions/newSession.tsx';
-import NavBar from './pages/navbar.tsx';
+import NavBar from './pages/shared/navbar.tsx';
 import Home from './pages/home.tsx';
 import ProtectedRoute from './pages/auth/ProtectedRoute.tsx';
 import Login from './pages/auth/Login.tsx';

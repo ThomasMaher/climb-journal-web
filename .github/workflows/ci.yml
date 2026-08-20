@@ -1,0 +1,33 @@
+name: React CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  continuous-integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source code
+        uses: actions/checkout@v7
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: run tests
+        run: npm test
+
+      - name: run linting
+        run: npm run lint
+
+      - name: run typescript check
+        run: npx tsc -b

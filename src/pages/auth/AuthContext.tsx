@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getUserStatus } from "../../api/user";
 import type { UserState, UserData } from "../../models/user_models";
 
-const AuthContext = createContext<UserState>({user: undefined, setUser: ()=> {}, loading: true});
+export const AuthContext = createContext<UserState>({user: undefined, setUser: ()=> {}, loading: true});
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<UserData |undefined>(undefined);

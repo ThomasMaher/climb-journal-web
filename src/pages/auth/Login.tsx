@@ -29,15 +29,14 @@ function Login() {
         setError(undefined);
         setSubmitting(true);
 
-        if (formData.password !== formData.rePassword) {
-            setError('Passwords do not match');
-            setSubmitting(false);
-            return;
-        }
-
         try {
             let response;
             if (registering) {
+                if (formData.password !== formData.rePassword) {
+                    setError('Passwords do not match');
+                    setSubmitting(false);
+                    return;
+                }
                 response = await register(formData);
             } else {
                 response = await login(formData);

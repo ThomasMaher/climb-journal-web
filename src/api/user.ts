@@ -20,7 +20,7 @@ export async function login(formData: UserPayload) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            user: { username, password_digest: password, },
+            user: { username, password: password, },
         }),
     })
 }
@@ -42,7 +42,7 @@ export async function register(formData: UserPayload) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            user: { username, password_digest: password, }
+            user: { username, password: password, }
         })
     })
 }

@@ -31,45 +31,68 @@ export default function Session() {
 
   // set session data
   useEffect(() => {
-    if (!id) {
+    let ignore = false;
+  
+    async function loadSession() {
+      if (ignore) return;
+  
+      // clear prev session data
       setSession(undefined);
       setSessionClimbs([]);
       setSessionWarmups([]);
-      setSessionStats(undefined);
-      return;
+      setSessionError(undefined);
+
+      setSessionLoading(true);
+      
+      if (!id) {
+        setSessionError('No session available');
+        return;
+      }
+
+      try {
+        const response = await getSession(id);
+
+        if (response.ok && response.data) {
+          
+          const {id, gym_name, date, notes} = response.data;
+          setSession({id, gym_name, date, notes});
+          setSessionClimbs(response.data.not_warmup ?? []);
+          setSessionWarmups(response.data.warmup ?? []);
+        } else if (!response.ok) {
+          setSessionError(response.error ?? 'Unable to load session');
+        }
+      } finally {
+        setSessionLoading(false)
+      }
     }
 
-    // clear prev session data
-    setSession(undefined);
-    setSessionClimbs([]);
-    setSessionWarmups([]);
-    setSessionStats(undefined);
-    setSessionError(undefined);
-    setStatsError(undefined);
+    async function loadStats() {
+      if (ignore) return;
 
-    setSessionLoading(true);
-    setStatsLoading(true);
+      setSessionStats(undefined);
+      setStatsError(undefined);
 
-    getSession(id).then((response) => {
-      if (response.ok && response.data) {
-        const sessionData = response.data;
-        setSession((({ id, gym_name, date, notes }) => ({id, gym_name, date, notes}))(sessionData));
-        setSessionClimbs(sessionData.not_warmup ?? []);
-        setSessionWarmups(sessionData.warmup ?? []);
-      } else if (!response.ok) {
-        setSessionError(response.error ?? 'Unable to load session');
+      setStatsLoading(true);
+
+      try {
+        const response = await getSessionStats(id);
+
+        if (!response.ok) {
+          setStatsError(response.error ?? 'Unable to load stats');
+        } else if (response.data) {
+          setSessionStats(response.data);
+        }
+      } finally{
+        setStatsLoading(false);
       }
-      setSessionLoading(false);
-    });
+    }
 
-    getSessionStats(id).then((response) => {
-      if (!response.ok) {
-        setStatsError(response.error ?? 'Unable to load stats');
-      } else if (response.data) {
-        setSessionStats(response.data);
-      }
-      setStatsLoading(false);
-    });
+    loadSession();
+    loadStats();
+
+    return () => {
+      ignore = true;
+    };
   }, [id]);
 
   const handleBoulderCreated = async (newBoulder: SessionClimbBoulder) => {

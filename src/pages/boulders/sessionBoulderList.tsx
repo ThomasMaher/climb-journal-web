@@ -22,7 +22,7 @@ function SessionClimbList(props: SessionClimbListProps) {
       tag = 'Warmup';
     } else if (sent(climb)) {
       tag = 'Sent'
-    } else {
+    } else if (climb.percent_finished) {
       tag = `${climb.percent_finished}% complete`
     }
 

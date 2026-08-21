@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { submitSessionClimb, createRequestData } from '../../api/boulders';
 import GradeSelect from '../shared/gradeSelect';
 import type { SessionClimbFormData, SessionClimbBoulder } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
 
 const MAX_INCLINE = 90 / 5;
-const MAX_RATING = 10;
 
 function BoulderForm(props: BoulderFormProps) {
   const [formData, setFormData] = useState<SessionClimbFormData>({
@@ -15,7 +14,6 @@ function BoulderForm(props: BoulderFormProps) {
     self_grade: undefined,
     notes: '',
     incline: 0,
-    rating: 10,
     boulder_type: 'Indoor',
     attempts: 0,
     percent_finished: 0,
@@ -24,10 +22,6 @@ function BoulderForm(props: BoulderFormProps) {
   const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    setErrors(props.errors);
-  }, [props.errors])
 
   const getFieldError = (field: string) => {
     if (!errors || 'form' in errors) return undefined;
@@ -77,7 +71,6 @@ function BoulderForm(props: BoulderFormProps) {
       'vgrade_range_min',
       'vgrade_range_max',
       'self_grade',
-      'rating',
       'incline',
       'attempts',
       'percent_finished',
@@ -104,6 +97,9 @@ function BoulderForm(props: BoulderFormProps) {
         {(submitError || (errors && 'form' in errors)) && (
           <p className="error-banner" role="alert">
             {submitError ?? (errors && 'form' in errors ? errors.form : '')}
+            {getFieldError('created_by_id') && (
+              <p className="field-error">{getFieldError('created_by_id')}</p>
+            )}
           </p>
         )}
 
@@ -218,20 +214,6 @@ function BoulderForm(props: BoulderFormProps) {
               {[...Array(MAX_INCLINE).keys()].map((k) => (
                 <option key={k} value={(k + 1) * 5}>
                   {(k + 1) * 5}°
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="field">
-            <label htmlFor="rating">Rating</label>
-            {getFieldError('rating') && (
-              <p className="field-error">{getFieldError('rating')}</p>
-            )}
-            <select id="rating" name="rating" value={formData.rating} onChange={handleChange}>
-              {[...Array(MAX_RATING).keys()].map((k) => (
-                <option key={k} value={k + 1}>
-                  {k + 1}
                 </option>
               ))}
             </select>

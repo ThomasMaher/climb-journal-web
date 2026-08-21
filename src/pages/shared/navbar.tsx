@@ -19,22 +19,6 @@ function NavBar() {
     navigate('/');
   }
 
-  const renderUserButton = () => {
-    if (!user) {
-      return (
-        <Link to="/login" state={{ registering: true }} className="site-nav__link">
-          Register
-        </Link>
-      )
-    } else {
-      return (
-        <button onClick={(e) => handleLogout(e)} className="site-nav__link site-nav__link--primary">
-          Logout
-        </button>
-      )
-    }
-  }
-
   return (
     <header className="site-nav">
       <div className="site-nav__inner">
@@ -42,10 +26,16 @@ function NavBar() {
           Climb<span>Journal</span>
         </Link>
         <nav className="site-nav__links" aria-label="Primary">
-          <Link to="/" className="site-nav__link" state={{ content: SESSIONS }}>
-            Sessions
-          </Link>
-          {renderUserButton()}
+          {user && (
+            <>
+              <Link to="/" className="site-nav__link" state={{ content: SESSIONS }}>
+                Sessions
+              </Link>
+              <button onClick={(e) => handleLogout(e)} className="site-nav__link site-nav__link--primary">
+                Logout
+              </button>
+            </>
+          )}
         </nav>
       </div>
     </header>

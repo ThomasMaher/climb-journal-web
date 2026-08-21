@@ -11,17 +11,28 @@ export default function PersonalBoulderStats(props: {boulderId: string | undefin
     useEffect(() => {
         if (!boulderId) return;
 
-        setBoulderData(undefined);
-        setDataLoading(true);
-        getUserBoulderData(boulderId).then((response) => {
-            if (response.ok && response.data) {
-                setBoulderData(response.data);
-            } else if (!response.ok) {
-                setError(response.error ?? 'Unable to load data');
-            }
-        })
+        async function loadUserBoulderData() {
+            if (!boulderId) return;
 
-        setDataLoading(false);
+            setBoulderData(undefined);
+            setDataLoading(true);
+            setError(undefined);
+
+            try {
+                const response = await getUserBoulderData(boulderId);
+
+                if (response.ok && response.data) {
+                    setBoulderData(response.data);
+                } else if (!response.ok) {
+                    setError(response.error ?? 'Unable to load data');
+                }
+            } finally {
+                setDataLoading(false);
+            }
+        }
+        
+        
+        loadUserBoulderData();
     }, [boulderId])
 
     return (

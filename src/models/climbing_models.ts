@@ -23,9 +23,9 @@ export type Boulder = {
     vgrade_range_max: number;
     self_grade: number;
     incline: number;
-    rating: number;
     boulder_type: string;
     nickname: string;
+    created_by_id: string;
     created_at?: string;
     updated_at?: string;
 }
@@ -48,7 +48,6 @@ export type SessionClimbFormData = {
     vgrade_range_max: number;
     self_grade: number | undefined;
     incline: number | undefined;
-    rating: number | undefined;
     notes: string;
     boulder_type: string;
     nickname: string;
@@ -62,9 +61,9 @@ export type SessionClimbPayload = {
     vgrade_range_max: number;
     self_grade: number | undefined;
     incline: number | undefined;
-    rating: number | undefined;
     boulder_type: string;
     nickname: string;
+    created_by_id: string;
     session_climbs_attributes: 
         Omit<SessionClimb, "id" | "boulder_id" | "created_at" | "updated_at">[];
 }

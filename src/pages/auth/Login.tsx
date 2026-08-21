@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from './useAuth';
 import { login, register } from '../../api/user';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { UserPayload } from '../../models/user_models';
 
 function Login() {
     const navigate = useNavigate();
-    const location = useLocation();
     const { setUser } = useAuth();
     const [error, setError] = useState<string | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
@@ -16,13 +15,7 @@ function Login() {
         rePassword: '',
     });
 
-    const locationState = location.state as { registering?: boolean } | null | undefined;
-    const [registering, setRegistering] = useState<boolean>(locationState?.registering ?? false);
-
-    useEffect(() => {
-        const nextRegistering = locationState?.registering ?? false;
-        setRegistering(nextRegistering);
-    }, [locationState]);
+    const [registering, setRegistering] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

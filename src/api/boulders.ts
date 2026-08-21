@@ -37,5 +37,5 @@ export function createRequestData(formData: SessionClimbFormData, sessionId: str
         user_id: userId,
     }
 
-    return {...boulderData, session_climbs_attributes: [session_climb]}
+    return {...boulderData, created_by_id: userId, session_climbs_attributes: [session_climb]}
 }

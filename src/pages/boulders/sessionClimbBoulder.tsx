@@ -17,7 +17,7 @@ function SessionClimbBoulder() {
         vgrade_range_max: 1,
         self_grade: 1,
         incline: 0,
-        rating: 0,
+        created_by_id: '',
         boulder_type: ''
     })
 
@@ -27,24 +27,32 @@ function SessionClimbBoulder() {
     const [submitting, setSubmitting] = useState<boolean>(false);
 
     useEffect(() => {
-        if (!boulderId) return; 
+        async function loadData() {
+            setBoulder(undefined);
+            setBoulderErrors(undefined);
+            setPageError(undefined);
+            setLoadingBoulder(true);
 
-        setBoulder(undefined);
-        setBoulderErrors(undefined);
-        setPageError(undefined);
-
-        setLoadingBoulder(true);
-
-        getBoulder(boulderId).then(response => {
-            if (!response.ok) {
-                setPageError(response.error ?? 'Unable to load climb info');
-            } else if (response.data) {
-                setBoulder(response.data);
-                setFormData(response.data);
+            if (!boulderId) {
+                setPageError('No boulder id present');
+                return;
             }
-        })
 
-        setLoadingBoulder(false);
+            try {
+                const response = await getBoulder(boulderId);
+
+                if (!response.ok) {
+                    setPageError(response.error ?? 'Unable to load climb info');
+                } else if (response.data) {
+                    setBoulder(response.data);
+                    setFormData(response.data);
+                }
+            } finally {
+                setLoadingBoulder(false);
+            }
+        }
+
+        loadData();
     }, [boulderId]);
 
     const userCreatedBoulder = () => {

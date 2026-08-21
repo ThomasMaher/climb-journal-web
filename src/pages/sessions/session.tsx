@@ -6,7 +6,7 @@ import BoulderForm from '../boulders/boulderForm.tsx';
 import SessionBoulderList from '../boulders/sessionBoulderList';
 import SessionStats from './sessionStats';
 import { SESSIONS } from '../home';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/useAuth';
 import type { Session, SessionClimbBoulder, SessionStatsResponse } from '../../models/climbing_models.ts';
 import type { ApiFormErrors } from '../../api/utils';
 

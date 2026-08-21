@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from './AuthContext';
+import { useAuth } from './useAuth';
 import { login, register } from '../../api/user';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { UserPayload } from '../../models/user_models';

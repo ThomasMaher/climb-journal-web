@@ -5,7 +5,7 @@ import './styles/tokens.css';
 import './styles/base.css';
 import './styles/components.css';
 import App from './App.tsx';
-import { AuthProvider } from './pages/auth/AuthContext.tsx'
+import { AuthProvider } from './pages/auth/AuthProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

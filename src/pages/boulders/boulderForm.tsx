@@ -15,8 +15,8 @@ function BoulderForm(props: BoulderFormProps) {
     notes: '',
     incline: 0,
     boulder_type: 'Indoor',
-    attempts: 0,
-    percent_finished: 0,
+    attempts: '',
+    percent_finished: '',
     warmup: false,
   });
   const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
@@ -64,6 +64,16 @@ function BoulderForm(props: BoulderFormProps) {
     }
   };
 
+  const getNumberVal = (val: string): number | '' => {
+    if (val === '') return '';
+
+    try {
+      return Number(val);
+    } catch {
+      return '';
+    }
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, type, value } = e.target;
     const checked = e.target instanceof HTMLInputElement ? e.target.checked : false;
@@ -79,8 +89,11 @@ function BoulderForm(props: BoulderFormProps) {
       type === 'checkbox'
         ? checked
         : numericFields.includes(name)
-          ? Number(value)
+          ? getNumberVal(value)
           : value;
+
+    if (name === 'percent_finished' && value > 100) { return; }
+    if (['percent_finished', 'attempts'].includes(name) && value < 0) { return; }
 
     setFormData((prev) => ({
       ...prev,
@@ -183,9 +196,9 @@ function BoulderForm(props: BoulderFormProps) {
             <label htmlFor="attempts">Attempts</label>
             <input
               id="attempts"
-              type="number"
+              type="text"
               name="attempts"
-              min={0}
+              placeholder='0'
               value={formData.attempts}
               onChange={handleChange}
             />
@@ -197,8 +210,7 @@ function BoulderForm(props: BoulderFormProps) {
               id="percent_finished"
               type="number"
               name="percent_finished"
-              min={0}
-              max={100}
+              placeholder='0'
               value={formData.percent_finished}
               onChange={handleChange}
             />

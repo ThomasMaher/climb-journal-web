@@ -15,6 +15,17 @@ export async function getUserBoulderData(boulderId: string) {
     return fetchApi<UserBoulderData>(`/boulders/${boulderId}/user_boulder_data`);
 }
 
+export async function updateBoulder(boulderData: Boulder, boulderId: string) {
+    return fetchApi<Boulder>(`/boulders/${boulderId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify(boulderData),
+    })
+}
+
 export async function submitSessionClimb(boulderData: SessionClimbPayload) {
     return fetchApi<SessionClimbBoulder>(`/boulders`, {
         method: 'POST',
@@ -27,7 +38,9 @@ export async function submitSessionClimb(boulderData: SessionClimbPayload) {
 }
 
 export function createRequestData(formData: SessionClimbFormData, sessionId: string, userId: string) {
-    const { attempts, percent_finished, warmup, notes, ...boulderData } = formData
+    let { attempts, percent_finished, warmup, notes, ...boulderData } = formData
+    attempts = attempts || 0
+    percent_finished = percent_finished || 0
     const session_climb = {
         attempts,
         percent_finished,

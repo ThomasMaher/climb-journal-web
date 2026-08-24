@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getBoulder } from '../../api/boulders';
+import { getBoulder, updateBoulder } from '../../api/boulders';
 import GradeSelect from '../shared/gradeSelect';
 import BoulderImages from './boulderImages';
 import PersonalBoulderStats from './personalBoulderStats';
@@ -12,7 +12,7 @@ function SessionClimbBoulder() {
     const [boulder, setBoulder] = useState<Boulder | undefined>(undefined);
     const [formData, setFormData] = useState<Boulder>({
         nickname: '',
-        boulder_id: '',
+        boulder_id: boulderId,
         vgrade_range_min: 1,
         vgrade_range_max: 1,
         self_grade: 1,
@@ -194,8 +194,21 @@ function SessionClimbBoulder() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        setSubmitting(true);
-        setSubmitting(false);
+        async function sendUpdateBoulder() {
+            setSubmitting(true);
+
+            const response = await updateBoulder(formData, boulderId);
+            if (response.ok) {
+                setPageError(null);
+                setBoulder(response.data);
+            } else if (response.errors) {
+                setBoulderErrors(response.errors || []);
+            } else {
+                setPageError(response.error || 'Failed to update boulder.');
+            }
+        }
+
+        sendUpdateBoulder().finally(() => setSubmitting(false));
     }
 
     return(

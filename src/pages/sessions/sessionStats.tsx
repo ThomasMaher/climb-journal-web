@@ -34,21 +34,21 @@ export default function SessionStats(props: {
                     <table className="home-stats__table stats__table">
                         <tbody>
                             <tr>
-                                <th scope="row">Total Boulder</th>
+                                <th scope="row">Total Boulders</th>
                                 <td>{total_boulders}</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                                 <th scope="row">Total Sent</th>
                                 <td>Placeholder</td>
-                            </tr>
+                            </tr> */}
                             <tr>
                                 <th scope="row">Highest Grade</th>
                                 <td>{highest_grade_sent}</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                                 <th scope="row">Highest Grade Sent</th>
                                 <td>Placeholder</td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
                 </div>

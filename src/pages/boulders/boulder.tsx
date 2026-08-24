@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getBoulder, updateBoulder } from '../../api/boulders';
+import { getBoulder, updateBoulder, getSessionClimbs } from '../../api/boulders';
+import { deleteSessionClimb } from '../../api/session_climbs';
+import { useAuth } from '../auth/useAuth';
 import GradeSelect from '../shared/gradeSelect';
 import BoulderImages from './boulderImages';
 import PersonalBoulderStats from './personalBoulderStats';
-import type { Boulder } from '../../models/climbing_models';
+import SessionBoulderList from './sessionBoulderList';
+import type { Boulder, SessionClimbBoulder } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
+import session from '../sessions/session';
 
 function SessionClimbBoulder() {
     const { boulderId } = useParams<{ boulderId: string }>();
+    const { user } = useAuth();
     const [boulder, setBoulder] = useState<Boulder | undefined>(undefined);
     const [formData, setFormData] = useState<Boulder>({
         nickname: '',
@@ -26,8 +31,13 @@ function SessionClimbBoulder() {
     const [pageError, setPageError] = useState<string | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
 
+    const [deleting, setDeleting] = useState<boolean>(false);
+    const [sessionClimbs, setSessionClimbs] = useState<SessionClimbBoulder[]>([])
+    const [sessionClimbError, setSessionClimbError] = useState<string | undefined>(undefined);
+    const [loadingSessionClimbs, setLoadingSessionClimbs] = useState<boolean>(false);
+
     useEffect(() => {
-        async function loadData() {
+        async function loadBoulderData() {
             setBoulder(undefined);
             setBoulderErrors(undefined);
             setPageError(undefined);
@@ -52,11 +62,24 @@ function SessionClimbBoulder() {
             }
         }
 
-        loadData();
+        async function loadSessionClimbs() {
+            setSessionClimbs(undefined);
+            setSessionClimbError(undefined);
+            setDeleting(false);
+            setLoadingSessionClimbs(undefined);
+            setSessionClimbs([]);
+
+            const response = getSessionClimbs(boulderId);
+        }
+
+        loadBoulderData();
+        loadSessionClimbs();
     }, [boulderId]);
 
     const userCreatedBoulder = () => {
-        return true
+        if (!user || !boulder) return false;
+
+        return user.id === boulder.created_by_id;
     }
 
     const renderBoulderInfo = () => {
@@ -211,6 +234,29 @@ function SessionClimbBoulder() {
         sendUpdateBoulder().finally(() => setSubmitting(false));
     }
 
+      const handleRemoveClimb = async (sessionClimbId: string) => {
+        setDeleting(true)
+        try {
+          const response = await deleteSessionClimb(sessionClimbId.toString());
+    
+          if (!response.ok) {
+            setSessionClimbError(response.error ?? 'Failed to remove climb from session.')
+          } else {
+            const sessionData = response.data;
+            if (sessionData) {
+              setSessionClimbs(sessionData.not_warmup ?? []);
+              setSessionWarmups(sessionData.warmup ?? []);
+            }
+          }
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            setSessionClimbError(err?.message || 'Failed to removev climb from session');
+          }
+        } finally {
+          setDeleting(false);
+        }
+      }
+
     return(
         <div style={{textAlign: 'center'}}>
             <h2>{boulder && !loadingBoulder ? boulder.nickname : ''}</h2>
@@ -225,7 +271,9 @@ function SessionClimbBoulder() {
                     {userCreatedBoulder() ? renderBoulderForm() : renderBoulderInfo()}
                 </div>
             </form>
-            
+
+            {sessionClimbError && <p>{sessionClimbError}</p>}   
+            <SessionBoulderList type="session" sessionClimbs={sessionClimbs} handleRemoveClimb={handleRemoveClimb} deleting={deleting} title="Sessions" />
         </div>
     )
 }

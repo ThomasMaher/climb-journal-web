@@ -29,25 +29,43 @@ function SessionClimbList(props: SessionClimbListProps) {
     return <span className="climb-item__warmup">{tag}</span>
   }
 
+  const emptyMessage = () => {
+    if (props.type === 'boulder') {
+      return "No climbs logged for this session yet."
+    } else {
+      return "No sessions logged for this boulder yet."
+    }
+  }
+
+  const renderTotal = () => {
+    if (props.type === 'boulder') {
+      return `${climbs.length} ${climbs.length === 1 ? 'climb' : 'climbs'}`
+    } else {
+      return `${climbs.length} ${climbs.length === 1 ? 'session' : 'sessions'}`
+    }
+  }
+
   return (
     <section className="section-block">
       <div className="section-block__header">
         <h2>{props.title}</h2>
         <span className="section-block__count">
-          {climbs.length} {climbs.length === 1 ? 'climb' : 'climbs'}
+          {renderTotal()}
         </span>
       </div>
 
       {climbs.length === 0 ? (
         <div className="empty-state">
-          <p>No climbs logged for this session yet.</p>
+          <p>{emptyMessage()}</p>
         </div>
       ) : (
         <ul className="climb-list">
           {climbs.map((climb) => (
             <li className="climb-item">
                 <Link key={climb.id} to={`/sessionClimbBoulders/${climb.boulder_id}`}>
-                  <div className="climb-item__name">{climb.nickname || 'Untitled climb'}</div>
+                  <div className="climb-item__name" style={{textDecoration: 'underline'}}>
+                    {climb.nickname || 'Untitled climb'}
+                  </div>
                 </Link>
                 <div className="climb-item__meta">
                   {renderProgressTag(climb)}
@@ -59,7 +77,8 @@ function SessionClimbList(props: SessionClimbListProps) {
                     style={{background:'none', border:'none', cursor: 'pointer'}}
                     type="button" 
                     aria-label="delete-session-climb" 
-                    className="climb-item__delete" 
+                    className="climb-item__delete"
+                    disabled={props.deleting}
                     onClick={() => props.handleRemoveClimb(climb.id)}>
                     🗑️
                   </button>
@@ -75,6 +94,8 @@ function SessionClimbList(props: SessionClimbListProps) {
 type SessionClimbListProps = {
   sessionClimbs: SessionClimbBoulder[];
   title: string;
+  deleting: boolean;
+  type: 'boulder' | 'session';
   handleRemoveClimb: (sessionClimbId: string) => void;
 }
 

@@ -3,6 +3,7 @@ import type {
     SessionClimbFormData, 
     SessionClimbBoulder, 
     SessionClimbPayload,
+    SessionClimb,
     Boulder,
  } from '../models/climbing_models';
  import type { UserBoulderData } from '../models/user_models';
@@ -13,6 +14,10 @@ export async function getBoulder(boulderId: string) {
 
 export async function getUserBoulderData(boulderId: string) {
     return fetchApi<UserBoulderData>(`/boulders/${boulderId}/user_boulder_data`);
+}
+
+export async function getSessionClimbs(boulderId: string) {
+    return fetchApi<SessionClimb>(`/boulders/${boulderId}/sessions`);
 }
 
 export async function updateBoulder(boulderData: Boulder, boulderId: string) {

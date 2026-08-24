@@ -5,7 +5,7 @@ import NavBar from './pages/shared/navbar.tsx';
 import Home from './pages/home.tsx';
 import ProtectedRoute from './pages/auth/ProtectedRoute.tsx';
 import Login from './pages/auth/Login.tsx';
-import SessionClimbBoulder from './pages/boulders/sessionClimbBoulder';
+import SessionClimbBoulder from './pages/boulders/boulder.tsx';
 
 function App() {
   return (

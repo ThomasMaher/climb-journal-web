@@ -215,8 +215,8 @@ export default function Session() {
       </div>
 
       {sessionClimbError && <p>{sessionClimbError}</p>}
-      <SessionBoulderList sessionClimbs={sessionClimbs} handleRemoveClimb={handleRemoveClimb} title="Climbs" />
-      <SessionBoulderList sessionClimbs={sessionWarmups} handleRemoveClimb={handleRemoveClimb} title="Warmups" />
+      <SessionBoulderList sessionClimbs={sessionClimbs} type="boulder" handleRemoveClimb={handleRemoveClimb} deleting={deleting} title="Climbs" />
+      <SessionBoulderList sessionClimbs={sessionWarmups} type="boulder" handleRemoveClimb={handleRemoveClimb} deleting={deleting} title="Warmups" />
     </>
   );
 }

@@ -45,9 +45,10 @@ function SessionClimbList(props: SessionClimbListProps) {
       ) : (
         <ul className="climb-list">
           {climbs.map((climb) => (
-            <Link key={climb.id} to={`/sessionClimbBoulders/${climb.boulder_id}`}>
-              <li className="climb-item">
-                <div className="climb-item__name">{climb.nickname || 'Untitled climb'}</div>
+            <li className="climb-item">
+                <Link key={climb.id} to={`/sessionClimbBoulders/${climb.boulder_id}`}>
+                  <div className="climb-item__name">{climb.nickname || 'Untitled climb'}</div>
+                </Link>
                 <div className="climb-item__meta">
                   {renderProgressTag(climb)}
                   <span className="badge">V{vGradeRange(climb)}</span>
@@ -55,7 +56,7 @@ function SessionClimbList(props: SessionClimbListProps) {
                     <strong>{climb.attempts ?? 0}</strong> attempts
                   </p>
                   <button 
-                    style={{background:'none', border:'none'}}
+                    style={{background:'none', border:'none', cursor: 'pointer'}}
                     type="button" 
                     aria-label="delete-session-climb" 
                     className="climb-item__delete" 
@@ -64,7 +65,6 @@ function SessionClimbList(props: SessionClimbListProps) {
                   </button>
                 </div>
               </li>
-            </Link>
           ))}
         </ul>
       )}

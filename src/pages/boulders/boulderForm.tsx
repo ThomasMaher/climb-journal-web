@@ -15,8 +15,8 @@ function BoulderForm(props: BoulderFormProps) {
     notes: '',
     incline: 0,
     boulder_type: 'Indoor',
-    attempts: '',
-    percent_finished: '',
+    attempts: 0,
+    percent_finished: 0,
     warmup: false,
   });
   const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
@@ -92,8 +92,10 @@ function BoulderForm(props: BoulderFormProps) {
           ? getNumberVal(value)
           : value;
 
-    if (name === 'percent_finished' && value > 100) { return; }
-    if (['percent_finished', 'attempts'].includes(name) && value < 0) { return; }
+    if (typeof parsedValue === "number") {
+      if (name === 'percent_finished' && parsedValue > 100) { return; }
+      if (['percent_finished', 'attempts'].includes(name) && parsedValue < 0) { return; }
+    }
 
     setFormData((prev) => ({
       ...prev,

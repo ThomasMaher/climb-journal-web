@@ -7,9 +7,8 @@ import GradeSelect from '../shared/gradeSelect';
 import BoulderImages from './boulderImages';
 import PersonalBoulderStats from './personalBoulderStats';
 import SessionBoulderList from './sessionBoulderList';
-import type { Boulder, SessionClimbBoulder } from '../../models/climbing_models';
+import type { Boulder, SessionClimbBoulder, SessionClimb } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
-import session from '../sessions/session';
 
 function SessionClimbBoulder() {
     const { boulderId } = useParams<{ boulderId: string }>();
@@ -32,7 +31,7 @@ function SessionClimbBoulder() {
     const [submitting, setSubmitting] = useState<boolean>(false);
 
     const [deleting, setDeleting] = useState<boolean>(false);
-    const [sessionClimbs, setSessionClimbs] = useState<SessionClimbBoulder[]>([])
+    const [sessionClimbs, setSessionClimbs] = useState<SessionClimb[]>([])
     const [sessionClimbError, setSessionClimbError] = useState<string | undefined>(undefined);
     const [loadingSessionClimbs, setLoadingSessionClimbs] = useState<boolean>(false);
 
@@ -63,13 +62,15 @@ function SessionClimbBoulder() {
         }
 
         async function loadSessionClimbs() {
-            setSessionClimbs(undefined);
+            setSessionClimbs([]);
             setSessionClimbError(undefined);
             setDeleting(false);
-            setLoadingSessionClimbs(undefined);
-            setSessionClimbs([]);
+            setLoadingSessionClimbs(false);
 
-            const response = getSessionClimbs(boulderId);
+            const response = await getSessionClimbs(boulderId);
+            if (response.ok && response.data) {
+                setSessionClimbs(response.data);
+            }
         }
 
         loadBoulderData();
@@ -245,7 +246,6 @@ function SessionClimbBoulder() {
             const sessionData = response.data;
             if (sessionData) {
               setSessionClimbs(sessionData.not_warmup ?? []);
-              setSessionWarmups(sessionData.warmup ?? []);
             }
           }
         } catch (err: unknown) {

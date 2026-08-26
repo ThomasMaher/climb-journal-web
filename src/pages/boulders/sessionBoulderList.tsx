@@ -1,12 +1,10 @@
 import { Link } from 'react-router-dom';
-import type { SessionClimbBoulder } from '../../models/climbing_models';
+import type { SessionClimbBoulder, SessionClimb } from '../../models/climbing_models';
 
 function SessionClimbList(props: SessionClimbListProps) {
   const climbs = props.sessionClimbs ?? [];
 
   const vGradeRange = (climb: SessionClimbBoulder) => {
-    if (!climb.vgrade_range_min || !climb.vgrade_range_max) return '';
-
     if (climb.vgrade_range_min === climb.vgrade_range_max) {
       return climb.vgrade_range_min;
     } else {
@@ -14,9 +12,9 @@ function SessionClimbList(props: SessionClimbListProps) {
     }
   }
 
-  const sent = (climb: SessionClimbBoulder) => climb.percent_finished === 100
+  const sent = (climb: SessionClimbBoulder | SessionClimb) => climb.percent_finished === 100
 
-  const renderProgressTag = (climb: SessionClimbBoulder) => {
+  const renderProgressTag = (climb: SessionClimbBoulder | SessionClimb) => {
     let tag: string = '';
     if (climb.warmup) {
       tag = 'Warmup';
@@ -45,6 +43,15 @@ function SessionClimbList(props: SessionClimbListProps) {
     }
   }
 
+  const renderName = (climb: SessionClimbBoulder | SessionClimb) => {
+    if ('nickname' in climb) {
+      return climb.nickname
+    } else if ('notes' in climb) {
+      return climb.notes;
+    }
+    return 'Unknown';
+  }
+
   return (
     <section className="section-block">
       <div className="section-block__header">
@@ -64,12 +71,14 @@ function SessionClimbList(props: SessionClimbListProps) {
             <li className="climb-item">
                 <Link key={climb.id} to={`/sessionClimbBoulders/${climb.boulder_id}`}>
                   <div className="climb-item__name" style={{textDecoration: 'underline'}}>
-                    {climb.nickname || 'Untitled climb'}
+                    {renderName(climb)}
                   </div>
                 </Link>
                 <div className="climb-item__meta">
                   {renderProgressTag(climb)}
-                  <span className="badge">V{vGradeRange(climb)}</span>
+                  {'vgrade_range_max' in climb ? (
+                    <span className="badge">V{vGradeRange(climb)}</span>
+                  ) : ''}
                   <p className="climb-item__stat">
                     <strong>{climb.attempts ?? 0}</strong> attempts
                   </p>
@@ -92,7 +101,7 @@ function SessionClimbList(props: SessionClimbListProps) {
 }
 
 type SessionClimbListProps = {
-  sessionClimbs: SessionClimbBoulder[];
+  sessionClimbs: SessionClimbBoulder[] | SessionClimb[];
   title: string;
   deleting: boolean;
   type: 'boulder' | 'session';

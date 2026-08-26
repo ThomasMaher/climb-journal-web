@@ -18,7 +18,7 @@ export type SessionClimb = {
 }
 
 export type Boulder = {
-    boulder_id: string;
+    boulder_id: string | undefined;
     vgrade_range_min: number;
     vgrade_range_max: number;
     self_grade: number;

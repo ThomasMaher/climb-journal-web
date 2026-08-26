@@ -16,11 +16,11 @@ export async function getUserBoulderData(boulderId: string) {
     return fetchApi<UserBoulderData>(`/boulders/${boulderId}/user_boulder_data`);
 }
 
-export async function getSessionClimbs(boulderId: string) {
-    return fetchApi<SessionClimb>(`/boulders/${boulderId}/sessions`);
+export async function getSessionClimbs(boulderId: string | undefined) {
+    return fetchApi<SessionClimb[]>(`/boulders/${boulderId}/sessions`);
 }
 
-export async function updateBoulder(boulderData: Boulder, boulderId: string) {
+export async function updateBoulder(boulderData: Boulder, boulderId: string | undefined) {
     return fetchApi<Boulder>(`/boulders/${boulderId}`, {
         method: 'PUT',
         headers: {

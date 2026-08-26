@@ -43,12 +43,12 @@ export async function submitSessionClimb(boulderData: SessionClimbPayload) {
 }
 
 export function createRequestData(formData: SessionClimbFormData, sessionId: string, userId: string) {
-    let { attempts, percent_finished, warmup, notes, ...boulderData } = formData
-    attempts = attempts || 0
-    percent_finished = percent_finished || 0
+    const { attempts, percent_finished, warmup, notes, ...boulderData } = formData
+    const parsed_attempts = attempts || 0
+    const parsed_percent_finished = percent_finished || 0
     const session_climb = {
-        attempts,
-        percent_finished,
+        attempts: parsed_attempts,
+        percent_finished: parsed_percent_finished,
         notes,
         warmup,
         session_id: sessionId,

@@ -7,10 +7,10 @@ import GradeSelect from '../shared/gradeSelect';
 import BoulderImages from './boulderImages';
 import PersonalBoulderStats from './personalBoulderStats';
 import SessionBoulderList from './sessionBoulderList';
-import type { Boulder, SessionClimbBoulder, SessionClimb } from '../../models/climbing_models';
+import type { Boulder, SessionClimb } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
 
-function SessionClimbBoulder() {
+function BoulderPage() {
     const { boulderId } = useParams<{ boulderId: string }>();
     const { user } = useAuth();
     const [boulder, setBoulder] = useState<Boulder | undefined>(undefined);
@@ -289,4 +289,4 @@ function SessionClimbBoulder() {
     )
 }
 
-export default SessionClimbBoulder;
+export default BoulderPage;

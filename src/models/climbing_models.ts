@@ -15,6 +15,7 @@ export type SessionClimb = {
     percent_finished: number;
     warmup: boolean;
     notes: string;
+    date?: string;
 }
 
 export type Boulder = {

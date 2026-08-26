@@ -64,12 +64,17 @@ function SessionClimbBoulder() {
         async function loadSessionClimbs() {
             setSessionClimbs([]);
             setSessionClimbError(undefined);
-            setDeleting(false);
-            setLoadingSessionClimbs(false);
+            setLoadingSessionClimbs(true);
 
-            const response = await getSessionClimbs(boulderId);
-            if (response.ok && response.data) {
-                setSessionClimbs(response.data);
+            try {
+                const response = await getSessionClimbs(boulderId);
+                if (response.ok && response.data) {
+                    setSessionClimbs(response.data);
+                } else if (!response.ok) {
+                    setSessionClimbError(response.error ?? 'Unable to load sessions.')
+                }
+            } finally {
+                setLoadingSessionClimbs(false);
             }
         }
 
@@ -223,7 +228,7 @@ function SessionClimbBoulder() {
 
             const response = await updateBoulder(formData, boulderId);
             if (response.ok) {
-                setPageError(null);
+                setPageError(undefined);
                 setBoulder(response.data);
             } else if (response.errors) {
                 setBoulderErrors(response.errors || []);
@@ -273,7 +278,13 @@ function SessionClimbBoulder() {
             </form>
 
             {sessionClimbError && <p>{sessionClimbError}</p>}   
-            <SessionBoulderList type="session" sessionClimbs={sessionClimbs} handleRemoveClimb={handleRemoveClimb} deleting={deleting} title="Sessions" />
+            <SessionBoulderList 
+                type="session" 
+                sessionClimbs={sessionClimbs} 
+                handleRemoveClimb={handleRemoveClimb} 
+                deleting={deleting} 
+                title="Sessions" 
+                loading={loadingSessionClimbs} />
         </div>
     )
 }

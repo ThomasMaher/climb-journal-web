@@ -45,11 +45,17 @@ function SessionClimbList(props: SessionClimbListProps) {
 
   const renderName = (climb: SessionClimbBoulder | SessionClimb) => {
     if ('nickname' in climb) {
-      return climb.nickname
-    } else if ('notes' in climb) {
-      return climb.notes;
+      return climb.nickname;
+    } else if ('date' in climb) {
+      if (climb.date) return climb.date;
+      return `Session: ${climb.id}`;
     }
     return 'Unknown';
+  }
+
+  const linkTarget = (climb: SessionClimbBoulder | SessionClimb) => {
+    if (props.type === 'boulder') return `/sessionClimbBoulders/${climb.boulder_id}`;
+    else return `/sessions/${climb.session_id}`;
   }
 
   return (
@@ -61,6 +67,8 @@ function SessionClimbList(props: SessionClimbListProps) {
         </span>
       </div>
 
+      {props.loading && (<p>Loading...</p>)}
+
       {climbs.length === 0 ? (
         <div className="empty-state">
           <p>{emptyMessage()}</p>
@@ -69,7 +77,7 @@ function SessionClimbList(props: SessionClimbListProps) {
         <ul className="climb-list">
           {climbs.map((climb) => (
             <li className="climb-item">
-                <Link key={climb.id} to={`/sessionClimbBoulders/${climb.boulder_id}`}>
+                <Link key={climb.id} to={linkTarget(climb)}>
                   <div className="climb-item__name" style={{textDecoration: 'underline'}}>
                     {renderName(climb)}
                   </div>
@@ -105,6 +113,7 @@ type SessionClimbListProps = {
   title: string;
   deleting: boolean;
   type: 'boulder' | 'session';
+  loading: boolean;
   handleRemoveClimb: (sessionClimbId: string) => void;
 }
 

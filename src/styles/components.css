@@ -653,3 +653,8 @@
 .personal-boulder__stats {
   width: 35%;
 }
+
+
+.inactive {
+  color: #a3a5a3;
+}

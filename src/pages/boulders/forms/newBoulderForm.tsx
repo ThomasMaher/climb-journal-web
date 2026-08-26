@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { submitSessionClimb, createRequestData } from '../../api/boulders';
-import GradeSelect from '../shared/gradeSelect';
-import type { SessionClimbFormData, SessionClimbBoulder } from '../../models/climbing_models';
-import type { ApiFormErrors } from '../../api/utils';
+import { submitSessionClimb, createRequestData } from '../../../api/boulders';
+import GradeSelect from '../../shared/gradeSelect';
+import type { SessionClimbFormData, BoulderFormProps } from '../../../models/climbing_models';
+import type { ApiFormErrors } from '../../../api/utils';
 
 const MAX_INCLINE = 90 / 5;
 
-function BoulderForm(props: BoulderFormProps) {
+function NewBoulderForm(props: BoulderFormProps) {
   const [formData, setFormData] = useState<SessionClimbFormData>({
     nickname: '',
     vgrade_range_min: 1,
@@ -104,8 +104,7 @@ function BoulderForm(props: BoulderFormProps) {
   };
 
   return (
-    <section className="form-panel">
-      <h2 className="form-panel__title">Add a climb</h2>
+    <>
       <p className="form-panel__hint">Brief details to track this boulder.</p>
 
       <form className="form-stack" onSubmit={handleSubmit}>
@@ -273,17 +272,8 @@ function BoulderForm(props: BoulderFormProps) {
           </button>
         </div>
       </form>
-    </section>
+    </>
   );
 }
 
-
-type BoulderFormProps = {
-  sessionId: string | undefined;
-  userId: string | undefined;
-  errors?: ApiFormErrors;
-  sessionClimbs?: SessionClimbBoulder[];
-  handleBoulderCreated: (newBoulder: SessionClimbBoulder) => void;
-};
-
-export default BoulderForm;
+export default NewBoulderForm;

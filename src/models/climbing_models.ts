@@ -1,4 +1,5 @@
 import type { SendsByGrade } from './user_models';
+import type { ApiFormErrors } from '../api/utils';
 
 export type Session = {
     id: number | undefined;
@@ -68,3 +69,10 @@ export type SessionClimbPayload = {
     session_climbs_attributes: 
         Omit<SessionClimb, "id" | "boulder_id" | "created_at" | "updated_at">[];
 }
+
+export type BoulderFormProps = {
+  sessionId: string | undefined;
+  userId: string | undefined;
+  errors?: ApiFormErrors;
+  handleBoulderCreated: (newBoulder: SessionClimbBoulder) => void;
+};

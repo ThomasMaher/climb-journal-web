@@ -2,7 +2,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getSession, deleteSession, getSessionStats } from '../../api/sessions';
 import { deleteSessionClimb } from '../../api/session_climbs.ts';
-import BoulderForm from '../boulders/boulderForm.tsx';
+import SearchAndCreateBoulder from '../boulders/forms/searchAndCreateBoulder';
 import SessionBoulderList from '../boulders/sessionBoulderList';
 import SessionStats from './sessionStats';
 import { SESSIONS } from '../home';
@@ -205,13 +205,10 @@ export default function Session() {
           </div>
         </aside>
 
-        <BoulderForm
+        <SearchAndCreateBoulder 
           sessionId={id}
           userId={user?.id}
-          errors={formErrors}
-          sessionClimbs={sessionClimbs}
-          handleBoulderCreated={handleBoulderCreated}
-        />
+          handleBoulderCreated={handleBoulderCreated} />
       </div>
 
       {sessionClimbError && <p>{sessionClimbError}</p>}

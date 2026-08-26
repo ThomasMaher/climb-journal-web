@@ -11,8 +11,7 @@ function Home() {
     const locationState = location.state as { content?: string } | null | undefined;
     const [content, setContent] = useState<string>(locationState?.content ?? STATS);
 
-    const handleToggle = () => {
-        const newState = content === STATS ? SESSIONS : STATS;
+    const handleToggle = (newState: 'STATS' | 'SESSIONS') => {
         setContent(newState);
     }
 
@@ -23,11 +22,11 @@ function Home() {
                     <p className="page-header__eyebrow">Logbook</p>
                     <div className="page-header__toggler">
                         <div>
-                            <h2 onClick={handleToggle}>Stats</h2>
+                            <h2 onClick={() => handleToggle(STATS)}>Stats</h2>
                             {content === STATS && <hr />}
                         </div>
                         <div>
-                            <h2 onClick={handleToggle}>Sessions</h2>
+                            <h2 onClick={() => handleToggle(SESSIONS)}>Sessions</h2>
                             {content === SESSIONS && <hr />}
                         </div>
                     </div>

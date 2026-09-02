@@ -76,3 +76,11 @@ export type BoulderFormProps = {
   errors?: ApiFormErrors;
   handleBoulderCreated: (newBoulder: SessionClimbBoulder) => void;
 };
+
+
+export type BoulderSearchType = {
+    nickname: string;
+    vgrade_range_min: number;
+    vgrade_range_max: number;
+    boulder_type: "Indoor" | "Outdoor" | "Kilter Board"
+}

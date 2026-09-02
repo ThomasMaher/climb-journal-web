@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import NewBoulderForm from './newBoulderForm';
+import BoulderSearchForm from './boulderSearchForm';
 import type { BoulderFormProps } from '../../../models/climbing_models';
 
 const CREATE = 'create';
@@ -30,10 +31,10 @@ function SearchAndCreateBoulder(props: BoulderFormProps) {
                     sessionId={props.sessionId} 
                     userId={props.userId} 
                     handleBoulderCreated={props.handleBoulderCreated}/> :
-                <NewBoulderForm 
-                    sessionId={props.sessionId} 
-                    userId={props.userId} 
-                    handleBoulderCreated={props.handleBoulderCreated} />
+                <BoulderSearchForm 
+                    // sessionId={props.sessionId} 
+                    // userId={props.userId} 
+                     />
             }
         </section>
     )

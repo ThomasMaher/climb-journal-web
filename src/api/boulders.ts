@@ -5,6 +5,7 @@ import type {
     SessionClimbPayload,
     SessionClimb,
     Boulder,
+    BoulderSearchType,
  } from '../models/climbing_models';
  import type { UserBoulderData } from '../models/user_models';
 
@@ -18,6 +19,10 @@ export async function getUserBoulderData(boulderId: string) {
 
 export async function getSessionClimbs(boulderId: string | undefined) {
     return fetchApi<SessionClimb[]>(`/boulders/${boulderId}/sessions`);
+}
+
+export async function submitBoulderSearch(boulderQuery: string) {
+    return fetchApi<Boulder[]>(`/boulders/${boulderQuery}`)
 }
 
 export async function updateBoulder(boulderData: Boulder, boulderId: string | undefined) {
@@ -56,4 +61,14 @@ export function createRequestData(formData: SessionClimbFormData, sessionId: str
     }
 
     return {...boulderData, created_by_id: userId, session_climbs_attributes: [session_climb]}
+}
+
+export function builderSearchQuery(searchData: BoulderSearchType) {
+    let queryString = '';
+
+    for (const [param, value] of Object.entries(searchData)) {
+        if (value) { queryString += `?${param}=${value}`}
+    }
+
+    return queryString;
 }

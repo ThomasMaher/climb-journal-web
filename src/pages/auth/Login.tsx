@@ -3,11 +3,12 @@ import { useAuth } from './useAuth';
 import { login, register } from '../../api/user';
 import { useNavigate } from 'react-router-dom';
 import type { UserPayload } from '../../models/user_models';
+import type { ApiFormErrors } from '../../api/utils';
 
 function Login() {
     const navigate = useNavigate();
     const { setUser } = useAuth();
-    const [error, setError] = useState<string | undefined>(undefined);
+    const [errors, setErrors] = useState<ApiFormErrors | []>([]);
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [formData, setFormData] = useState<UserPayload>({
         username: '',
@@ -19,14 +20,14 @@ function Login() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setError(undefined);
+        setErrors([]);
         setSubmitting(true);
 
         try {
             let response;
             if (registering) {
                 if (formData.password !== formData.rePassword) {
-                    setError('Passwords do not match');
+                    setErrors({ password: ['Passwords do not match'] });
                     setSubmitting(false);
                     return;
                 }
@@ -37,16 +38,20 @@ function Login() {
             if (response?.ok) {
                 setUser(response.data);
                 navigate(`/`);
-            } else if (response.error) {
-                setError(response.error || 'Unable to log in.');
+            } else if (response?.errors){
+                setErrors(response.errors);
             }
         } catch (err: unknown) {
             if (err instanceof Error) {
-                setError(err?.message || 'Unable to log in.')
+                setErrors({ general: [err?.message] })
             }
         } finally {
             setSubmitting(false)
         }
+    }
+
+    const allErrors = () => {
+        return Object.values(errors).flat();
     }
 
     return(
@@ -59,8 +64,9 @@ function Login() {
                 {registering ? 'Choose username and password' : 'Log In'}
             </h2>
             <form className="form-panel form-stack" onSubmit={handleSubmit} style={{marginTop: '10px'}}>
-                {error && (<p className="error-banner" role="alert">{error}</p>)}
-
+                {allErrors().length > 0 && allErrors().map((err, idx) => (
+                    <p key={idx} className="error-banner" role="alert">{err}</p>
+                ))}
                 <div className="field">
                     <label htmlFor="username">Username: </label>
                     <input
@@ -97,7 +103,7 @@ function Login() {
                         onClick={(e) => {
                             e.preventDefault();
 
-                            setError(undefined);
+                            setErrors([]);
                             setRegistering(!registering);
                         }}
                         >

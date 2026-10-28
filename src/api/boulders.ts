@@ -64,10 +64,10 @@ export function createRequestData(formData: SessionClimbFormData, sessionId: str
 }
 
 export function builderSearchQuery(searchData: BoulderSearchType) {
-    let queryString = '';
+    let queryString = '?';
 
     for (const [param, value] of Object.entries(searchData)) {
-        if (value) { queryString += `?${param}=${value}`}
+        if (value) { queryString += `&${param}=${value}`}
     }
 
     return queryString;

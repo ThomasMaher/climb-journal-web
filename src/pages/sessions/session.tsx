@@ -8,7 +8,7 @@ import SessionStats from './sessionStats';
 import { SESSIONS } from '../home';
 import { useAuth } from '../auth/useAuth';
 import type { Session, SessionClimbBoulder, SessionStatsResponse } from '../../models/climbing_models.ts';
-import type { ApiFormErrors } from '../../api/utils';
+// import type { ApiFormErrors } from '../../api/utils';
 
 export default function Session() {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function Session() {
   const [sessionError, setSessionError] = useState<string | undefined>(undefined);
   const [statsError, setStatsError] = useState<string | undefined>(undefined);
   const [sessionClimbError, setSessionClimbError] = useState<string | undefined>(undefined);
-  const [formErrors] = useState<ApiFormErrors | undefined>(undefined);
+  // const [formErrors] = useState<ApiFormErrors | undefined>(undefined);
 
   // set session data
   useEffect(() => {

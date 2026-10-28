@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import GradeSelect from '../../shared/gradeSelect';
 import { submitBoulderSearch, builderSearchQuery } from '../../../api/boulders.ts';
+import BoulderResults from './BoulderResults/boulderResults';
 
 import type { Boulder, BoulderSearchType } from '../../../models/climbing_models';
+import type { ApiFormErrors } from '../../../api/utils.ts';
 
 
 export default function BoulderSearchForm() {
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [boulders, setBoulders] = useState<Boulder[]>([]);
-    const [error, setError] = useState<string | undefined>(undefined);
+    const [errors, setErrors] = useState<ApiFormErrors | undefined>(undefined);
     const [formData, setFormData] = useState<BoulderSearchType>({
         nickname: '',
         vgrade_range_min: 1,
@@ -49,7 +51,7 @@ export default function BoulderSearchForm() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const failedMessage = 'Unable to get a reesponse';
+        const failedMessage = 'Unable to get a response';
         setSubmitting(true);
 
         try {
@@ -58,17 +60,17 @@ export default function BoulderSearchForm() {
             if (response.ok && response.data) {
                 setBoulders(response.data);
             } else if (!response.ok) {
-                if (response.error) {
-                    setError(response.error);
+                if (response.errors) {
+                    setErrors(response.errors);
                 } else {
-                    setError(failedMessage);
+                    setErrors({ general: [failedMessage] });
                 }
             }
         } catch (err: unknown) {
             if (err instanceof Error) {
-                setError(err?.message || failedMessage)
+                setErrors({ general: [err?.message || failedMessage] })
             } else {
-                setError(failedMessage);
+                setErrors({ general: [failedMessage] });
             }
         } finally {
             setSubmitting(false);
@@ -78,6 +80,8 @@ export default function BoulderSearchForm() {
     return (
         <>
             <p>Search for an existing boulder to add to your session.</p>
+
+            {errors && errors.general && <p>{errors.general[0]}</p>}
 
             <form className="form-stack" onSubmit={handleSubmit}>
                 <div className="fields-grid">
@@ -138,10 +142,12 @@ export default function BoulderSearchForm() {
 
                 <div className="form-actions">
                     <button type="submit" className="btn" disabled={submitting}>
-                        {submitting ? 'Adding…' : 'Add climb'}
+                        {submitting ? 'Searching…' : 'Search climb'}
                     </button>
                 </div>
             </form>
+
+            <BoulderResults boulders={boulders} />
         </>
     )
 }

@@ -21,7 +21,7 @@ function SearchAndCreateBoulder(props: BoulderFormProps) {
         nickname: '',
         vgrade_range_min: 1,
         vgrade_range_max: 1,
-        boulder_type: 'Indoor',
+        boulder_type: [],
     });
     const [newBoulderFormData, setNewBoulderFormData] = useState<SessionClimbFormData>({
         nickname: '',

@@ -1,5 +1,4 @@
 import type { SendsByGrade } from './user_models';
-import type { ApiFormErrors } from '../api/utils';
 
 export type Session = {
     id: number | undefined;
@@ -72,9 +71,11 @@ export type SessionClimbPayload = {
 }
 
 
+export type BoulderType = "Indoor" | "Outdoor" | "Kilter Board";
+
 export type BoulderSearchType = {
     nickname: string;
     vgrade_range_min: number;
     vgrade_range_max: number;
-    boulder_type: "Indoor" | "Outdoor" | "Kilter Board"
+    boulder_type: BoulderType[];
 }

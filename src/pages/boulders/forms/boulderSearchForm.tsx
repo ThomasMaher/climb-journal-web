@@ -2,6 +2,7 @@ import { useState } from 'react';
 import GradeSelect from '../../shared/gradeSelect';
 import { submitBoulderSearch, builderSearchQuery } from '../../../api/boulders.ts';
 import BoulderResults from './BoulderResults/boulderResults';
+import { BOULDER_TYPES } from '../../../utils/constants';
 
 import type { Boulder, BoulderSearchType } from '../../../models/climbing_models';
 import type { ApiFormErrors } from '../../../api/utils.ts';
@@ -30,6 +31,20 @@ export default function BoulderSearchForm(props: {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, type, value } = e.target;
         const checked = e.target instanceof HTMLInputElement ? e.target.checked : false;
+
+        if (name === 'boulder_type') {
+            const boulderType = BOULDER_TYPES.find((option) => option === value);
+            if (!boulderType) return;
+
+            props.setFormData((prev) => ({
+                ...prev,
+                boulder_type: checked
+                    ? [...prev.boulder_type, boulderType]
+                    : prev.boulder_type.filter((selectedType) => selectedType !== boulderType),
+            }));
+            return;
+        }
+
         const numericFields = [
         'vgrade_range_min',
         'vgrade_range_max',
@@ -124,13 +139,13 @@ export default function BoulderSearchForm(props: {
                     <span className="field__label">Type</span>
 
                     <div className="choice-row">
-                    {['Indoor', 'Outdoor', 'Kilter Board'].map((type) => (
+                    {BOULDER_TYPES.map((type) => (
                         <label key={type} className="choice">
                         <input
-                            type="radio"
+                            type="checkbox"
                             name="boulder_type"
                             value={type}
-                            checked={props.formData?.boulder_type === type}
+                            checked={props.formData.boulder_type.includes(type)}
                             onChange={handleChange}
                         />
                         {type === 'Kilter Board' ? 'Kilter' : type}

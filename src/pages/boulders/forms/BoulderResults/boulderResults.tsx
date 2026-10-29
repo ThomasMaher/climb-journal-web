@@ -3,6 +3,9 @@ import type { Boulder } from '../../../../models/climbing_models';
 export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
     if (boulders.length === 0) return null;
 
+    const NAME_LIMIT = 25;
+    const CREATOR_NAME_LIMIT = 15;
+
     const gradeRange = (boulder: Boulder) => {
         if (boulder.vgrade_range_min === boulder.vgrade_range_max) {
             return `V${boulder.vgrade_range_min}`;
@@ -11,8 +14,8 @@ export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
         return `V${boulder.vgrade_range_min}–V${boulder.vgrade_range_max}`;
     }
 
-    const displayName = (name: string) => {
-        return name.length > 25 ? `${name.slice(0, 22)}...` : name;
+    const displayString = (name: string, limit: number) => {
+        return name.length > limit ? `${name.slice(0, limit-3)}...` : name;
     }
 
     return (
@@ -44,7 +47,7 @@ export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
                                     className="boulder-results__name"
                                     title={boulder.nickname}
                                 >
-                                    {displayName(boulder.nickname)}
+                                    {displayString(boulder.nickname, NAME_LIMIT)}
                                 </td>
                                 <td className="boulder-results__action">
                                     <button type="button" className="btn btn--sm">
@@ -57,7 +60,7 @@ export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
                                 <td>{boulder.boulder_type}</td>
                                 <td>
                                     <code className="boulder-results__creator">
-                                        {boulder.created_by_id}
+                                        {displayString(boulder.creator_name, CREATOR_NAME_LIMIT)}
                                     </code>
                                 </td>
                             </tr>

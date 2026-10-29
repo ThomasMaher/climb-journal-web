@@ -28,6 +28,7 @@ export type Boulder = {
     boulder_type: string;
     nickname: string;
     created_by_id: string;
+    creator_name: string;
     created_at?: string;
     updated_at?: string;
 }

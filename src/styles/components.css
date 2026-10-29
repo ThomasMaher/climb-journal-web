@@ -266,6 +266,12 @@
   white-space: nowrap;
 }
 
+.boulder-results__name a,
+.boulder-results__name a:hover {
+  color: var(--text-heading);
+  cursor: pointer;
+}
+
 .boulder-results__table th.boulder-results__action,
 .boulder-results__table td.boulder-results__action {
   width: 1%;

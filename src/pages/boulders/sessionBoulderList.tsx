@@ -1,16 +1,10 @@
 import { Link } from 'react-router-dom';
+import { vGradeRange } from '../../utils/utils';
+
 import type { SessionClimbBoulder, SessionClimb } from '../../models/climbing_models';
 
 function SessionClimbList(props: SessionClimbListProps) {
   const climbs = props.sessionClimbs ?? [];
-
-  const vGradeRange = (climb: SessionClimbBoulder) => {
-    if (climb.vgrade_range_min === climb.vgrade_range_max) {
-      return climb.vgrade_range_min;
-    } else {
-      return `${climb.vgrade_range_min} - V${climb.vgrade_range_max}`;
-    }
-  }
 
   const sent = (climb: SessionClimbBoulder | SessionClimb) => climb.percent_finished === 100
 
@@ -85,7 +79,7 @@ function SessionClimbList(props: SessionClimbListProps) {
                 <div className="climb-item__meta">
                   {renderProgressTag(climb)}
                   {'vgrade_range_max' in climb ? (
-                    <span className="badge">V{vGradeRange(climb)}</span>
+                    <span className="badge">{vGradeRange(climb)}</span>
                   ) : ''}
                   <p className="climb-item__stat">
                     <strong>{climb.attempts ?? 0}</strong> attempts

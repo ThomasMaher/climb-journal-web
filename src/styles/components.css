@@ -224,23 +224,23 @@
 
 .boulder-results__table {
   width: 100%;
-  min-width: 36rem;
+  min-width: 32rem;
   border-collapse: collapse;
   text-align: left;
 }
 
 .boulder-results__table th,
 .boulder-results__table td {
-  padding: 0.55rem 0.7rem;
+  padding: 0.4rem 0.55rem;
   border-bottom: 1px solid var(--border);
-  font-size: 0.875rem;
+  font-size: 0.82rem;
   vertical-align: middle;
 }
 
 .boulder-results__table th {
   color: var(--text);
   background: rgba(12, 16, 14, 0.3);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -269,14 +269,19 @@
 .boulder-results__table th.boulder-results__action,
 .boulder-results__table td.boulder-results__action {
   width: 1%;
-  padding-left: var(--space-xs);
-  padding-right: var(--space-lg);
+  padding-left: var(--space-md);
+  padding-right: var(--space-xl);
   white-space: nowrap;
+}
+
+.boulder-results__action .btn {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
 }
 
 .boulder-results__creator {
   color: var(--text);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
 }
 
 .visually-hidden {

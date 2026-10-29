@@ -12,7 +12,7 @@ export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
     }
 
     const displayName = (name: string) => {
-        return name.length > 18 ? `${name.slice(0, 15)}...` : name;
+        return name.length > 25 ? `${name.slice(0, 22)}...` : name;
     }
 
     return (

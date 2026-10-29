@@ -5,18 +5,17 @@ import BoulderResults from './BoulderResults/boulderResults';
 
 import type { Boulder, BoulderSearchType } from '../../../models/climbing_models';
 import type { ApiFormErrors } from '../../../api/utils.ts';
+import type { Dispatch, SetStateAction } from 'react';
 
 
-export default function BoulderSearchForm() {
+export default function BoulderSearchForm(props: {
+    boulders: Boulder[], 
+    setBoulders: Dispatch<SetStateAction<Boulder[]>>,
+    formData: BoulderSearchType,
+    setFormData: Dispatch<SetStateAction<BoulderSearchType>>,
+}) {
     const [submitting, setSubmitting] = useState<boolean>(false);
-    const [boulders, setBoulders] = useState<Boulder[]>([]);
     const [errors, setErrors] = useState<ApiFormErrors | undefined>(undefined);
-    const [formData, setFormData] = useState<BoulderSearchType>({
-        nickname: '',
-        vgrade_range_min: 1,
-        vgrade_range_max: 1,
-        boulder_type: 'Indoor',
-      });
 
     const getNumberVal = (val: string): number | '' => {
         if (val === '') return '';
@@ -42,7 +41,7 @@ export default function BoulderSearchForm() {
             ? getNumberVal(value)
             : value;
 
-        setFormData((prev) => ({
+        props.setFormData((prev) => ({
         ...prev,
         [name]: parsedValue,
         }));
@@ -55,10 +54,10 @@ export default function BoulderSearchForm() {
         setSubmitting(true);
 
         try {
-            const response = await submitBoulderSearch(builderSearchQuery(formData));
+            const response = await submitBoulderSearch(builderSearchQuery(props.formData));
 
             if (response.ok && response.data) {
-                setBoulders(response.data);
+                props.setBoulders(response.data);
             } else if (!response.ok) {
                 if (response.errors) {
                     setErrors(response.errors);
@@ -92,7 +91,7 @@ export default function BoulderSearchForm() {
                             id="nickname"
                             type="text"
                             name="nickname"
-                            value={formData.nickname}
+                            value={props.formData?.nickname}
                             onChange={handleChange}
                             placeholder="Project name"
                         />
@@ -105,7 +104,7 @@ export default function BoulderSearchForm() {
                     <GradeSelect
                         id="vgrade_range_min"
                         name="vgrade_range_min"
-                        value={formData.vgrade_range_min}
+                        value={props.formData?.vgrade_range_min}
                         onChange={handleChange}
                     />
                 </div>
@@ -116,7 +115,7 @@ export default function BoulderSearchForm() {
                     <GradeSelect
                         id="vgrade_range_max"
                         name="vgrade_range_max"
-                        value={formData.vgrade_range_max}
+                        value={props.formData?.vgrade_range_max}
                         onChange={handleChange}
                     />
                 </div>
@@ -131,7 +130,7 @@ export default function BoulderSearchForm() {
                             type="radio"
                             name="boulder_type"
                             value={type}
-                            checked={formData.boulder_type === type}
+                            checked={props.formData?.boulder_type === type}
                             onChange={handleChange}
                         />
                         {type === 'Kilter Board' ? 'Kilter' : type}
@@ -147,7 +146,7 @@ export default function BoulderSearchForm() {
                 </div>
             </form>
 
-            <BoulderResults boulders={boulders} />
+            <BoulderResults boulders={props.boulders} />
         </>
     )
 }

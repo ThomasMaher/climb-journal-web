@@ -22,7 +22,8 @@ function BoulderPage() {
         self_grade: 1,
         incline: 0,
         created_by_id: '',
-        boulder_type: ''
+        boulder_type: '',
+        creator_name: '',
     })
 
     const [loadingBoulder, setLoadingBoulder] = useState<boolean>(false);

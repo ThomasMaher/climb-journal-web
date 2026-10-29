@@ -1,13 +1,20 @@
 import { useState } from 'react';
 import NewBoulderForm from './newBoulderForm';
 import BoulderSearchForm from './boulderSearchForm';
-import type { BoulderFormProps } from '../../../models/climbing_models';
+import type { BoulderFormProps, Boulder, BoulderSearchType } from '../../../models/climbing_models';
 
 const CREATE = 'create';
 const SEARCH = 'search';
 
 function SearchAndCreateBoulder(props: BoulderFormProps) {
     const [content, setContent] = useState<'create' | 'search'>(CREATE);
+    const [boulders, setBoulders] = useState<Boulder[]>([]);
+    const [searchFormData, setSearchFormData] = useState<BoulderSearchType>({
+        nickname: '',
+        vgrade_range_min: 1,
+        vgrade_range_max: 1,
+        boulder_type: 'Indoor',
+      });
 
     const toggleContent = (newState: 'create' | 'search') => {
         setContent(newState)
@@ -32,6 +39,10 @@ function SearchAndCreateBoulder(props: BoulderFormProps) {
                     userId={props.userId} 
                     handleBoulderCreated={props.handleBoulderCreated}/> :
                 <BoulderSearchForm 
+                    boulders={boulders}
+                    setBoulders={setBoulders}
+                    formData={searchFormData}
+                    setFormData={setSearchFormData}
                     // sessionId={props.sessionId} 
                     // userId={props.userId} 
                      />

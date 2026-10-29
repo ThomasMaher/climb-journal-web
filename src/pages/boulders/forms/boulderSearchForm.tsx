@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import GradeSelect from '../../shared/gradeSelect';
 import { submitBoulderSearch, builderSearchQuery } from '../../../api/boulders.ts';
-import BoulderResults from './BoulderResults/boulderResults';
+import BoulderResults from './boulderResults.tsx';
 import { BOULDER_TYPES } from '../../../utils/constants';
 
 import type { Boulder, BoulderSearchType } from '../../../models/climbing_models';

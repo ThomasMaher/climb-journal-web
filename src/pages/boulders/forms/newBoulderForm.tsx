@@ -1,24 +1,21 @@
 import { useState } from 'react';
 import { submitSessionClimb, createRequestData } from '../../../api/boulders';
 import GradeSelect from '../../shared/gradeSelect';
-import type { SessionClimbFormData, BoulderFormProps } from '../../../models/climbing_models';
+import type { SessionClimbFormData, SessionClimbBoulder } from '../../../models/climbing_models';
 import type { ApiFormErrors } from '../../../api/utils';
 
 const MAX_INCLINE = 90 / 5;
 
-function NewBoulderForm(props: BoulderFormProps) {
-  const [formData, setFormData] = useState<SessionClimbFormData>({
-    nickname: '',
-    vgrade_range_min: 1,
-    vgrade_range_max: 1,
-    self_grade: undefined,
-    notes: '',
-    incline: 0,
-    boulder_type: 'Indoor',
-    attempts: 0,
-    percent_finished: 0,
-    warmup: false,
-  });
+type NewBoulderFormProps = {
+  sessionId: string | undefined;
+  userId: string | undefined;
+  errors?: ApiFormErrors;
+  formData: SessionClimbFormData;
+  setFormData: React.Dispatch<React.SetStateAction<SessionClimbFormData>>;
+  handleBoulderCreated: (newBoulder: SessionClimbBoulder) => void;
+};
+
+function NewBoulderForm(props: NewBoulderFormProps) {
   const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
@@ -44,7 +41,7 @@ function NewBoulderForm(props: BoulderFormProps) {
     setSubmitting(true);
 
     try {
-      const response = await submitSessionClimb(createRequestData(formData, props.sessionId, props.userId));
+      const response = await submitSessionClimb(createRequestData(props.formData, props.sessionId, props.userId));
 
       if (response.ok && response.data) {
         props.handleBoulderCreated(response.data)
@@ -97,7 +94,7 @@ function NewBoulderForm(props: BoulderFormProps) {
       if (['percent_finished', 'attempts'].includes(name) && parsedValue < 0) { return; }
     }
 
-    setFormData((prev) => ({
+    props.setFormData((prev) => ({
       ...prev,
       [name]: parsedValue,
     }));
@@ -127,7 +124,7 @@ function NewBoulderForm(props: BoulderFormProps) {
               id="nickname"
               type="text"
               name="nickname"
-              value={formData.nickname}
+              value={props.formData?.nickname}
               onChange={handleChange}
               placeholder="Project name or hold color"
             />
@@ -145,7 +142,7 @@ function NewBoulderForm(props: BoulderFormProps) {
                     type="radio"
                     name="boulder_type"
                     value={type}
-                    checked={formData.boulder_type === type}
+                    checked={props.formData?.boulder_type === type}
                     onChange={handleChange}
                   />
                   {type === 'Kilter Board' ? 'Kilter' : type}
@@ -162,7 +159,7 @@ function NewBoulderForm(props: BoulderFormProps) {
             <GradeSelect
               id="vgrade_range_min"
               name="vgrade_range_min"
-              value={formData.vgrade_range_min}
+              value={props.formData?.vgrade_range_min}
               onChange={handleChange}
             />
           </div>
@@ -175,7 +172,7 @@ function NewBoulderForm(props: BoulderFormProps) {
             <GradeSelect
               id="vgrade_range_max"
               name="vgrade_range_max"
-              value={formData.vgrade_range_max}
+              value={props.formData?.vgrade_range_max}
               onChange={handleChange}
             />
           </div>
@@ -188,7 +185,7 @@ function NewBoulderForm(props: BoulderFormProps) {
             <GradeSelect
               id="self_grade"
               name="self_grade"
-              value={formData.self_grade}
+              value={props.formData?.self_grade}
               onChange={handleChange}
             />
           </div>
@@ -200,7 +197,7 @@ function NewBoulderForm(props: BoulderFormProps) {
               type="text"
               name="attempts"
               placeholder='0'
-              value={formData.attempts}
+              value={props.formData?.attempts}
               onChange={handleChange}
             />
           </div>
@@ -212,7 +209,7 @@ function NewBoulderForm(props: BoulderFormProps) {
               type="number"
               name="percent_finished"
               placeholder='0'
-              value={formData.percent_finished}
+              value={props.formData?.percent_finished}
               onChange={handleChange}
             />
           </div>
@@ -222,7 +219,7 @@ function NewBoulderForm(props: BoulderFormProps) {
             {getFieldError('incline') && (
               <p className="field-error">{getFieldError('incline')}</p>
             )}
-            <select id="incline" name="incline" value={formData.incline} onChange={handleChange}>
+            <select id="incline" name="incline" value={props.formData?.incline} onChange={handleChange}>
               <option value={0}>0°</option>
               {[...Array(MAX_INCLINE).keys()].map((k) => (
                 <option key={k} value={(k + 1) * 5}>
@@ -242,7 +239,7 @@ function NewBoulderForm(props: BoulderFormProps) {
                   type="checkbox"
                   name="warmup"
                   value="warmup"
-                  checked={formData.warmup}
+                  checked={props.formData?.warmup}
                   onChange={handleChange}
                 />
                 Warmup
@@ -259,7 +256,7 @@ function NewBoulderForm(props: BoulderFormProps) {
               id="notes"
               type="text"
               name="notes"
-              value={formData.notes}
+              value={props.formData?.notes}
               onChange={handleChange}
               placeholder="Beta, crux, conditions…"
             />

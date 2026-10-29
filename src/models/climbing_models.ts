@@ -71,13 +71,6 @@ export type SessionClimbPayload = {
         Omit<SessionClimb, "id" | "boulder_id" | "created_at" | "updated_at">[];
 }
 
-export type BoulderFormProps = {
-  sessionId: string | undefined;
-  userId: string | undefined;
-  errors?: ApiFormErrors;
-  handleBoulderCreated: (newBoulder: SessionClimbBoulder) => void;
-};
-
 
 export type BoulderSearchType = {
     nickname: string;

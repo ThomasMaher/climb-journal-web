@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Boulder } from '../../../models/climbing_models';
-import { vGradeRange } from '../../../utils/utils';
+import { vGradeRange, limitedDisplayString } from '../../../utils/utils';
 import AddBoulderToSession from './addBoulderToSession';
 
 export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
@@ -10,10 +10,6 @@ export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
 
     const NAME_LIMIT = 25;
     const CREATOR_NAME_LIMIT = 15;
-
-    const displayString = (name: string, limit: number) => {
-        return name.length > limit ? `${name.slice(0, limit-3)}...` : name;
-    }
 
     useEffect(() => {
         const dialog = dialogRef.current;
@@ -59,7 +55,7 @@ export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
                             <tr key={boulder.boulder_id ?? `${boulder.nickname}-${index}`}>
                                 <td className="boulder-results__name" title={boulder.nickname}>
                                     <Link to={`/sessionClimbBoulders/${boulder.boulder_id}`}>
-                                        {displayString(boulder.nickname, NAME_LIMIT)}
+                                        {limitedDisplayString(boulder.nickname, NAME_LIMIT)}
                                     </Link>
                                 </td>
                                 <td className="boulder-results__action">
@@ -77,7 +73,7 @@ export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
                                 <td>{boulder.boulder_type}</td>
                                 <td>
                                     <code className="boulder-results__creator">
-                                        {displayString(boulder.creator_name, CREATOR_NAME_LIMIT)}
+                                        {limitedDisplayString(boulder.creator_name, CREATOR_NAME_LIMIT)}
                                     </code>
                                 </td>
                             </tr>

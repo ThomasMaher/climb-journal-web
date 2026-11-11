@@ -1,4 +1,4 @@
-import { vGradeRange } from "../../../utils/utils";
+import { vGradeRange, limitedDisplayString } from "../../../utils/utils";
 
 import type { Boulder } from "../../../models/climbing_models";
 import { useState } from "react";
@@ -9,6 +9,8 @@ export default function AddBoulderToSession(props: { boulder: Boulder; onClose: 
         percent_finished: '',
         warmup: false
     });
+
+    const NAME_LIMIT = 45;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -27,7 +29,9 @@ export default function AddBoulderToSession(props: { boulder: Boulder; onClose: 
         <>
             <div className="boulder-modal__summary">
                 <p className="boulder-modal__name">
-                    {props.boulder.nickname}
+                    <span className="boulder-modal__nickname">
+                        {limitedDisplayString(props.boulder.nickname, NAME_LIMIT)}
+                    </span>
                     <span className="badge">{vGradeRange(props.boulder)}</span>
                 </p>
                 <p className="boulder-modal__meta">{props.boulder.boulder_type}</p>

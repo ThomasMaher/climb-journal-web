@@ -291,7 +291,9 @@
 }
 
 .boulder-modal {
-  width: min(100% - 2rem, 28rem);
+  width: max-content;
+  min-width: min(100% - 2rem, 28rem);
+  max-width: calc(100% - 2rem);
   padding: 0;
   color: var(--text);
   background: var(--bg-elevated);
@@ -329,6 +331,24 @@
   gap: var(--space-sm);
   color: var(--text-heading);
   font-weight: 600;
+}
+
+.boulder-modal__nickname {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.boulder-modal__name .badge {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.boulder-modal .form-stack {
+  contain: inline-size;
+}
+
+.boulder-modal .fields-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .boulder-modal__meta {

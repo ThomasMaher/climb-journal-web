@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import type { Boulder } from '../../../models/climbing_models';
+import type { Boulder, SessionClimbBoulder } from '../../../models/climbing_models';
 import { vGradeRange, limitedDisplayString } from '../../../utils/utils';
 import AddBoulderToSession from './addBoulderToSession';
 
-export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
+export default function BoulderResults({ boulders, sessionId, userId, addBoulder }: { 
+    boulders: Boulder[], 
+    sessionId: string, 
+    userId: string,
+    addBoulder: (sessionBoulder: SessionClimbBoulder) =>  void,
+}) {
     const [selectedBoulder, setSelectedBoulder] = useState<Boulder | null>(null);
     const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -100,6 +105,12 @@ export default function BoulderResults({ boulders }: { boulders: Boulder[] }) {
                         <AddBoulderToSession
                             boulder={selectedBoulder}
                             onClose={closeAddPrompt}
+                            handleAdd={(sessionBoulder) => {
+                                closeAddPrompt();
+                                addBoulder(sessionBoulder);
+                            }}
+                            sessionId={sessionId}
+                            userId={userId}
                         />
                     )}
                 </div>

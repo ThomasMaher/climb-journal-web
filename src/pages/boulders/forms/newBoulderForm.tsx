@@ -3,6 +3,7 @@ import { submitSessionClimb, createRequestData } from '../../../api/boulders';
 import GradeSelect from '../../shared/gradeSelect';
 import type { SessionClimbFormData, SessionClimbBoulder } from '../../../models/climbing_models';
 import type { ApiFormErrors } from '../../../api/utils';
+import { getFieldError } from '../../../utils/utils';
 
 const MAX_INCLINE = 90 / 5;
 
@@ -19,13 +20,6 @@ function NewBoulderForm(props: NewBoulderFormProps) {
   const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
-
-  const getFieldError = (field: string) => {
-    if (!errors || 'form' in errors) return undefined;
-
-    const fieldErrors = errors[field];
-    return Array.isArray(fieldErrors) ? fieldErrors[0] : undefined;
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -108,8 +102,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
         {(submitError || (errors && 'form' in errors)) && (
           <p className="error-banner" role="alert">
             {submitError ?? (errors && 'form' in errors ? errors.form : '')}
-            {getFieldError('created_by_id') && (
-              <p className="field-error">{getFieldError('created_by_id')}</p>
+            {getFieldError('created_by_id', errors) && (
+              <p className="field-error">{getFieldError('created_by_id', errors)}</p>
             )}
           </p>
         )}
@@ -117,8 +111,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
         <div className="fields-grid">
           <div className="field field--full">
             <label htmlFor="nickname">Nickname</label>
-            {getFieldError('nickname') && (
-              <p className="field-error">{getFieldError('nickname')}</p>
+            {getFieldError('nickname', errors) && (
+              <p className="field-error">{getFieldError('nickname', errors)}</p>
             )}
             <input
               id="nickname"
@@ -132,8 +126,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
 
           <div className="field field--full">
             <span className="field__label">Type</span>
-            {getFieldError('boulder_type') && (
-              <p className="field-error">{getFieldError('boulder_type')}</p>
+            {getFieldError('boulder_type', errors) && (
+              <p className="field-error">{getFieldError('boulder_type', errors)}</p>
             )}
             <div className="choice-row">
               {['Indoor', 'Outdoor', 'Kilter Board'].map((type) => (
@@ -153,8 +147,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
 
           <div className="field">
             <label htmlFor="vgrade_range_min">V grade (min)</label>
-            {getFieldError('vgrade_range_min') && (
-              <p className="field-error">{getFieldError('vgrade_range_min')}</p>
+            {getFieldError('vgrade_range_min', errors) && (
+              <p className="field-error">{getFieldError('vgrade_range_min', errors)}</p>
             )}
             <GradeSelect
               id="vgrade_range_min"
@@ -166,8 +160,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
 
           <div className="field">
             <label htmlFor="vgrade_range_max">V grade (max)</label>
-            {getFieldError('vgrade_range_max') && (
-              <p className="field-error">{getFieldError('vgrade_range_max')}</p>
+            {getFieldError('vgrade_range_max', errors) && (
+              <p className="field-error">{getFieldError('vgrade_range_max', errors)}</p>
             )}
             <GradeSelect
               id="vgrade_range_max"
@@ -179,8 +173,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
 
           <div className="field">
             <label htmlFor="self_grade">Your grade</label>
-            {getFieldError('self_grade') && (
-              <p className="field-error">{getFieldError('self_grade')}</p>
+            {getFieldError('self_grade', errors) && (
+              <p className="field-error">{getFieldError('self_grade', errors)}</p>
             )}
             <GradeSelect
               id="self_grade"
@@ -216,8 +210,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
 
           <div className="field">
             <label htmlFor="incline">Incline</label>
-            {getFieldError('incline') && (
-              <p className="field-error">{getFieldError('incline')}</p>
+            {getFieldError('incline', errors) && (
+              <p className="field-error">{getFieldError('incline', errors)}</p>
             )}
             <select id="incline" name="incline" value={props.formData?.incline} onChange={handleChange}>
               <option value={0}>0°</option>
@@ -230,8 +224,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
           </div>
 
           <div className="field field--full">
-            {getFieldError('warmup') && (
-              <p className="field-error">{getFieldError('warmup')}</p>
+            {getFieldError('warmup', errors) && (
+              <p className="field-error">{getFieldError('warmup', errors)}</p>
             )}
             <div className="choice-row">
               <label key='warmup' className="choice">
@@ -249,8 +243,8 @@ function NewBoulderForm(props: NewBoulderFormProps) {
 
           <div className="field field--full">
             <label htmlFor="notes">Notes</label>
-            {getFieldError('notes') && (
-              <p className="field-error">{getFieldError('notes')}</p>
+            {getFieldError('notes', errors) && (
+              <p className="field-error">{getFieldError('notes', errors)}</p>
             )}
             <input
               id="notes"

@@ -1,4 +1,5 @@
 import { fetchApi } from './utils'
+
 import type { 
     SessionClimbFormData, 
     SessionClimbBoulder, 
@@ -6,6 +7,7 @@ import type {
     SessionClimb,
     Boulder,
     BoulderSearchType,
+    SessionClimbOnlyData,
  } from '../models/climbing_models';
  import type { UserBoulderData } from '../models/user_models';
 
@@ -46,6 +48,18 @@ export async function submitSessionClimb(boulderData: SessionClimbPayload) {
         body: JSON.stringify(boulderData),
     })
 }
+
+export async function addBoulderToSession(sessionId: string, boulderId: string | undefined, formData: SessionClimbOnlyData) {
+    return fetchApi<SessionClimbBoulder>(`/sessions/${sessionId}/boulders/${boulderId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+}
+
 
 export function createRequestData(formData: SessionClimbFormData, sessionId: string, userId: string) {
     const { attempts, percent_finished, warmup, notes, ...boulderData } = formData

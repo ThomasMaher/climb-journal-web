@@ -79,3 +79,9 @@ export type BoulderSearchType = {
     vgrade_range_max: number;
     boulder_type: BoulderType[];
 }
+
+export type SessionClimbOnlyData = {
+    attempts: string;
+    percent_finished: string;
+    warmup: boolean;
+}

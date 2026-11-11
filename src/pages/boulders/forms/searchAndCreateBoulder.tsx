@@ -40,7 +40,10 @@ function SearchAndCreateBoulder(props: BoulderFormProps) {
         setContent(newState)
     }
 
+    if (!props.sessionId || !props.userId) return null;
+
     return (
+
         <section className="form-panel">
             <div className="page-header__toggler">
                 <div onClick={() => toggleContent(CREATE)}>
@@ -65,8 +68,9 @@ function SearchAndCreateBoulder(props: BoulderFormProps) {
                     setBoulders={setBoulders}
                     formData={searchFormData}
                     setFormData={setSearchFormData}
-                    // sessionId={props.sessionId} 
-                    // userId={props.userId} 
+                    sessionId={props.sessionId}
+                    userId={props.userId}
+                    addBoulder={props.handleBoulderCreated}
                      />
             }
         </section>

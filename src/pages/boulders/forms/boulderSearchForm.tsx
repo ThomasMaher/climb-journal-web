@@ -4,7 +4,7 @@ import { submitBoulderSearch, builderSearchQuery } from '../../../api/boulders.t
 import BoulderResults from './boulderResults.tsx';
 import { BOULDER_TYPES } from '../../../utils/constants';
 
-import type { Boulder, BoulderSearchType } from '../../../models/climbing_models';
+import type { Boulder, BoulderSearchType, SessionClimbBoulder } from '../../../models/climbing_models';
 import type { ApiFormErrors } from '../../../api/utils.ts';
 import type { Dispatch, SetStateAction } from 'react';
 
@@ -12,8 +12,11 @@ import type { Dispatch, SetStateAction } from 'react';
 export default function BoulderSearchForm(props: {
     boulders: Boulder[], 
     setBoulders: Dispatch<SetStateAction<Boulder[]>>,
+    addBoulder: (newBoulder: SessionClimbBoulder) =>  void,
     formData: BoulderSearchType,
     setFormData: Dispatch<SetStateAction<BoulderSearchType>>,
+    sessionId: string,
+    userId: string,
 }) {
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [errors, setErrors] = useState<ApiFormErrors | undefined>(undefined);
@@ -161,7 +164,11 @@ export default function BoulderSearchForm(props: {
                 </div>
             </form>
 
-            <BoulderResults boulders={props.boulders} />
+            <BoulderResults 
+                boulders={props.boulders} 
+                sessionId={props.sessionId} 
+                userId={props.userId}
+                addBoulder={props.addBoulder} />
         </>
     )
 }

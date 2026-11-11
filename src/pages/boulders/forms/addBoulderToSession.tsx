@@ -1,10 +1,21 @@
-import { vGradeRange, limitedDisplayString } from "../../../utils/utils";
-
-import type { Boulder } from "../../../models/climbing_models";
 import { useState } from "react";
+import { vGradeRange, limitedDisplayString, getFieldError } from "../../../utils/utils";
+import { addBoulderToSession } from "../../../api/boulders";
 
-export default function AddBoulderToSession(props: { boulder: Boulder; onClose: () => void }) {
-    const [formData, setFormData] = useState({
+import type { Boulder, SessionClimbOnlyData, SessionClimbBoulder } from "../../../models/climbing_models";
+import type { ApiFormErrors } from "../../../api/utils";
+
+
+export default function AddBoulderToSession(props: { 
+    boulder: Boulder; 
+    onClose: () => void,
+    sessionId: string,
+    userId: string,
+    handleAdd: (sessionBoulder: SessionClimbBoulder) => void
+}) {
+    const [submitting, setSubmitting] = useState(false);
+    const [errors, setErrors] = useState<ApiFormErrors | undefined>(undefined);
+    const [formData, setFormData] = useState<SessionClimbOnlyData>({
         attempts: '',
         percent_finished: '',
         warmup: false
@@ -20,9 +31,34 @@ export default function AddBoulderToSession(props: { boulder: Boulder; onClose: 
         }));
     };
 
-    const getFieldError = (_field: string) => {
-        // Implement your field error logic here
-        return '';
+    const handleAdd = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const failedMessage = "Unable to add boulder to session";
+
+        setSubmitting(true);
+        setErrors(undefined);
+        try {
+            const response = await addBoulderToSession(props.sessionId, props.boulder.boulder_id, formData)
+
+            if (response.ok && response.data) {
+                props.handleAdd(response.data);
+            } else if (!response.ok) {
+                if (response.errors) {
+                    setErrors(response.errors);
+                } else {
+                    setErrors({ general: [failedMessage] });
+                }
+            }
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setErrors({ general: [err?.message || failedMessage ]});
+            } else {
+                setErrors({ general: [failedMessage] });
+            }
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -37,9 +73,16 @@ export default function AddBoulderToSession(props: { boulder: Boulder; onClose: 
                 <p className="boulder-modal__meta">{props.boulder.boulder_type}</p>
             </div>
 
-            <form className="form-stack">
+            <form className="form-stack" onSubmit={handleAdd}>
+                {errors?.general?.[0] && (
+                    <p className="field-error" role="alert">{errors.general[0]}</p>
+                )}
+
                 <div className="fields-grid">
                     <div className="field">
+                        {getFieldError('attempts', errors) && (
+                            <p className="field-error">{getFieldError('attempts', errors)}</p>
+                        )}
                         <label htmlFor="attempts">Attempts</label>
                         <input
                         id="attempts"
@@ -53,6 +96,9 @@ export default function AddBoulderToSession(props: { boulder: Boulder; onClose: 
                     </div>
 
                     <div className="field">
+                        {getFieldError('percent_finished', errors) && (
+                            <p className="field-error">{getFieldError('percent_finished', errors)}</p>
+                        )}
                         <label htmlFor="percent_finished">Finished</label>
                         <input
                         id="percent_finished"
@@ -67,8 +113,8 @@ export default function AddBoulderToSession(props: { boulder: Boulder; onClose: 
                     </div>
 
                     <div className="field field--full">
-                        {getFieldError('warmup') && (
-                        <p className="field-error">{getFieldError('warmup')}</p>
+                        {getFieldError('warmup', errors) && (
+                            <p className="field-error">{getFieldError('warmup', errors)}</p>
                         )}
                         <div className="choice-row">
                         <label className="choice">
@@ -85,8 +131,8 @@ export default function AddBoulderToSession(props: { boulder: Boulder; onClose: 
                 </div>
 
                 <div className="form-actions">
-                    <button type="submit" className="btn">
-                        Add to Session
+                    <button type="submit" className="btn" disabled={submitting}>
+                        {submitting ? 'Adding...' : 'Add to Session'}
                     </button>
                     <button
                         type="button"

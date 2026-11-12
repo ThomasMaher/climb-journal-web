@@ -16,7 +16,6 @@ export default function BoulderSearchForm(props: {
     formData: BoulderSearchType,
     setFormData: Dispatch<SetStateAction<BoulderSearchType>>,
     sessionId: string,
-    userId: string,
 }) {
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [errors, setErrors] = useState<ApiFormErrors | undefined>(undefined);
@@ -166,8 +165,7 @@ export default function BoulderSearchForm(props: {
 
             <BoulderResults 
                 boulders={props.boulders} 
-                sessionId={props.sessionId} 
-                userId={props.userId}
+                sessionId={props.sessionId}
                 addBoulder={props.addBoulder} />
         </>
     )

@@ -27,7 +27,6 @@ export default function Session() {
   const [sessionError, setSessionError] = useState<string | undefined>(undefined);
   const [statsError, setStatsError] = useState<string | undefined>(undefined);
   const [sessionClimbError, setSessionClimbError] = useState<string | undefined>(undefined);
-  // const [formErrors] = useState<ApiFormErrors | undefined>(undefined);
 
   // set session data
   useEffect(() => {

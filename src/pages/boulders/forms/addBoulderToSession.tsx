@@ -10,7 +10,6 @@ export default function AddBoulderToSession(props: {
     boulder: Boulder; 
     onClose: () => void,
     sessionId: string,
-    userId: string,
     handleAdd: (sessionBoulder: SessionClimbBoulder) => void
 }) {
     const [submitting, setSubmitting] = useState(false);
@@ -39,16 +38,18 @@ export default function AddBoulderToSession(props: {
         setSubmitting(true);
         setErrors(undefined);
         try {
-            const response = await addBoulderToSession(props.sessionId, props.boulder.boulder_id, formData)
+            const response = await addBoulderToSession(
+                props.sessionId,
+                props.boulder.boulder_id,
+                formData
+            )
 
             if (response.ok && response.data) {
                 props.handleAdd(response.data);
             } else if (!response.ok) {
-                if (response.errors) {
-                    setErrors(response.errors);
-                } else {
-                    setErrors({ general: [failedMessage] });
-                }
+                const newErrors = response.errors ?? {};
+                newErrors.general = [response.error ?? failedMessage];
+                setErrors(newErrors);
             }
         } catch (err: unknown) {
             if (err instanceof Error) {

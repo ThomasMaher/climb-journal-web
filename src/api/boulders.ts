@@ -49,14 +49,20 @@ export async function submitSessionClimb(boulderData: SessionClimbPayload) {
     })
 }
 
-export async function addBoulderToSession(sessionId: string, boulderId: string | undefined, formData: SessionClimbOnlyData) {
-    return fetchApi<SessionClimbBoulder>(`/sessions/${sessionId}/boulders/${boulderId}`, {
+export async function addBoulderToSession(
+    sessionId: string, 
+    boulderId: string | undefined,
+    formData: SessionClimbOnlyData) 
+{
+    return fetchApi<SessionClimbBoulder>('/session_climbs', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({session: {
+            ...formData, session_id: sessionId, boulder_id: boulderId
+        }}),
     })
 }
 

@@ -4,10 +4,9 @@ import type { Boulder, SessionClimbBoulder } from '../../../models/climbing_mode
 import { vGradeRange, limitedDisplayString } from '../../../utils/utils';
 import AddBoulderToSession from './addBoulderToSession';
 
-export default function BoulderResults({ boulders, sessionId, userId, addBoulder }: { 
+export default function BoulderResults({ boulders, sessionId, addBoulder }: { 
     boulders: Boulder[], 
-    sessionId: string, 
-    userId: string,
+    sessionId: string,
     addBoulder: (sessionBoulder: SessionClimbBoulder) =>  void,
 }) {
     const [selectedBoulder, setSelectedBoulder] = useState<Boulder | null>(null);
@@ -110,7 +109,6 @@ export default function BoulderResults({ boulders, sessionId, userId, addBoulder
                                 addBoulder(sessionBoulder);
                             }}
                             sessionId={sessionId}
-                            userId={userId}
                         />
                     )}
                 </div>

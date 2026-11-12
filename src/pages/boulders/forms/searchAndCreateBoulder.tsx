@@ -40,7 +40,7 @@ function SearchAndCreateBoulder(props: BoulderFormProps) {
         setContent(newState)
     }
 
-    if (!props.sessionId || !props.userId) return null;
+    if (!props.sessionId) return null;
 
     return (
 
@@ -69,7 +69,6 @@ function SearchAndCreateBoulder(props: BoulderFormProps) {
                     formData={searchFormData}
                     setFormData={setSearchFormData}
                     sessionId={props.sessionId}
-                    userId={props.userId}
                     addBoulder={props.handleBoulderCreated}
                      />
             }

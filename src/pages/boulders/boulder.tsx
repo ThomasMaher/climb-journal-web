@@ -7,6 +7,7 @@ import GradeSelect from '../shared/gradeSelect';
 import BoulderImages from './boulderImages';
 import PersonalBoulderStats from './personalBoulderStats';
 import SessionBoulderList from './sessionBoulderList';
+import AddBoulderPhotoForm from './forms/addBoulderPhotoForm';
 import type { Boulder, SessionClimb } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
 
@@ -268,9 +269,12 @@ function BoulderPage() {
             <h2>{boulder && !loadingBoulder ? boulder.nickname : ''}</h2>
 
             {pageError}
-            <div className="home-stats__body" style={{marginTop: '40px', marginBottom: '40px'}}>
+            <div className="home-stats__body boulder-details">
                 <BoulderImages />
-                <PersonalBoulderStats boulderId={boulderId} />
+                <div className="boulder-details__sidebar">
+                    <PersonalBoulderStats boulderId={boulderId} />
+                    {userCreatedBoulder() && boulderId && <AddBoulderPhotoForm boulderId={boulderId} />}
+                </div>
             </div>
             <form className="form-stack" onSubmit={handleSubmit}>
                 <div className="fields-grid">

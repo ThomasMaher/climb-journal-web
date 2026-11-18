@@ -6,6 +6,8 @@ import Home from './pages/home.tsx';
 import ProtectedRoute from './pages/auth/ProtectedRoute.tsx';
 import Login from './pages/auth/Login.tsx';
 import BoulderPage from './pages/boulders/boulder.tsx';
+import SessionStats from './pages/sessions/sessionStats/sessionStats.tsx';
+import SessionHealth from './pages/sessions/sessionHealth/sessionHealth.tsx';
 
 function App() {
   return (
@@ -33,6 +35,16 @@ function App() {
             <ProtectedRoute>
               <BoulderPage />
             </ProtectedRoute>
+            } />
+            <Route path="/sessions/:id/stats" element={
+              <ProtectedRoute>
+                <SessionStats />
+              </ProtectedRoute>
+            } />
+            <Route path="/sessions/:id/health" element={
+              <ProtectedRoute>
+                <SessionHealth />
+              </ProtectedRoute>
             } />
         </Routes>
       </main>

@@ -4,7 +4,8 @@ import { getSession, deleteSession, getSessionStats } from '../../api/sessions';
 import { deleteSessionClimb } from '../../api/session_climbs.ts';
 import SearchAndCreateBoulder from '../boulders/forms/searchAndCreateBoulder';
 import SessionBoulderList from '../boulders/sessionBoulderList';
-import SessionStats from './sessionStats';
+import SessionStatsCard from './sessionStats/sessionStatsCard.tsx';
+import SessionHealthCard from './sessionHealth/sessionHealthCard.tsx';
 import { SESSIONS } from '../home';
 import { useAuth } from '../auth/useAuth';
 import type { Session, SessionClimbBoulder, SessionStatsResponse } from '../../models/climbing_models.ts';
@@ -200,7 +201,14 @@ export default function Session() {
           </div>
           <div className="session-aside__info">
             {statsLoading && <p>Session Stats Loading...</p>}
-            {!statsLoading && <SessionStats sessionStats={sessionStats} statsError={statsError} />}
+            {!statsLoading && id && 
+              <SessionStatsCard sessionStats={sessionStats} statsError={statsError} sessionId={id} />
+            }
+          </div>
+          <div className="session-aside__info">
+            {/* {statsLoading && <p>Session Health Data Loading...</p>} */}
+            
+            {id && <SessionHealthCard sessionId={id} />}
           </div>
         </aside>
 

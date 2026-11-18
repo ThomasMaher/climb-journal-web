@@ -21,3 +21,10 @@ export async function getBoulderPhotos(boulderId: string) {
         `/boulders/${boulderId}/boulder_photos`
     )
 }
+
+export async function deleteBoulderPhoto(boulderId: string, photoId: string) {
+    return fetchApi<undefined>(
+        `/boulders/${boulderId}/boulder_photos/${photoId}`,
+        { method: 'DELETE' }
+    );
+}

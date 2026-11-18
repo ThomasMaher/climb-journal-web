@@ -273,7 +273,7 @@ function BoulderPage() {
 
             {pageError}
             <div className="home-stats__body boulder-details">
-                {boulderId && <BoulderImages boulderId={boulderId} />}
+                {boulderId && <BoulderImages boulderId={boulderId} canDeletePhotos={userCreatedBoulder()} />}
                 <div className="boulder-details__sidebar">
                     <PersonalBoulderStats boulderId={boulderId} />
                     {userCreatedBoulder() && boulderId && <AddBoulderPhotoForm boulderId={boulderId} />}

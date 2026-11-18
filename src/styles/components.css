@@ -644,6 +644,49 @@
   object-fit: contain;
 }
 
+.photo-carousel__expand,
+.photo-modal__close {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid rgba(244, 247, 244, 0.22);
+  border-radius: 50%;
+  background: rgba(12, 16, 14, 0.76);
+  color: var(--text-strong);
+  cursor: pointer;
+  transition: color var(--ease), background var(--ease), border-color var(--ease);
+}
+
+.photo-carousel__expand {
+  top: var(--space-md);
+  left: var(--space-md);
+}
+
+.photo-carousel__expand:hover,
+.photo-modal__close:hover {
+  border-color: var(--accent-border);
+  background: rgba(26, 33, 29, 0.96);
+  color: var(--chalk);
+}
+
+.photo-carousel__expand-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  background:
+    linear-gradient(currentColor, currentColor) left top / 38% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) left top / 1.5px 38% no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 38% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 1.5px 38% no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 38% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 1.5px 38% no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 38% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 1.5px 38% no-repeat;
+}
+
 .photo-carousel__delete {
   position: absolute;
   top: var(--space-md);
@@ -786,6 +829,153 @@
   padding: 0 var(--space-md) var(--space-sm);
   color: var(--danger);
   font-size: 0.875rem;
+}
+
+.photo-modal {
+  display: none;
+  flex-direction: column;
+  width: min(96vw, 88rem);
+  height: min(94vh, 60rem);
+  height: min(94dvh, 60rem);
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  color: var(--text-strong);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.photo-modal[open] {
+  display: flex;
+}
+
+.photo-modal::backdrop {
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(3px);
+}
+
+.photo-modal__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: 3.75rem;
+  padding: var(--space-xs) var(--space-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.photo-modal__title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.photo-modal__close {
+  position: relative;
+  flex: 0 0 auto;
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.photo-modal__close-icon {
+  position: relative;
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.photo-modal__close-icon::before,
+.photo-modal__close-icon::after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  border-top: 1.5px solid currentColor;
+  content: '';
+}
+
+.photo-modal__close-icon::before {
+  transform: rotate(45deg);
+}
+
+.photo-modal__close-icon::after {
+  transform: rotate(-45deg);
+}
+
+.photo-modal__stage {
+  position: relative;
+  display: grid;
+  flex: 1;
+  place-items: center;
+  min-height: 0;
+  overflow: hidden;
+  background: #080b09;
+  touch-action: pan-y;
+}
+
+.photo-modal__image {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.photo-modal__arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 1px solid rgba(244, 247, 244, 0.22);
+  border-radius: 50%;
+  background: rgba(12, 16, 14, 0.76);
+  color: var(--chalk);
+  cursor: pointer;
+  transition: background var(--ease), border-color var(--ease);
+}
+
+.photo-modal__arrow:hover {
+  border-color: var(--accent-border);
+  background: rgba(26, 33, 29, 0.96);
+}
+
+.photo-modal__arrow--previous {
+  left: var(--space-md);
+}
+
+.photo-modal__arrow--next {
+  right: var(--space-md);
+}
+
+.photo-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 2.75rem;
+  padding: var(--space-xs) var(--space-md);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 600px) {
+  .photo-modal {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
 }
 
 .boulder-details__sidebar > .personal-boulder__stats {

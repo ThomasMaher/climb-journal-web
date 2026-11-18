@@ -1,5 +1,7 @@
 import { fetchApi } from "./utils";
 
+import type { BoulderPhoto } from "../models/photo_models";
+
 export async function addBoulderPhoto(boulderId: string, file: File, caption: string) {
     const body = new FormData();
     body.append('boulder_photo[image]', file);
@@ -12,4 +14,10 @@ export async function addBoulderPhoto(boulderId: string, file: File, caption: st
             body: body,
         }
     );
+}
+
+export async function getBoulderPhotos(boulderId: string) {
+    return fetchApi<BoulderPhoto[]>(
+        `/boulders/${boulderId}/boulder_photos`
+    )
 }

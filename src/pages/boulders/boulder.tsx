@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../auth/useAuth';
+
 import { getBoulder, updateBoulder, getSessionClimbs } from '../../api/boulders';
 import { deleteSessionClimb } from '../../api/session_climbs';
-import { useAuth } from '../auth/useAuth';
+
 import GradeSelect from '../shared/gradeSelect';
 import BoulderImages from './boulderImages';
 import PersonalBoulderStats from './personalBoulderStats';
 import SessionBoulderList from './sessionBoulderList';
 import AddBoulderPhotoForm from './forms/addBoulderPhotoForm';
+
 import type { Boulder, SessionClimb } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
 
@@ -270,7 +273,7 @@ function BoulderPage() {
 
             {pageError}
             <div className="home-stats__body boulder-details">
-                <BoulderImages />
+                {boulderId && <BoulderImages boulderId={boulderId} />}
                 <div className="boulder-details__sidebar">
                     <PersonalBoulderStats boulderId={boulderId} />
                     {userCreatedBoulder() && boulderId && <AddBoulderPhotoForm boulderId={boulderId} />}

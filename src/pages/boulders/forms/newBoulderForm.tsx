@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { submitSessionClimb, createRequestData } from '../../../api/boulders';
 import GradeSelect from '../../shared/gradeSelect';
 import { getFieldError } from '../../../utils/utils';
@@ -22,8 +22,42 @@ type NewBoulderFormProps = {
 function NewBoulderForm(props: NewBoulderFormProps) {
   const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const [tags, setTags] = useState<TagModel[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagModel[]>([]);
+  const [tagSearch, setTagSearch] = useState<string>('');
+  const [tagDropdownOpen, setTagDropdownOpen] = useState<boolean>(false);
+  const tagPickerRef = useRef<HTMLDivElement>(null);
+
+  const availableTags = tags.filter((tag) =>
+    !selectedTags.some((selectedTag) => selectedTag.id === tag.id)
+  );
+  const filteredTags = availableTags.filter((tag) =>
+    `${tag.tag} ${tag.category}`.toLowerCase().includes(tagSearch.trim().toLowerCase())
+  );
+
+  const selectTag = (tag: TagModel) => {
+    setSelectedTags((currentTags) => [...currentTags, tag]);
+    setTagSearch('');
+    setTagDropdownOpen(true);
+  };
+
+  const removeTag = (tagId: string) => {
+    setSelectedTags((currentTags) => currentTags.filter((tag) => tag.id !== tagId));
+  };
+
+  useEffect(() => {
+    if (!tagDropdownOpen) return;
+
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      if (event.target instanceof Node && !tagPickerRef.current?.contains(event.target)) {
+        setTagDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', closeOnOutsideClick);
+    return () => document.removeEventListener('pointerdown', closeOnOutsideClick);
+  }, [tagDropdownOpen]);
 
   useEffect(() => {
     async function fetchTags() {
@@ -56,7 +90,9 @@ function NewBoulderForm(props: NewBoulderFormProps) {
     setSubmitting(true);
 
     try {
-      const response = await submitSessionClimb(createRequestData(props.formData, props.sessionId, props.userId));
+      const response = await submitSessionClimb(
+        createRequestData(props.formData, selectedTags, props.sessionId, props.userId)
+      );
 
       if (response.ok && response.data) {
         props.handleBoulderCreated(response.data)
@@ -248,17 +284,82 @@ function NewBoulderForm(props: NewBoulderFormProps) {
             {getFieldError('warmup', errors) && (
               <p className="field-error">{getFieldError('warmup', errors)}</p>
             )}
-            <div className="choice-row">
-              <label key='warmup' className="choice">
-                <input
-                  type="checkbox"
-                  name="warmup"
-                  value="warmup"
-                  checked={props.formData?.warmup}
-                  onChange={handleChange}
-                />
-                Warmup
-              </label>
+            <div className="new-boulder-form__warmup-tags">
+              <div className="choice-row">
+                <label key='warmup' className="choice">
+                  <input
+                    type="checkbox"
+                    name="warmup"
+                    value="warmup"
+                    checked={props.formData?.warmup}
+                    onChange={handleChange}
+                  />
+                  Warmup
+                </label>
+              </div>
+
+              <div className="field new-boulder-form__tag-field">
+                <div className="tag-picker" ref={tagPickerRef}>
+                  <div className="tag-picker__control">
+                    {selectedTags.map((tag) => (
+                      <span className="tag-picker__chip" key={tag.id}>
+                        {tag.tag}
+                        <button
+                          type="button"
+                          aria-label={`Remove ${tag.tag}`}
+                          onClick={() => removeTag(tag.id)}>
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                    <input
+                      id="new-boulder-tags"
+                      type="text"
+                      role="combobox"
+                      aria-label="Tags"
+                      aria-autocomplete="list"
+                      aria-expanded={tagDropdownOpen}
+                      aria-controls="new-boulder-tag-options"
+                      autoComplete="off"
+                      placeholder={selectedTags.length ? '' : 'Search or select tags'}
+                      value={tagSearch}
+                      onFocus={() => setTagDropdownOpen(true)}
+                      onChange={(event) => {
+                        setTagSearch(event.target.value);
+                        setTagDropdownOpen(true);
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Escape') setTagDropdownOpen(false);
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="tag-picker__toggle"
+                      aria-label={tagDropdownOpen ? 'Hide tags' : 'Show tags'}
+                      onClick={() => setTagDropdownOpen((open) => !open)}>
+                      <span aria-hidden="true">▾</span>
+                    </button>
+                  </div>
+                  {tagDropdownOpen && (
+                    <div className="tag-picker__options" id="new-boulder-tag-options" role="listbox" aria-label="Available tags">
+                      {filteredTags.length > 0 ? filteredTags.map((tag) => (
+                        <button
+                          type="button"
+                          className="tag-picker__option"
+                          key={tag.id}
+                          role="option"
+                          aria-selected="false"
+                          onClick={() => selectTag(tag)}>
+                          <span>{tag.tag}</span>
+                          <span className="tag-picker__category">{tag.category}</span>
+                        </button>
+                      )) : (
+                        <p className="tag-picker__empty">No matching tags</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 

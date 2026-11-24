@@ -8,6 +8,7 @@ import type {
     Boulder,
     BoulderSearchType,
     SessionClimbOnlyData,
+    TagModel,
  } from '../models/climbing_models';
  import type { UserBoulderData } from '../models/user_models';
 
@@ -67,7 +68,7 @@ export async function addBoulderToSession(
 }
 
 
-export function createRequestData(formData: SessionClimbFormData, sessionId: string, userId: string) {
+export function createRequestData(formData: SessionClimbFormData, selectedTags: TagModel[], sessionId: string, userId: string) {
     const { attempts, percent_finished, warmup, notes, ...boulderData } = formData
     const parsed_attempts = attempts || 0
     const parsed_percent_finished = percent_finished || 0
@@ -79,8 +80,9 @@ export function createRequestData(formData: SessionClimbFormData, sessionId: str
         session_id: sessionId,
         user_id: userId,
     }
+    const tagIds = selectedTags.map((tag) => tag.id)
 
-    return {...boulderData, created_by_id: userId, session_climbs_attributes: [session_climb]}
+    return {...boulderData, created_by_id: userId, boulder_tags_attributes: tagIds, session_climbs_attributes: [session_climb]}
 }
 
 export function builderSearchQuery(searchData: BoulderSearchType) {

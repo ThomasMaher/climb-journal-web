@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { submitSessionClimb, createRequestData } from '../../../api/boulders';
 import GradeSelect from '../../shared/gradeSelect';
+import { getFieldError } from '../../../utils/utils';
+import { getAllTags } from '../../../api/tags';
+
 import type { SessionClimbFormData, SessionClimbBoulder } from '../../../models/climbing_models';
 import type { ApiFormErrors } from '../../../api/utils';
-import { getFieldError } from '../../../utils/utils';
+import type { TagModel } from '../../../models/climbing_models';
 
 const MAX_INCLINE = 90 / 5;
 
@@ -20,6 +23,24 @@ function NewBoulderForm(props: NewBoulderFormProps) {
   const [errors, setErrors] = useState<ApiFormErrors | undefined>(props.errors);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
+  const [tags, setTags] = useState<TagModel[]>([]);
+
+  useEffect(() => {
+    async function fetchTags() {
+      setTags([]);
+      try {
+        const response = await getAllTags();
+        if(response.ok && response.data) {
+          setTags(response.data);
+        } else {
+          console.error('Failed to fetch tags');
+        }
+      } catch (err) {
+        console.error('Failed to fetch tags', err);
+      }
+    }
+    fetchTags();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

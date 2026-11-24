@@ -28,6 +28,7 @@ function BoulderPage() {
         created_by_id: '',
         boulder_type: '',
         creator_name: '',
+        tags: [],
     })
 
     const [loadingBoulder, setLoadingBoulder] = useState<boolean>(false);

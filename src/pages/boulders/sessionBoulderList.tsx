@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { vGradeRange } from '../../utils/utils';
 
@@ -5,6 +6,19 @@ import type { SessionClimbBoulder, SessionClimb } from '../../models/climbing_mo
 
 function SessionClimbList(props: SessionClimbListProps) {
   const climbs = props.sessionClimbs ?? [];
+  const [expandedClimbIds, setExpandedClimbIds] = useState<Set<string>>(new Set());
+
+  const toggleTags = (climbId: string) => {
+    setExpandedClimbIds((expandedIds) => {
+      const nextExpandedIds = new Set(expandedIds);
+      if (nextExpandedIds.has(climbId)) {
+        nextExpandedIds.delete(climbId);
+      } else {
+        nextExpandedIds.add(climbId);
+      }
+      return nextExpandedIds;
+    });
+  };
 
   const sent = (climb: SessionClimbBoulder | SessionClimb) => climb.percent_finished === 100
 
@@ -69,33 +83,54 @@ function SessionClimbList(props: SessionClimbListProps) {
         </div>
       ) : (
         <ul className="climb-list">
-          {climbs.map((climb) => (
-            <li className="climb-item">
-                <Link key={climb.id} to={linkTarget(climb)}>
-                  <div className="climb-item__name" style={{textDecoration: 'underline'}}>
-                    {renderName(climb)}
+          {climbs.map((climb) => {
+            const tags = 'tags' in climb ? climb.tags : [];
+            const tagsExpanded = expandedClimbIds.has(climb.id);
+
+            return (
+              <li className="climb-item" key={climb.id}>
+                <div className="climb-item__main">
+                  <Link to={linkTarget(climb)}>
+                    <div className="climb-item__name" style={{textDecoration: 'underline'}}>
+                      {renderName(climb)}
+                    </div>
+                  </Link>
+                  <div className="climb-item__meta">
+                    {tags.length > 0 && (
+                      <button
+                        type="button"
+                        className="climb-item__tags-toggle"
+                        aria-expanded={tagsExpanded}
+                        onClick={() => toggleTags(climb.id)}>
+                        {tagsExpanded ? 'Hide tags' : 'Show tags'}
+                      </button>
+                    )}
+                    {renderProgressTag(climb)}
+                    {'vgrade_range_max' in climb ? (
+                      <span className="badge">{vGradeRange(climb)}</span>
+                    ) : ''}
+                    <p className="climb-item__stat">
+                      <strong>{climb.attempts ?? 0}</strong> attempts
+                    </p>
+                    <button 
+                      style={{background:'none', border:'none', cursor: 'pointer'}}
+                      type="button" 
+                      aria-label="delete-session-climb" 
+                      className="climb-item__delete"
+                      disabled={props.deleting}
+                      onClick={() => props.handleRemoveClimb(climb.id)}>
+                      🗑️
+                    </button>
                   </div>
-                </Link>
-                <div className="climb-item__meta">
-                  {renderProgressTag(climb)}
-                  {'vgrade_range_max' in climb ? (
-                    <span className="badge">{vGradeRange(climb)}</span>
-                  ) : ''}
-                  <p className="climb-item__stat">
-                    <strong>{climb.attempts ?? 0}</strong> attempts
-                  </p>
-                  <button 
-                    style={{background:'none', border:'none', cursor: 'pointer'}}
-                    type="button" 
-                    aria-label="delete-session-climb" 
-                    className="climb-item__delete"
-                    disabled={props.deleting}
-                    onClick={() => props.handleRemoveClimb(climb.id)}>
-                    🗑️
-                  </button>
                 </div>
+                {tagsExpanded && tags.length > 0 && (
+                  <div className="climb-item__tags" aria-label="Climb tags">
+                    {tags.map((tag) => <span className="badge" key={tag.id}>{tag.tag}</span>)}
+                  </div>
+                )}
               </li>
-          ))}
+            );
+          })}
         </ul>
       )}
     </section>

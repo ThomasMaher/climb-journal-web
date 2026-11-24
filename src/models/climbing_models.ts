@@ -18,6 +18,12 @@ export type SessionClimb = {
     date?: string;
 }
 
+export type TagModel = {
+    id: string;
+    tag: string;
+    category: string;
+}
+
 export type Boulder = {
     boulder_id: string | undefined;
     vgrade_range_min: number;
@@ -28,6 +34,7 @@ export type Boulder = {
     nickname: string;
     created_by_id: string;
     creator_name: string;
+    tags: TagModel[];
     created_at?: string;
     updated_at?: string;
 }

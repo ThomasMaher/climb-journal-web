@@ -436,6 +436,12 @@
   gap: var(--space-md);
 }
 
+.new-session__date-duration {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
 .fields-grid .field--full {
   grid-column: 1 / -1;
 }
@@ -1409,6 +1415,10 @@
   .app-main {
     width: min(100% - 1.25rem, var(--content-width));
     padding-top: var(--space-lg);
+  }
+
+  .new-session__date-duration {
+    grid-template-columns: 1fr;
   }
 
   .fields-grid {

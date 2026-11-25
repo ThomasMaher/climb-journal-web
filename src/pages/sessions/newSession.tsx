@@ -13,6 +13,7 @@ function NewSession() {
     date: '',
     gym_name: '',
     notes: '',
+    duration: undefined,
   });
   const [errors, setErrors] = useState<ApiFormErrorss | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
@@ -83,16 +84,35 @@ function NewSession() {
           />
         </div>
 
-        <div className="field">
-          <label htmlFor="date">Date</label>
-          {getFieldError('date') && <p className="field-error">{getFieldError('date')}</p>}
-          <input
-            id="date"
-            type="date"
-            value={formData.date}
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            required
-          />
+        <div className="new-session__date-duration">
+          <div className="field">
+            <label htmlFor="date">Date</label>
+            {getFieldError('date') && <p className="field-error">{getFieldError('date')}</p>}
+            <input
+              id="date"
+              type="date"
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="duration">Duration (minutes)</label>
+            {getFieldError('duration') && <p className="field-error">{getFieldError('duration')}</p>}
+            <input
+              id="duration"
+              type="number"
+              min="0"
+              step="1"
+              value={formData.duration ?? ''}
+              onChange={(e) => setFormData({
+                ...formData,
+                duration: e.target.value === '' ? undefined : Number(e.target.value),
+              })}
+              placeholder="e.g. 90"
+            />
+          </div>
         </div>
 
         <div className="field">

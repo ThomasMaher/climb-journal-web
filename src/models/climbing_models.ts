@@ -5,6 +5,7 @@ export type Session = {
     date: string;
     gym_name: string;
     notes: string;
+    duration?: number;
 }
 
 export type SessionClimb = {
@@ -73,6 +74,7 @@ export type SessionClimbPayload = {
     boulder_type: string;
     nickname: string;
     created_by_id: string;
+    boulder_tags_attributes: Omit<TagModel, "category" | "tag">[];
     session_climbs_attributes: 
         Omit<SessionClimb, "id" | "boulder_id" | "created_at" | "updated_at">[];
 }

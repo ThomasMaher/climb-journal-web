@@ -33,6 +33,7 @@ export async function createSession(session: {
     date: string,
     gym_name: string,
     notes: string,
+    duration?: number,
 }) {
     return fetchApi<Session>(`/sessions`, {
         method: 'POST',

@@ -11,6 +11,17 @@ import { useAuth } from '../auth/useAuth';
 import type { Session, SessionClimbBoulder, SessionStatsResponse } from '../../models/climbing_models.ts';
 // import type { ApiFormErrors } from '../../api/utils';
 
+function formatDuration(duration: number) {
+  const hours = Math.floor(duration / 60);
+  const minutes = duration % 60;
+  const parts: string[] = [];
+
+  if (hours > 0) parts.push(`${hours} ${hours === 1 ? 'hour' : 'hours'}`);
+  if (minutes > 0 || hours === 0) parts.push(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`);
+
+  return parts.join(' ');
+}
+
 export default function Session() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -54,8 +65,8 @@ export default function Session() {
 
         if (response.ok && response.data) {
           
-          const {id, gym_name, date, notes} = response.data;
-          setSession({id, gym_name, date, notes});
+          const {id, gym_name, date, notes, duration} = response.data;
+          setSession({id, gym_name, date, notes, duration});
           setSessionClimbs(response.data.not_warmup ?? []);
           setSessionWarmups(response.data.warmup ?? []);
         } else if (!response.ok) {
@@ -187,6 +198,9 @@ export default function Session() {
                 <time className="session-aside__date" dateTime={session.date}>
                   {session.date}
                 </time>
+              )}
+              {session?.duration != null && (
+                <p className="session-aside__duration">{formatDuration(session.duration)}</p>
               )}
             </div>
             {session?.notes ? <p className="session-aside__notes">{session.notes}</p> : null}

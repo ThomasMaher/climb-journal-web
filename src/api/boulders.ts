@@ -80,7 +80,7 @@ export function createRequestData(formData: SessionClimbFormData, selectedTags: 
         session_id: sessionId,
         user_id: userId,
     }
-    const tagIds = selectedTags.map((tag) => { tag_id: tag.id })
+    const tagIds = selectedTags.map((tag) => ({ tag_id: tag.id }))
 
     return {...boulderData, created_by_id: userId, boulder_tags_attributes: tagIds, session_climbs_attributes: [session_climb]}
 }

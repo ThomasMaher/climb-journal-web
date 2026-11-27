@@ -74,7 +74,7 @@ export type SessionClimbPayload = {
     boulder_type: string;
     nickname: string;
     created_by_id: string;
-    boulder_tags_attributes: Omit<TagModel, "category" | "tag">[];
+    boulder_tags_attributes: { tag_id: string }[];
     session_climbs_attributes: 
         Omit<SessionClimb, "id" | "boulder_id" | "created_at" | "updated_at">[];
 }

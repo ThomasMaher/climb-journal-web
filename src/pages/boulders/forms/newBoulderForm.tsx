@@ -3,12 +3,11 @@ import { submitSessionClimb, createRequestData } from '../../../api/boulders';
 import GradeSelect from '../../shared/gradeSelect';
 import { getFieldError } from '../../../utils/utils';
 import { getAllTags } from '../../../api/tags';
+import { INCLINE_VALUES } from '../../../utils/constants';
 
 import type { SessionClimbFormData, SessionClimbBoulder } from '../../../models/climbing_models';
 import type { ApiFormErrors } from '../../../api/utils';
 import type { TagModel } from '../../../models/climbing_models';
-
-const MAX_INCLINE = 90 / 5;
 
 type NewBoulderFormProps = {
   sessionId: string | undefined;
@@ -236,7 +235,7 @@ function NewBoulderForm(props: NewBoulderFormProps) {
             <GradeSelect
               id="self_grade"
               name="self_grade"
-              value={props.formData?.self_grade}
+              value={props.formData?.self_grade || undefined}
               onChange={handleChange}
             />
           </div>
@@ -270,13 +269,12 @@ function NewBoulderForm(props: NewBoulderFormProps) {
             {getFieldError('incline', errors) && (
               <p className="field-error">{getFieldError('incline', errors)}</p>
             )}
-            <select id="incline" name="incline" value={props.formData?.incline} onChange={handleChange}>
-              <option value={0}>0°</option>
-              {[...Array(MAX_INCLINE).keys()].map((k) => (
-                <option key={k} value={(k + 1) * 5}>
-                  {(k + 1) * 5}°
-                </option>
-              ))}
+            <select id="incline" name="incline" value={props.formData?.incline || undefined} onChange={handleChange}>
+              <option value={INCLINE_VALUES[0]}>{INCLINE_VALUES[0]}</option>
+              <option value={INCLINE_VALUES[1]}>{INCLINE_VALUES[1]}</option>
+              <option value={INCLINE_VALUES[2]}>{INCLINE_VALUES[2]}</option>
+              <option value={INCLINE_VALUES[3]}>{INCLINE_VALUES[3]}</option>
+              <option value={INCLINE_VALUES[4]}>{INCLINE_VALUES[4]}</option>
             </select>
           </div>
 

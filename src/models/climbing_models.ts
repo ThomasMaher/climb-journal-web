@@ -30,11 +30,12 @@ export type Boulder = {
     vgrade_range_min: number;
     vgrade_range_max: number;
     self_grade: number;
-    incline: number;
+    incline: string | null;
     boulder_type: string;
     nickname: string;
     created_by_id: string;
     creator_name: string;
+    notes: string;
     tags: TagModel[];
     created_at?: string;
     updated_at?: string;
@@ -56,8 +57,8 @@ export type SessionStatsResponse = {
 export type SessionClimbFormData = {
     vgrade_range_min: number;
     vgrade_range_max: number;
-    self_grade: number | undefined;
-    incline: number | undefined;
+    self_grade: number | null;
+    incline: string | null;
     notes: string;
     boulder_type: string;
     nickname: string;
@@ -69,8 +70,8 @@ export type SessionClimbFormData = {
 export type SessionClimbPayload = {
     vgrade_range_min: number;
     vgrade_range_max: number;
-    self_grade: number | undefined;
-    incline: number | undefined;
+    self_grade: number | null;
+    incline: string | null;
     boulder_type: string;
     nickname: string;
     created_by_id: string;

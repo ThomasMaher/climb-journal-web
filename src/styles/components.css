@@ -629,6 +629,72 @@
   margin-left: auto;
 }
 
+.boulder-form {
+  margin: var(--space-lg) 0;
+  text-align: left;
+}
+
+.boulder-form .fields-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sm) var(--space-md);
+}
+
+.boulder-form .fields-grid > .field--full,
+.boulder-form .fields-grid > .choice-row {
+  grid-column: span 2;
+}
+
+.boulder-form .fields-grid > .field:has(textarea) {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .boulder-form .fields-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .boulder-form .fields-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .boulder-form .fields-grid > .field--full,
+  .boulder-form .fields-grid > .choice-row,
+  .boulder-form .fields-grid > .field:has(textarea) {
+    grid-column: auto;
+  }
+}
+
+.boulder-form .field label {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.boulder-form .field input:focus,
+.boulder-form .field select:focus,
+.boulder-form .field textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+.boulder-form .field textarea {
+  min-height: 4rem;
+  resize: none;
+}
+
+.boulder-form .choice-row {
+  align-items: center;
+}
+
+.boulder-form__actions {
+  grid-column: 1 / -1;
+  justify-content: flex-start;
+  margin-top: var(--space-xs);
+}
+
 .form-error,
 .field-error,
 .error-banner {

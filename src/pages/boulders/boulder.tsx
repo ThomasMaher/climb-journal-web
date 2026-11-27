@@ -13,6 +13,7 @@ import AddBoulderPhotoForm from './forms/addBoulderPhotoForm';
 
 import type { Boulder, SessionClimb } from '../../models/climbing_models';
 import type { ApiFormErrors } from '../../api/utils';
+import { INCLINE_VALUES } from '../../utils/constants';
 
 function BoulderPage() {
     const { boulderId } = useParams<{ boulderId: string }>();
@@ -24,10 +25,11 @@ function BoulderPage() {
         vgrade_range_min: 1,
         vgrade_range_max: 1,
         self_grade: 1,
-        incline: 0,
+        incline: '',
         created_by_id: '',
         boulder_type: '',
         creator_name: '',
+        notes: '',
         tags: [],
     })
 
@@ -124,7 +126,7 @@ function BoulderPage() {
         return Array.isArray(fieldErrors) ? fieldErrors[0] : undefined;
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, type, value } = e.target;
         const checked = e.target instanceof HTMLInputElement ? e.target.checked : false;
         const numericFields = [
@@ -151,7 +153,7 @@ function BoulderPage() {
         return (
             <>
                 <div className="field field--full">
-                    <label htmlFor="nicknae">Nickname</label>
+                    <label htmlFor="nickname">Nickname</label>
                     {getFieldError("nickname") && (
                         <p className="field-error">{getFieldError("nickname")}</p>
                     )}
@@ -217,7 +219,34 @@ function BoulderPage() {
                     />
                 </div>
 
-                <div className="form-actions">
+
+                <div className="field">
+                    <label htmlFor="notes">Boulder notes</label>
+                    {getFieldError('notes') && (
+                        <p className="field-error">{getFieldError('notes')}</p>
+                    )}
+                    <textarea
+                        id="notes"
+                        name="notes"
+                        value={formData.notes}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="field">
+                    <label htmlFor="incline">Incline</label>
+                    {getFieldError('incline') && (
+                        <p className="field-error">{getFieldError('incline')}</p>
+                    )}
+                    <select id="incline" name="incline" value={formData?.incline || undefined} onChange={handleChange}>
+                        <option value={INCLINE_VALUES[0]}>{INCLINE_VALUES[0]}</option>
+                        <option value={INCLINE_VALUES[1]}>{INCLINE_VALUES[1]}</option>
+                        <option value={INCLINE_VALUES[2]}>{INCLINE_VALUES[2]}</option>
+                        <option value={INCLINE_VALUES[3]}>{INCLINE_VALUES[3]}</option>
+                        <option value={INCLINE_VALUES[4]}>{INCLINE_VALUES[4]}</option>
+                    </select>
+                </div>
+
+                <div className="form-actions boulder-form__actions">
                     <button type="submit" className="btn" disabled={submitting}>
                         {submitting ? 'Updating…' : 'Update climb'}
                     </button>
@@ -280,7 +309,8 @@ function BoulderPage() {
                     {userCreatedBoulder() && boulderId && <AddBoulderPhotoForm boulderId={boulderId} />}
                 </div>
             </div>
-            <form className="form-stack" onSubmit={handleSubmit}>
+            <form className="form-stack boulder-form" onSubmit={handleSubmit}>
+                {userCreatedBoulder() && <h3 className="form-panel__title">Edit boulder</h3>}
                 <div className="fields-grid">
                     {userCreatedBoulder() ? renderBoulderForm() : renderBoulderInfo()}
                 </div>
